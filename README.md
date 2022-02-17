@@ -7,4 +7,4 @@
 
 🤓 Portfolio: [https://vincentbattez.github.io/vincentbattez/](https://vincentbattez.github.io/vincentbattez/)
 
-🇨🇦 Recherche un développeur front-end pour travailler à Montreal
+✅ Disponible pour mission freelance (développeur front-end)
