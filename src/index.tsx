@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import TagManager, { TagManagerArgs } from 'react-gtm-module'
 
 import { Homepage } from './pages/homepage/homepage.component';
 import { Navbar } from "./components/navbar/navbar.component";
@@ -7,9 +8,12 @@ import { HashtagCollection } from "./components/hashtag/hashtagCollection.compon
 
 import './styles/index.scss';
 import * as serviceWorker from './serviceWorker';
-import { GoogleAnalytics } from "./services/google/analytics";
 
-window.$googleAnalytics = new GoogleAnalytics()
+const tagManagerArgs: TagManagerArgs = {
+  gtmId: process.env.REACT_APP_GTM_ID || ''
+}
+
+TagManager.initialize(tagManagerArgs)
 
 ReactDOM.render(
   <React.Fragment>

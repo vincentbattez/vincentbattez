@@ -2,7 +2,7 @@ import React from 'react';
 
 import './social.component.scss'
 
-export function Social({ className, url, image, social }: SocialProps) {
+export function Social({ className, url, image, dataAnalyticsLabel }: SocialProps) {
   function mouseMove(e:any) {
     const x = e.pageX - e.target.offsetLeft;
     const y = e.pageY - e.target.offsetTop;
@@ -11,21 +11,15 @@ export function Social({ className, url, image, social }: SocialProps) {
     e.target.style.setProperty('--y', `${ y }px`);
   }
 
-  function clickOnSocial(): void {
-    window.$googleAnalytics.event({
-      category: 'Social',
-      action: social,
-    });
-  }
-
   return (
     <a
       href={url}
-      className={`${className} social`}
+      className={`social--${className} social`}
       target="_blank"
       rel="noopener noreferrer"
+      data-analytics-id="social"
+      data-analytics-label={dataAnalyticsLabel}
       onMouseMove={mouseMove}
-      onClick={clickOnSocial}
     >
       <img
         className="social__image"
@@ -37,7 +31,7 @@ export function Social({ className, url, image, social }: SocialProps) {
 }
 
 export type SocialProps = {
-  social: string,
+  dataAnalyticsLabel: string
   url: string
   image: {
     url: string

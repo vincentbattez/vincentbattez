@@ -1,6 +1,6 @@
 export const navbarData = {
   link: {
-    label: 'Recherche un développeur web - Montréal',
+    label: 'Disponible pour contrat Freelance',
     url: 'https://www.linkedin.com/in/vincentbattez/',
   },
   isAvailable: true

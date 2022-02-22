@@ -6,12 +6,13 @@ import './socialCollection.component.scss'
 export function SocialCollection({ socialCollection}: SocialCollectionProps) {
   return (
     <div className="social-collection ml-4">
-      {socialCollection.map(({ url, image, social  }, key) =>
+      {socialCollection.map(({ url, image, dataAnalyticsLabel, className  }, key) =>
         <Social
           key={key}
-          social={social}
           url={url}
+          className={className}
           image={image}
+          dataAnalyticsLabel={dataAnalyticsLabel}
         />
       )}
     </div>

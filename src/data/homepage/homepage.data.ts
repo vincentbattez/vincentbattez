@@ -1,7 +1,7 @@
 export const homepageData = {
   subTitle: 'Porfolio Développeur Front-End Confirmé',
-  title: 'Développeur Front-End Confirmé affinité UX/UI',
-  description: 'Recherche un développeur front-end pour travailler à Montréal.',
+  title: 'Développeur Vue.js Confirmé affinité UX/UI',
+  description: 'Je peux lead un projet Vue.js.',
   image: {
     url: require('../../assets/face-vector.svg')
   },

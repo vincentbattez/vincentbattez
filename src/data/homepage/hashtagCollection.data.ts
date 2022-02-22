@@ -7,28 +7,28 @@ export const hashtagCollectionData = [
     }
   },
   {
-    label: 'vuejs',
+    label: 'vue.js',
     position: 2,
     hashtag_type: {
       name: 'frontend',
     }
   },
   {
-    label: 'angular 10',
+    label: 'UX / UI',
     position: 3,
     hashtag_type: {
       name: 'frontend',
     }
   },
   {
-    label: 'react',
+    label: 'accessibilité',
     position: 4,
     hashtag_type: {
       name: 'frontend',
     }
   },
   {
-    label: 'accessibilité',
+    label: 'analytics',
     position: 5,
     hashtag_type: {
       name: 'frontend',
