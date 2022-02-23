@@ -7,6 +7,6 @@ export const homepageData = {
   },
   cv: {
     label: 'Voir mon CV',
-    url: 'https://drive.google.com/file/d/0B_qtZh6a-s4cVTFkMU42bU9LTU0/view',
+    url: '/go/cv?s=pf',
   },
 }

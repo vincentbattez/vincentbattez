@@ -1,7 +1,7 @@
 export const navbarData = {
   link: {
     label: 'Disponible pour contrat Freelance',
-    url: 'https://www.linkedin.com/in/vincentbattez/',
+    url: '/go/linkedin?s=pf',
   },
   isAvailable: true
 }

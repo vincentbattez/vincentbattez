@@ -1,6 +1,6 @@
 export const socialCollectionData = [
   {
-    url: 'https://www.linkedin.com/in/vincentbattez/',
+    url: '/go/linkedin?s=pf',
     className: 'linkedin',
     dataAnalyticsLabel: 'Linkedin',
     image: {
@@ -8,7 +8,7 @@ export const socialCollectionData = [
     },
   },
   {
-    url: 'https://github.com/vincentbattez/',
+    url: '/go/github?s=pf',
     className: 'github',
     dataAnalyticsLabel: 'Github',
     image: {
