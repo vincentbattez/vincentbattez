@@ -17,6 +17,8 @@ export function TextSection({ className, subTitle, title, description, cv }: Tex
         href={cv.url}
         target="_blank"
         rel="noopener noreferrer"
+        data-analytics-id='cv'
+        data-analytics-label={cv.label}
       >
         {cv.label}
         <img
