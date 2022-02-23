@@ -2,7 +2,7 @@ import React from "react";
 
 import './imageSection.component.scss'
 
-export function ImageSection({ image }: ImageSection) {
+export function ImageSection({ image }: ImageSectionProps) {
   return (
     <div className="image-section col-5">
       <img
@@ -13,7 +13,7 @@ export function ImageSection({ image }: ImageSection) {
   )
 }
 
-type ImageSection = {
+type ImageSectionProps = {
   image: {
     url: string
   }

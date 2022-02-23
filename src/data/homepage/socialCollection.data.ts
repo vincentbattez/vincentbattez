@@ -1,10 +1,13 @@
+import linkedinLogo from '../../assets/icons/linkedin.svg'
+import githubLogo from '../../assets/icons/github.svg'
+
 export const socialCollectionData = [
   {
     url: '/go/linkedin?s=pf',
     className: 'linkedin',
     dataAnalyticsLabel: 'Linkedin',
     image: {
-      url: require('../../assets/icons/linkedin.svg'),
+      url: linkedinLogo,
     },
   },
   {
@@ -12,7 +15,7 @@ export const socialCollectionData = [
     className: 'github',
     dataAnalyticsLabel: 'Github',
     image: {
-      url: require('../../assets/icons/github.svg'),
+      url: githubLogo,
     },
   }
 ]
