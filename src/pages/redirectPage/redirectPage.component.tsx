@@ -10,6 +10,7 @@ const lookupTable = {
     pf: 'portfolio',
     qr: 'qr_code',
     cv: 'cv',
+    gh: 'github',
   },
   redirectId: {
     envoyer_message: 'https://www.linkedin.com/messaging/thread/new/',
