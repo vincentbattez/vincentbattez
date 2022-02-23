@@ -5,7 +5,7 @@ const lookupTable = {
   source: {
     sem: 'signature_email',
     lk: 'linkedin',
-    fa: 'fantastical',
+    cd: 'calendrier_description',
     mp: 'message_prive',
     pf: 'portfolio',
     qr: 'qr_code',
