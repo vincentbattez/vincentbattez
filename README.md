@@ -1,15 +1,17 @@
-![Last Commit](https://img.shields.io/github/last-commit/vincentbattez/vincentbattez)
-![Code Size](https://img.shields.io/github/languages/code-size/vincentbattez/vincentbattez)
+## 🙋🏻‍♂️ Vincent Battez
 
-**Build**
-
-[![Netlify Status](https://api.netlify.com/api/v1/badges/bc06f6dd-3011-4c4e-a1b7-6add963dfef1/deploy-status)](https://app.netlify.com/sites/vincentbattez/deploys)
-![Uptime Status](https://badgen.net/uptime-robot/status/m790721858-eeda30cce5a3a6833e3e3d2f)
-![Uptime Status Month](https://badgen.net//uptime-robot/month/m790721858-eeda30cce5a3a6833e3e3d2f)
-![Uptime Response Speed](https://badgen.net/uptime-robot/response/m790721858-eeda30cce5a3a6833e3e3d2f)
+[![Linkedin](https://img.shields.io/badge/Profil-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://vincentbattez.dev/go/linkedin?s=gh)
+[![Portfolio](https://img.shields.io/badge/Portfolio-FFFFFF?style=for-the-badge&logo=react&logoColor=black)](https://vincentbattez.dev/)
+[![Freelance](https://img.shields.io/badge/Freelance-DB5762?style=for-the-badge&logo=MasterCard&logoColor=white)](https://vincentbattez.dev/go/linkedin?s=gh)
 
 ---
 
-- [https://vincentbattez.dev/](https://vincentbattez.dev/) (prod) 
-- [CI](https://app.netlify.com/sites/vincentbattez/overview) (build auto on master)
-- [Tags](https://docs.google.com/spreadsheets/d/1AUsA_Dg476R64JZ3F6GNqPkebhXWa903lKM5EPpdQrY/edit#gid=1386834576) 
+🏅 Développeur front-end (vuejs) UX & accessibilité
+
+🚀 Forte affinité pour l'UX, l'UI et l’accessibilité
+
+---
+
+✅ Disponible pour mission freelance (développeur front-end)
+
+[![Prendre rendez-vous](https://img.shields.io/badge/Prendre_RDV-00897B?style=for-the-badge&logo=GoogleMeet&logoColor=white)](https://vincentbattez.dev/go/entretien?s=gh)
