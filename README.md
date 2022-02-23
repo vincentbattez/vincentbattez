@@ -14,4 +14,4 @@
 
 ✅ Disponible pour mission freelance (développeur front-end)
 
-[![Prendre rendez-vous](https://img.shields.io/badge/Prendre_RDV-00897B?style=for-the-badge&logo=GoogleMeet&logoColor=white)](https://vincentbattez.dev/go/call?s=gh)
+[![Prendre rendez-vous](https://img.shields.io/badge/Prendre_RDV-00897B?style=for-the-badge&logo=GoogleMeet&logoColor=white)](https://vincentbattez.dev/go/entretien?s=gh)

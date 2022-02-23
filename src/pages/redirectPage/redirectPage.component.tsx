@@ -13,6 +13,7 @@ const lookupTable = {
     gh: 'github',
   },
   redirectId: {
+    entretien: 'https://hub.flexibits.com/openings/vincentbattez/entretien/',
     call: 'https://meet.google.com/aao-endc-ygw',
     envoyer_message: 'https://www.linkedin.com/messaging/thread/new/',
     linkedin: 'https://www.linkedin.com/in/vincentbattez/',
