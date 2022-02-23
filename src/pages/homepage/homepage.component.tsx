@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { TextSection } from './textSection/textSection.component'
 import { ImageSection } from './imageSection/imageSection.component'
 
 import './homepage.component.scss';
