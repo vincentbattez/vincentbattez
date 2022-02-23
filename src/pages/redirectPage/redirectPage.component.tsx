@@ -13,6 +13,7 @@ const lookupTable = {
     gh: 'github',
   },
   redirectId: {
+    recommandation: 'https://www.linkedin.com/in/vincentbattez/details/recommendations/edit/write/?profileUrn=urn%3Ali%3Afsd_profile%3AACoAABx8RLABL3SOZC3R86qDOhYgJZwNmmSBKWY',
     entretien: 'https://hub.flexibits.com/openings/vincentbattez/entretien/',
     call: 'https://meet.google.com/aao-endc-ygw',
     envoyer_message: 'https://www.linkedin.com/messaging/thread/new/',
