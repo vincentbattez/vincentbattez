@@ -29,11 +29,13 @@ export function Navbar() {
         <span className="main-navbar__dot mr-3" />
           <h3 className={`link ${disabledClassName}`}>
             {navbarData.link.label}
-            <img
-              className="icon icon-external-link"
-              src={externalLink}
-              alt=""
-            />
+            {isAvailable &&
+              <img
+                className="icon icon-external-link"
+                src={externalLink}
+                alt=""
+              />
+            }
           </h3>
         </LinkTag>
       </div>
