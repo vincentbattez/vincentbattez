@@ -25,6 +25,8 @@ export function Navbar() {
           target="_blank"
           rel="noopener noreferrer"
           href={linkHref}
+          data-analytics-id={isAvailable ? 'navbar_link' : 'navbar_link_unavailable'}
+          data-analytics-label={navbarData.link.label}
         >
         <span className="main-navbar__dot mr-3" />
           <h3 className={`link ${disabledClassName}`}>
