@@ -38,6 +38,8 @@
   }
 }
 
+.text-center { text-align: center; }
+
 @for $i from 1 through $grid-count {
   .col-#{$i} {
     grid-column: span $i;

@@ -1,5 +1,9 @@
-import React  from 'react';
+import React, {Fragment} from 'react';
 import { useSearchParams, useParams } from "react-router-dom";
+import { Helmet } from "react-helmet";
+import { Loader } from "../../components/loader/loader.component";
+
+import './redirectPage.component.scss'
 
 const lookupTable = {
   source: {
@@ -23,9 +27,58 @@ const lookupTable = {
   }
 }
 
-function Redirect() {
-  // @todo: redirection loader
-  return <div>Redirection en cours...</div>
+const metaCv = [
+  {name:"description", content:"Développeur Front-End confirmé"},
+  {name:"image", content:"https://s3.eu-west-3.amazonaws.com/vincentbattez.dev/opengraph-cv.jpg"},
+  {itemProp:"name", content:"📃 CV - Vincent Battez"},
+  {itemProp:"description", content:"Développeur Front-End confirmé"},
+  {itemProp:"image", content:"https://s3.eu-west-3.amazonaws.com/vincentbattez.dev/opengraph-cv.jpg"},
+  {name:"twitter:card", content:"summary"},
+  {name:"twitter:title", content:"📃 CV - Vincent Battez"},
+  {name:"twitter:description", content:"Développeur Front-End confirmé"},
+  {name:"og:title", content:"📃 CV - Vincent Battez"},
+  {name:"og:description", content:"Développeur Front-End confirmé"},
+  {name:"og:image", content:"https://s3.eu-west-3.amazonaws.com/vincentbattez.dev/opengraph-cv.jpg"},
+  {name:"og:url", content:"https://vincentbattez.dev/go/cv"},
+  {name:"og:site_name", content:"📃 CV - Vincent Battez"},
+  {name:"og:locale", content:"fr_FR"},
+  {name:"og:type", content:"website"},
+]
+
+function Redirect({redirectHref}: RedirectProps) {
+  const {redirectId} = useParams()
+  const isCv = redirectId === 'cv'
+
+  // Meta
+  let meta: any[] = [
+    {name:"robots", content:"noindex, nofollow"}
+  ]
+  const title = isCv
+    ? "📃 CV - Vincent Battez"
+    : "⏳ Redirection en cours..."
+
+  if (isCv) {
+    meta.push(...metaCv)
+  }
+
+  // @todo: redirection
+  return (
+    <Fragment>
+      <Helmet meta={meta} title={title} />
+      <section className="container">
+        <div className='col-12 text-center'>
+          <Loader />
+          <a
+            className="redirect-hint"
+            href={redirectHref}
+            rel="noopener noreferrer"
+          >
+            {redirectHref}
+          </a>
+        </div>
+      </section>
+    </Fragment>
+  )
 }
 
 export function RedirectPage() {
@@ -43,7 +96,7 @@ export function RedirectPage() {
   // 🚪 Redirect to external URL
   if (!urlQueryCollection.s || urlQueryCollection.utm_source) {
     window.location.replace(redirectHref)
-    return <Redirect />
+    return <Redirect redirectHref={redirectHref} />
   }
 
   // 🚪 Redirect to UTM url
@@ -54,5 +107,9 @@ export function RedirectPage() {
 
   window.location.replace(utmUrlRedirect.href)
 
-  return <Redirect />;
+  return <Redirect redirectHref={redirectHref} />;
+}
+
+type RedirectProps = {
+  redirectHref?: string
 }
