@@ -1,0 +1,54 @@
+.loader {
+  &__dots {
+    color: var(--primary);
+    letter-spacing: 2px;
+    font-weight: 600;
+    font-size: 24px;
+    margin-left: 4px;
+  }
+}
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.lds-ripple {
+  --loader-width: 15rem;
+
+  display: inline-block;
+  position: relative;
+  width: var(--loader-width);
+  height: var(--loader-width);
+
+  div {
+    position: absolute;
+    border: 6px solid var(--primary);
+    opacity: 1;
+    border-radius: 50%;
+    animation: lds-ripple 1.2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+
+    &:nth-child(2) {
+      animation-delay: -0.6s;
+    }
+  }
+}
+
+@keyframes lds-ripple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+
+  100% {
+    width: var(--loader-width);
+    height: var(--loader-width);
+    opacity: 0;
+  }
+}
