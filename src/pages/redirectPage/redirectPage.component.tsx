@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useEffect} from 'react';
 import { useSearchParams, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { Loader } from "../../components/loader/loader.component";
@@ -87,25 +87,29 @@ export function RedirectPage() {
   const redirectHref = lookupTable.redirectId[redirectId]
   const urlQueryCollection = Object.fromEntries(useSearchParams()[0])
 
-  // 🚪 Redirect to Homepage
-  if (!redirectId || !redirectHref) {
-    window.location.replace("/")
-    return <Redirect />
-  }
+  useEffect(() => {
+    // ❌ Redirect to Homepage
+    if (!redirectHref) {
+      window.location.replace("/")
 
-  // 🚪 Redirect to external URL
-  if (!urlQueryCollection.s || urlQueryCollection.utm_source) {
+      return
+    }
+
+    // ➡️ Redirect to UTM url
+    if (urlQueryCollection.s) {
+      // @ts-ignore
+      const source = lookupTable.source[urlQueryCollection.s]
+      const utmUrlRedirect = new URL(window.location.origin + window.location.pathname);
+      utmUrlRedirect.searchParams.append("utm_source", source);
+
+      window.location.replace(utmUrlRedirect.href)
+      return
+    }
+
+    // ✅ Redirect to external URL
     window.location.replace(redirectHref)
-    return <Redirect redirectHref={redirectHref} />
-  }
+  }, [redirectHref, redirectId, urlQueryCollection.s])
 
-  // 🚪 Redirect to UTM url
-  // @ts-ignore
-  const source = lookupTable.source[urlQueryCollection.s]
-  const utmUrlRedirect = new URL(window.location.origin + window.location.pathname);
-  utmUrlRedirect.searchParams.append("utm_source", source);
-
-  window.location.replace(utmUrlRedirect.href)
 
   return <Redirect redirectHref={redirectHref} />;
 }

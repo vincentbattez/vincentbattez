@@ -19,7 +19,6 @@ export function Loader() {
       }
 
       i++
-      console.log('🤡 ()', dots)
     }, 600)
 
     return () => clearInterval(interval);
