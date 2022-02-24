@@ -19,6 +19,7 @@ export function Social({ className, url, image, dataAnalyticsLabel }: SocialProp
       rel="noopener noreferrer"
       data-analytics-id="social"
       data-analytics-label={dataAnalyticsLabel}
+      aria-label={dataAnalyticsLabel}
       onMouseMove={mouseMove}
     >
       <img
