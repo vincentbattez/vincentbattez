@@ -1,6 +1,9 @@
 import React, {Fragment} from 'react';
 import { useSearchParams, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { Loader } from "../../components/loader/loader.component";
+
+import './redirectPage.component.scss'
 
 const lookupTable = {
   source: {
@@ -42,7 +45,7 @@ const metaCv = [
   {name:"og:type", content:"website"},
 ]
 
-function Redirect() {
+function Redirect({redirectHref}: RedirectProps) {
   const {redirectId} = useParams()
   const isCv = redirectId === 'cv'
 
@@ -62,7 +65,18 @@ function Redirect() {
   return (
     <Fragment>
       <Helmet meta={meta} title={title} />
-      <div>Redirection en cours...</div>
+      <section className="container">
+        <div className='col-12 text-center'>
+          <Loader />
+          <a
+            className="redirect-hint"
+            href={redirectHref}
+            rel="noopener noreferrer"
+          >
+            {redirectHref}
+          </a>
+        </div>
+      </section>
     </Fragment>
   )
 }
@@ -70,30 +84,32 @@ function Redirect() {
 export function RedirectPage() {
   const {redirectId} = useParams()
   // @ts-ignore
-  // eslint-disable-next-line
   const redirectHref = lookupTable.redirectId[redirectId]
-  // eslint-disable-next-line
   const urlQueryCollection = Object.fromEntries(useSearchParams()[0])
 
   // 🚪 Redirect to Homepage
-  // if (!redirectId || !redirectHref) {
-  //   window.location.replace("/")
-  //   return <Redirect />
-  // }
-  //
-  // // 🚪 Redirect to external URL
-  // if (!urlQueryCollection.s || urlQueryCollection.utm_source) {
-  //   window.location.replace(redirectHref)
-  //   return <Redirect />
-  // }
-  //
-  // // 🚪 Redirect to UTM url
-  // // @ts-ignore
-  // const source = lookupTable.source[urlQueryCollection.s]
-  // const utmUrlRedirect = new URL(window.location.origin + window.location.pathname);
-  // utmUrlRedirect.searchParams.append("utm_source", source);
-  //
-  // window.location.replace(utmUrlRedirect.href)
+  if (!redirectId || !redirectHref) {
+    window.location.replace("/")
+    return <Redirect />
+  }
 
-  return <Redirect />;
+  // 🚪 Redirect to external URL
+  if (!urlQueryCollection.s || urlQueryCollection.utm_source) {
+    window.location.replace(redirectHref)
+    return <Redirect redirectHref={redirectHref} />
+  }
+
+  // 🚪 Redirect to UTM url
+  // @ts-ignore
+  const source = lookupTable.source[urlQueryCollection.s]
+  const utmUrlRedirect = new URL(window.location.origin + window.location.pathname);
+  utmUrlRedirect.searchParams.append("utm_source", source);
+
+  window.location.replace(utmUrlRedirect.href)
+
+  return <Redirect redirectHref={redirectHref} />;
+}
+
+type RedirectProps = {
+  redirectHref?: string
 }
