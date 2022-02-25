@@ -28,16 +28,16 @@ const lookupTable = {
 }
 
 const metaCv = [
-  {name:"description", content:"Développeur Front-End confirmé"},
+  {name:"description", content:"Développeur Front-End Sénior"},
   {name:"image", content:"https://s3.eu-west-3.amazonaws.com/vincentbattez.dev/opengraph-cv.jpg"},
   {itemProp:"name", content:"📃 CV - Vincent Battez"},
-  {itemProp:"description", content:"Développeur Front-End confirmé"},
+  {itemProp:"description", content:"Développeur Front-End Sénior"},
   {itemProp:"image", content:"https://s3.eu-west-3.amazonaws.com/vincentbattez.dev/opengraph-cv.jpg"},
   {name:"twitter:card", content:"summary"},
   {name:"twitter:title", content:"📃 CV - Vincent Battez"},
-  {name:"twitter:description", content:"Développeur Front-End confirmé"},
+  {name:"twitter:description", content:"Développeur Front-End Sénior"},
   {name:"og:title", content:"📃 CV - Vincent Battez"},
-  {name:"og:description", content:"Développeur Front-End confirmé"},
+  {name:"og:description", content:"Développeur Front-End Sénior"},
   {name:"og:image", content:"https://s3.eu-west-3.amazonaws.com/vincentbattez.dev/opengraph-cv.jpg"},
   {name:"og:url", content:"https://vincentbattez.dev/go/cv"},
   {name:"og:site_name", content:"📃 CV - Vincent Battez"},
