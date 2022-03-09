@@ -61,7 +61,6 @@ function Redirect({redirectHref}: RedirectProps) {
     meta.push(...metaCv)
   }
 
-  // @todo: redirection
   return (
     <Fragment>
       <Helmet meta={meta} title={title} />
@@ -93,6 +92,25 @@ export function RedirectPage() {
       window.location.replace("/")
 
       return
+    }
+
+    // 📲 Send iOS notication
+    if (redirectId === 'call') {
+      const title = "Quelqu'un essaye de me joindre"
+      const message = "Quelqu'un est passé par le lien \"vincentbattez.dev/go/call\""
+      const url = lookupTable.redirectId.call
+      const urlTitle = "Rejoindre l'appel"
+
+      fetch(
+      `https://api.pushover.net/1/messages.json
+        ?token=${process.env.REACT_APP_PUSHEROVER_APP_TOKEN}
+        &user=${process.env.REACT_APP_PUSHEROVER_USER_KEY}
+        &title=${title}
+        &message=${message}
+        &url=${url}
+        &url_title=${urlTitle}`,
+      { method: 'POST' }
+      )
     }
 
     // ➡️ Redirect to UTM url
