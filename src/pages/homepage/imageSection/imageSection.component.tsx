@@ -7,7 +7,7 @@ export function ImageSection({ image }: ImageSectionProps) {
     <div className="image-section col-5">
       <img
         src={image.url}
-        alt=""
+        alt="Vincent Battez Développeur Front-End"
       />
     </div>
   )
