@@ -11,7 +11,7 @@ export function Homepage() {
   return (
     <section className="page-homepage container">
       <Helmet>
-        <link rel="canonical" href="https://vincentbattez.dev" />
+        <link rel="canonical" href="https://vincentbattez.dev/" />
         <meta itemProp="name" content="🏆 Développeur Vue.js Sénior Freelance - Vincent Battez"/>
         <meta itemProp="description" content="✅ Développeur Front-End Sénior - Portfolio de Vincent Battez"/>
         <meta itemProp="image" content="https://s3.eu-west-3.amazonaws.com/vincentbattez.dev/opengraph-vincentbattez-dev.jpg"/>

@@ -29,7 +29,7 @@ export function Navbar() {
           data-analytics-label={navbarData.link.label}
         >
         <span className="main-navbar__dot mr-3" />
-          <h3 className={`link ${disabledClassName}`}>
+          <span className={`link ${disabledClassName}`}>
             {navbarData.link.label}
             {isAvailable &&
               <img
@@ -38,7 +38,7 @@ export function Navbar() {
                 alt=""
               />
             }
-          </h3>
+          </span>
         </LinkTag>
       </div>
     </nav>
