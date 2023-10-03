@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Nunito:wght@600;800&display=swap');
+
+body {
+  background: red;
+  @apply font-body text-black;
+}
+
+// Displays
+.display-xl, .display-lg {
+  @apply font-heading leading-heading font-extrabold;
+}
+.display-xl {
+  font-size: 4.75rem;
+
+  @screen md {
+    @apply text-display-xl;
+  }
+}
+.display-lg {
+  font-size: 3rem;
+
+  @screen md {
+    @apply text-display-lg;
+  }
+}
+
+// Headings
+.h1, .h2, .h3, .h4{
+  @apply font-heading leading-heading;
+}
+.h1, .h2, .h3 {
+  @apply font-semibold;
+}
+
+
+// H1
+.h1 {
+  @apply text-h2 font-extrabold;
+
+  @screen md {
+    @apply text-h1 font-semibold;
+  }
+}
+
+// H2
+.h2 {
+  @apply text-h3 font-extrabold;
+  @screen md {
+    @apply text-h2 font-semibold;
+  }
+}
+
+// H3
+.h3 {
+  @apply text-h4 font-extrabold;
+  @screen md {
+    @apply text-h3 font-semibold;
+  }
+}
+
+// H4
+.h4 {
+  @apply text-h4 font-extrabold;
+}
+
+// Body
+.body-lg, .body-md, .body-sm {
+  @apply font-semibold leading-body;
+}
+
+// body-lg
+.body-lg {
+  @apply text-body-lg;
+}
+
+// body-md
+.body-md {
+  @apply text-body-md;
+}
+
+// body-sm
+.body-sm {
+  @apply text-body-sm;
+}

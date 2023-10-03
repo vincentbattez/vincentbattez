@@ -1,0 +1,7 @@
+.vb-container {
+  @apply ps-xl pe-xl w-full;
+
+  @screen md {
+    @apply ps-xxxl pe-xxxl;
+  }
+}
