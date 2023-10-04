@@ -123,6 +123,9 @@ module.exports = {
           "font-size": ".75rem",
         },
         ".icon-md": {
+          "font-size": "1rem",
+        },
+        ".icon-lg": {
           "font-size": "1.5rem",
         },
       });

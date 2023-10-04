@@ -1,8 +1,8 @@
 @font-face {
     font-family: "vb-icon";
-    src: url("./vb-icon.ttf?ba652725a03b54386678a4d83ec68c5c") format("truetype"),
-url("./vb-icon.woff?ba652725a03b54386678a4d83ec68c5c") format("woff"),
-url("./vb-icon.woff2?ba652725a03b54386678a4d83ec68c5c") format("woff2");
+    src: url("./vb-icon.ttf?65a27d86d28c5fbf9106d1fda5e319d4") format("truetype"),
+url("./vb-icon.woff?65a27d86d28c5fbf9106d1fda5e319d4") format("woff"),
+url("./vb-icon.woff2?65a27d86d28c5fbf9106d1fda5e319d4") format("woff2");
 }
 
 i[class^="icon-"]:before, i[class*=" icon-"]:before {

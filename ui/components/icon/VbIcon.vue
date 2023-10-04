@@ -11,10 +11,11 @@
 
 <script setup lang="ts">
 import { VbIconEnum } from "~/types/vb-icon";
+import { vbButtonSizeEnum } from "~/ui/components/icon/VbIcon.type";
 
 const props = defineProps<{
   name: VbIconEnum;
-  size: string;
+  size: vbButtonSizeEnum;
 }>();
 </script>
 
@@ -28,6 +29,9 @@ const props = defineProps<{
   }
   &--md {
     @apply icon-md;
+  }
+  &--lg {
+    @apply icon-lg;
   }
 }
 </style>

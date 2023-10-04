@@ -1,51 +1,71 @@
 <template>
-  <ul class="skill--list">
+  <ul class="vb-skill--list">
     <li
       v-for="skill in props.skillList"
       :key="skill.name"
-      class="skill--item"
+      class="vb-skill--item"
       :class="{
-        [`skill--hastag__${skill.type}`]: skill.type,
+        [`vb-skill--hastag__${skill.type}`]: skill.type,
       }"
     >
-      <component :is="skill.love ? 'strong' : 'span'">
-        <span class="skill--hastag">#</span>
-        <span class="skill--text">{{ skill.name }}</span>
-        <VbIcon
-          v-if="skill.love"
-          class="skill--heart text-red-600"
-          :name="VbIconEnum.VbHeart"
-          size="sm"
-        />
-      </component>
+      <VbIcon
+        class="vb-skill--hashtag"
+        :class="{
+          [`vb-skill--hashtag__${skill.type}`]: skill.type,
+        }"
+        :name="VbIconEnum.VbHashtag"
+        :size="vbButtonSizeEnum.md"
+      />
+      <span class="vb-skill--text">{{ skill.name }}</span>
+      <VbIcon
+        v-if="skill.love"
+        class="vb-skill--heart text-red-600"
+        :name="VbIconEnum.VbHeart"
+        :size="vbButtonSizeEnum.sm"
+      />
     </li>
   </ul>
 </template>
 
 <script setup lang="ts">
-import { ISkill } from "~/components/footer/skill.interface";
+import { IVbSkill } from "~/components/footer/vbSkill.type";
 import VbIcon from "~/ui/components/icon/VbIcon.vue";
 import { VbIconEnum } from "~/types/vb-icon";
+import { vbButtonSizeEnum } from "~/ui/components/icon/VbIcon.type";
 
 const props = defineProps<{
-  skillList: ISkill[];
+  skillList: IVbSkill[];
 }>();
 </script>
 
 <style lang="scss" scoped>
-.skill {
+.vb-skill {
   &--list {
     @apply flex justify-center overflow-auto;
   }
 
-  &--item:not(:first-child) {
-    @apply pl-md;
+  &--item {
+    @apply flex items-center;
+
+    &:not(:first-child) {
+      @apply pl-md;
+    }
   }
 
   &--heart {
     position: relative;
     top: -0.25rem;
     left: 0.12rem;
+  }
+  &--hashtag {
+    @apply mr-xs;
+
+    &__primary {
+      @apply text-primary;
+    }
+    &__secondary {
+      @apply text-secondary;
+    }
   }
 }
 </style>

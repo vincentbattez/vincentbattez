@@ -1,10 +1,10 @@
-export enum skillTypeEnum {
+export enum vbSkillTypeEnum {
   primary = "primary",
   secondary = "secondary",
 }
 
-export interface ISkill {
+export interface IVbSkill {
   name: string;
-  type: skillTypeEnum;
+  type: vbSkillTypeEnum;
   love: boolean;
 }

@@ -1,60 +1,64 @@
 <template>
-  <div class="skill">
+  <div class="vb-skill">
     <VbSkillList :skill-list="skillList" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ISkill, skillTypeEnum } from "~/components/footer/skill.interface";
+import { IVbSkill, vbSkillTypeEnum } from "~/components/footer/vbSkill.type";
 import VbSkillList from "~/components/footer/VbSkillList.vue";
 
-const skillList: ISkill[] = [
+const skillList: IVbSkill[] = [
   {
     name: "vue 3",
-    type: skillTypeEnum.primary,
+    type: vbSkillTypeEnum.primary,
     love: true,
   },
   {
     name: "javascript",
-    type: skillTypeEnum.primary,
+    type: vbSkillTypeEnum.primary,
     love: false,
   },
   {
     name: "UX",
-    type: skillTypeEnum.primary,
+    type: vbSkillTypeEnum.primary,
     love: true,
   },
   {
     name: "accessibilité",
-    type: skillTypeEnum.primary,
+    type: vbSkillTypeEnum.primary,
     love: false,
   },
   {
     name: "user-centric",
-    type: skillTypeEnum.primary,
+    type: vbSkillTypeEnum.primary,
     love: true,
   },
   {
     name: "analytics",
-    type: skillTypeEnum.primary,
+    type: vbSkillTypeEnum.primary,
     love: false,
   },
   {
     name: "seo",
-    type: skillTypeEnum.primary,
+    type: vbSkillTypeEnum.primary,
     love: false,
   },
   {
     name: "freelance",
-    type: skillTypeEnum.secondary,
+    type: vbSkillTypeEnum.secondary,
     love: false,
   },
   {
     name: "node.js",
-    type: skillTypeEnum.secondary,
+    type: vbSkillTypeEnum.secondary,
     love: false,
   },
 ];
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.vb-skill {
+  @apply mb-md;
+}
+</style>
