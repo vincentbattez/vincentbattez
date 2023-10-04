@@ -32,12 +32,14 @@
     </div>
 
     <!-- Footer -->
+    <VbFooter />
   </main>
 </template>
 
 <script setup lang="ts">
 import VbH2 from "~/ui/components/typography/h1/VbH2.vue";
 import VbButton from "~/ui/components/forms/VbButton.vue";
+import VbFooter from "~/components/footer/VbFooter.vue";
 </script>
 
 <style lang="scss">

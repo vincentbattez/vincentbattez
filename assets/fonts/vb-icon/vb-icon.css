@@ -1,0 +1,33 @@
+@font-face {
+    font-family: "vb-icon";
+    src: url("./vb-icon.ttf?ba652725a03b54386678a4d83ec68c5c") format("truetype"),
+url("./vb-icon.woff?ba652725a03b54386678a4d83ec68c5c") format("woff"),
+url("./vb-icon.woff2?ba652725a03b54386678a4d83ec68c5c") format("woff2");
+}
+
+i[class^="icon-"]:before, i[class*=" icon-"]:before {
+    font-family: vb-icon !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-vb_calendar:before {
+    content: "\f101";
+}
+.icon-vb_github:before {
+    content: "\f102";
+}
+.icon-vb_hashtag:before {
+    content: "\f103";
+}
+.icon-vb_heart:before {
+    content: "\f104";
+}
+.icon-vb_linkedin:before {
+    content: "\f105";
+}
