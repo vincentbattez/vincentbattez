@@ -1,15 +1,27 @@
 <template>
   <nav class="vb-navbar">
     <!-- Freelance -->
-    <a class="vb-navbar--item" href="#">Disponible pour mission freelance</a>
+    <a class="vb-navbar--item" href="/go/envoyer_message?s=pf"
+      >Disponible pour mission freelance</a
+    >
 
     <!-- Linkedin -->
-    <VbButton class="vb-navbar--item" href="#" shape="square" type="primary">
+    <VbButton
+      class="vb-navbar--item"
+      href="/go/linkedin?s=pf"
+      shape="square"
+      type="primary"
+    >
       <VbIcon size="lg" :name="VbIconEnum.VbLinkedin" />
     </VbButton>
 
     <!-- Github -->
-    <VbButton class="vb-navbar--item" href="#" shape="square" type="primary">
+    <VbButton
+      class="vb-navbar--item"
+      href="/go/github?s=pf"
+      shape="square"
+      type="primary"
+    >
       <VbIcon size="lg" :name="VbIconEnum.VbGithub" />
     </VbButton>
   </nav>

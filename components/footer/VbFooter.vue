@@ -5,7 +5,10 @@
 </template>
 
 <script lang="ts" setup>
-import { IVbSkill, vbSkillTypeEnum } from "~/components/footer/vbSkill.type";
+import {
+  type IVbSkill,
+  vbSkillTypeEnum,
+} from "~/components/footer/vbSkill.type";
 import VbSkillList from "~/components/footer/VbSkillList.vue";
 
 const skillList: IVbSkill[] = [
