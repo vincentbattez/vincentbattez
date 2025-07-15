@@ -83,7 +83,7 @@ module.exports = {
       lg: "1.5rem",
       xl: "2rem",
       xxl: "3rem",
-      xxxl: "4rem",
+      xxxl: "5rem",
     },
     fontFamily: {
       heading: ["Nunito", "sans-serif"],

@@ -1,0 +1,25 @@
+{
+  "enabled": true,
+  "name": "Code Quality Analyzer",
+  "description": "Monitors source code files for changes and provides automated code quality analysis including code smells, design patterns, and best practices suggestions",
+  "version": "1",
+  "when": {
+    "type": "userTriggered",
+    "patterns": [
+      "**/*.vue",
+      "**/*.ts",
+      "**/*.js",
+      "**/*.scss",
+      "**/*.css",
+      "components/**/*",
+      "ui/**/*",
+      "utils/**/*",
+      "pages/**/*",
+      "server/**/*"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Analyze the modified code files for potential improvements. Focus on:\n\n1. **Code Smells & Anti-patterns**: Identify duplicated code, long functions, complex conditionals, and other maintainability issues\n2. **Vue.js Best Practices**: Check for proper Composition API usage, component structure, prop validation, and lifecycle management\n3. **TypeScript Quality**: Verify type safety, interface design, and proper typing practices\n4. **Design Patterns**: Suggest appropriate patterns for better architecture and maintainability\n5. **Performance Optimizations**: Identify opportunities for better performance without breaking functionality\n6. **Nuxt 3 Conventions**: Ensure adherence to Nuxt 3 best practices and conventions\n7. **Accessibility**: Check for accessibility improvements in Vue components\n8. **CSS/SCSS Quality**: Review styling for maintainability and consistency with the design system\n\nProvide specific, actionable suggestions while preserving existing functionality. Format your response with clear sections for each type of improvement found."
+  }
+}

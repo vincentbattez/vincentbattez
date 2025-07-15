@@ -1,7 +1,11 @@
 .vb-container {
-  @apply ps-xl pe-xl w-full;
+  @apply px-md sm:px-xl w-full max-w-[1440px] mx-auto;
 
   @screen md {
-    @apply ps-xxxl pe-xxxl;
+    @apply px-xxl;
+  }
+
+  @screen lg {
+    @apply px-xxxl;
   }
 }

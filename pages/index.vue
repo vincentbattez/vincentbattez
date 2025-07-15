@@ -12,30 +12,37 @@ const route = useRoute();
 </script>
 
 <template>
-  <div>
+  <div class="min-h-screen flex flex-col">
     <!-- Nav -->
     <VbNavbar class="vb-container" />
+
     <!-- Content -->
-    <div class="vb-container flex items-center flex-1">
-      <!-- Start -->
-      <div class="flex-[2]">
-        <div class="max-w-[30rem]">
+    <div
+      class="vb-container flex-1 flex flex-col lg:flex-row lg:items-center py-lg lg:py-0"
+    >
+      <!-- Content Section -->
+      <div class="flex items-center justify-center flex-[2] lg:justify-start">
+        <div class="lg:max-w-[30rem] mx-left lg:mx-0 text-center lg:text-left">
           <h1 class="h4 text-grey-200 uppercase mb-md">
             Développeur front-end freelance à lille
           </h1>
           <VbH2 class="mb-sm">Développeur Vue.js Sénior Freelance</VbH2>
-          <p class="body-md">
+          <p class="body-md mb-lg">
             Disponible dès maintenant pour
             <span class="font-extrabold">créer</span> ou
             <span class="font-extrabold">architecturer</span> un projet Vue 3
             avec passion
           </p>
-          <div class="flex mt-md">
+
+          <!-- Buttons - Responsive Stack -->
+          <div
+            class="flex flex-col sm:flex-row gap-md justify-center lg:justify-start"
+          >
             <!-- entretien -->
             <VbButton
               href="/go/entretien?s=pf"
               :type="vbButtonTypeEnum.primary"
-              class="mr-md"
+              class="w-full sm:w-auto"
             >
               <VbIcon
                 class="mr-sm"
@@ -46,16 +53,26 @@ const route = useRoute();
             </VbButton>
 
             <!-- CV -->
-            <VbButton href="/go/cv?s=pf" :type="vbButtonTypeEnum.secondary">
+            <VbButton
+              href="/go/cv?s=pf"
+              :type="vbButtonTypeEnum.outline"
+              class="w-full sm:w-auto"
+            >
               Voir mon CV
             </VbButton>
           </div>
         </div>
       </div>
 
-      <!-- End -->
-      <div class="flex-[1]">
-        <img class="w-full max-w-[20rem]" src="~/assets/img/face.svg" alt="" />
+      <!-- Image Section -->
+      <div class="flex-1 lg:flex-[1] order-1 lg:order-2 mb-lg lg:mb-0">
+        <div class="flex justify-center">
+          <img
+            class="w-full max-w-[16rem] sm:max-w-[18rem] lg:max-w-[20rem]"
+            src="~/assets/img/face.svg"
+            alt="Portrait de Vincent Battez, développeur Vue.js freelance"
+          />
+        </div>
       </div>
     </div>
 

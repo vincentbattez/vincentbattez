@@ -1,6 +1,6 @@
 export enum vbButtonTypeEnum {
   primary = "primary",
-  secondary = "secondary",
+  outline = "outline",
 }
 
 export enum vbButtonShapeEnum {

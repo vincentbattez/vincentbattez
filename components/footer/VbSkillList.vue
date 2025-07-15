@@ -41,15 +41,19 @@ const props = defineProps<{
 <style lang="scss" scoped>
 .vb-skill {
   &--list {
-    @apply flex justify-center overflow-auto;
+    @apply flex flex-wrap justify-center gap-sm sm:gap-md overflow-visible;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    
+    @screen sm {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
 
   &--item {
-    @apply flex items-center;
-
-    &:not(:first-child) {
-      @apply pl-md;
-    }
+    @apply flex items-center whitespace-nowrap;
+    @apply text-body-sm sm:text-body-md; // Smaller text on mobile
   }
 
   &--heart {
@@ -57,6 +61,7 @@ const props = defineProps<{
     top: -0.25rem;
     left: 0.12rem;
   }
+  
   &--hashtag {
     @apply mr-xs;
 
@@ -66,6 +71,10 @@ const props = defineProps<{
     &__secondary {
       @apply text-secondary;
     }
+  }
+  
+  &--text {
+    @apply text-body-sm sm:text-body-md;
   }
 }
 </style>
