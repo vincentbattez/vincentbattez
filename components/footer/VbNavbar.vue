@@ -1,9 +1,14 @@
 <template>
   <nav class="vb-navbar">
     <!-- Freelance -->
-    <a class="vb-navbar--item vb-navbar--freelance" href="/go/envoyer_message?s=pf">
+    <a
+      class="vb-navbar--item vb-navbar--freelance"
+      href="/go/envoyer_message?s=pf"
+    >
       <div class="vb-navbar--freelance-indicator"></div>
-      <span class="vb-navbar--freelance-text">Disponible pour mission freelance</span>
+      <span class="vb-navbar--freelance-text"
+        >Disponible pour mission freelance</span
+      >
     </a>
 
     <!-- Linkedin -->
@@ -56,7 +61,7 @@ import { vbButtonSizeEnum } from "~/ui/components/icon/VbIcon.type";
     @apply flex items-center;
 
     &:focus {
-      outline: 2px solid #3B82F6;
+      outline: 2px solid #3b82f6;
     }
   }
 
@@ -67,26 +72,26 @@ import { vbButtonSizeEnum } from "~/ui/components/icon/VbIcon.type";
 
   &--freelance-text {
     position: relative;
-    
+
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       bottom: -2px;
       left: 0;
       right: 0;
       height: 2px;
-      background-color: #3B82F6; // Tailwind blue-500
+      background-color: #3b82f6; // Tailwind blue-500
       border-radius: 2px;
     }
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       bottom: -2px;
       left: 0;
       width: 0;
       height: 2px;
-      background-color: #56C25F; // Green color matching the indicator
+      background-color: #56c25f; // Green color matching the indicator
       border-radius: 2px;
       transition: width 0.3s ease-in-out;
       z-index: 1;
@@ -98,22 +103,23 @@ import { vbButtonSizeEnum } from "~/ui/components/icon/VbIcon.type";
     width: 11px;
     height: 11px;
     border-radius: 11px;
-    background: var(--Green-600, #56C25F);
-    box-shadow: 0px 0px 4px 0px #56C25F;
+    background: var(--Green-600, #56c25f);
+    box-shadow: 0px 0px 4px 0px #56c25f;
     animation: live-pulse 2s ease-in-out infinite;
   }
 }
 
 @keyframes live-pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
-    box-shadow: 0px 0px 4px 0px #56C25F;
+    box-shadow: 0px 0px 4px 0px #56c25f;
   }
   50% {
     opacity: 0.7;
     transform: scale(1.1);
-    box-shadow: 0px 0px 8px 2px #56C25F;
+    box-shadow: 0px 0px 8px 2px #56c25f;
   }
 }
 </style>
