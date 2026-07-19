@@ -77,15 +77,24 @@
     (le 302 serveur les en empêchait). Notification iOS conservée côté serveur.
   - _Requirements: 2.1, 2.2, 2.3_
 
-- [ ] 8. Test and validate SEO implementation
-- [ ] 8.1 Validate structured data and meta tags
-  - Test structured data with Google's Rich Results Test
-  - Validate Open Graph tags with Facebook's Sharing Debugger
-  - Check Twitter Card rendering with Twitter's Card Validator
+- [~] 8. Test and validate SEO implementation
+  - Validation locale effectuée via `nuxt dev` + inspection HTML/headers.
+    Rapport complet : `.kiro/specs/seo-configuration/validation-report.md`.
+  - 🚧 BLOQUANT : `public/og/` ne contient que `README.md` — toutes les images OG
+    (`default.png`, `go-*.png`, `vincent-battez-photo.jpg`) renvoient 404. À livrer
+    avant de valider 8.1. (La tâche 7 est cochée mais son livrable image manque.)
+- [~] 8.1 Validate structured data and meta tags
+  - ✅ Local : `<title>` absolu, meta OG/Twitter (type=profile, locale=fr_FR),
+    canonical, geo.*, JSON-LD parse OK (Person + ProfessionalService + WebSite),
+    `/go/[id]` en 200 avec `X-Robots-Tag: noindex,nofollow` + canonical → `/`.
+  - ❌ `og:image` / `twitter:image` → 404 (voir blocker images).
+  - ⏳ Externe (après déploiement de `seo-v2`) : Google Rich Results Test,
+    Facebook Sharing Debugger, Twitter Card Validator.
   - _Requirements: 1.3, 2.1, 2.2, 4.2_
 
-- [ ] 8.2 Test search engine optimization
-  - Verify French keyword targeting in meta content
-  - Test geographic relevance for Lille/France searches
-  - Validate professional AI engineering positioning in all meta content
+- [x] 8.2 Test search engine optimization
+  - ✅ Mots-clés FR (IA Engineer, RAG, LLM, Context Engineering) présents dans
+    description + keywords ; pertinence géo Lille/FR-59 (meta geo.* + JSON-LD) ;
+    positionnement AI Engineer cohérent ; robots.txt `Allow: /` ;
+    sitemap.xml contient `/` et exclut `/go/**`.
   - _Requirements: 1.1, 1.2, 3.3, 4.2_
