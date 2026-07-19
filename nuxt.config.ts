@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ["@nuxtjs/tailwindcss", "@nuxtjs/seo", "@nuxt/eslint"],
+  modules: ["@nuxtjs/tailwindcss", "@nuxtjs/seo", "@nuxt/eslint", "@nuxt/fonts"],
 
   // Site configuration for SEO modules
   site: {
