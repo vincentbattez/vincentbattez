@@ -1,5 +1,3 @@
-import { definePerson } from "nuxt-schema-org/schema";
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: {
@@ -25,18 +23,10 @@ export default defineNuxtConfig({
     language: "fr-FR",
   },
 
-  // Open Graph configuration
+  // Open Graph configuration (l'image par défaut est définie dans app.vue via defineOgImage)
+  // Le rendu utilise Satori (deps satori + @resvg/resvg-js)
   ogImage: {
     enabled: true,
-    defaults: {
-      component: "OgImageBasic",
-      props: {
-        title: "Vincent Battez - AI Engineer & Full Stack Developer",
-        description:
-          "Expert RAG, LLMs, Node.js, React - Développeur IA à Lille",
-        siteName: "Vincent Battez Portfolio",
-      },
-    },
   },
 
   // Global SEO defaults
@@ -93,90 +83,11 @@ export default defineNuxtConfig({
     redirectToCanonicalSiteUrl: true,
   },
 
-  // Schema.org structured data configuration
-  schemaOrg: {
-    identity: definePerson({
-      type: "Person",
-      name: "Vincent Battez",
-      url: "https://vincentbattez.dev",
-      image: "https://vincentbattez.dev/vincent-battez-photo.jpg",
-      description:
-        "Développeur Full Stack spécialisé en IA, expert RAG et LLMs. Services de conseil et développement en intelligence artificielle.",
-      jobTitle: "AI Engineer & Full Stack Developer",
-      email: "contact@vincentbattez.dev",
-      sameAs: [
-        "https://www.linkedin.com/in/vincentbattez",
-        "https://github.com/vincentbattez",
-      ],
-      worksFor: {
-        "@type": "Organization",
-        name: "Freelance",
-      },
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Lille",
-        addressRegion: "Hauts-de-France",
-        addressCountry: "FR",
-      },
-      knowsAbout: [
-        "Artificial Intelligence",
-        "RAG (Retrieval-Augmented Generation)",
-        "Large Language Models",
-        "Context Engineering",
-        "Prompt Engineering",
-        "Full Stack Development",
-        "Node.js",
-        "React",
-        "Vue.js",
-        "TypeScript",
-      ],
-      hasOccupation: {
-        "@type": "Occupation",
-        name: "AI Engineer",
-        occupationLocation: {
-          "@type": "City",
-          name: "Lille, France",
-        },
-        skills: [
-          "Artificial Intelligence Development",
-          "RAG Implementation",
-          "LLM Integration",
-          "Full Stack Development",
-          "Software Architecture",
-        ],
-      },
-    }),
-    // Global schemas for professional services and local business
-    global: [
-      {
-        "@type": "ProfessionalService",
-        name: "Vincent Battez - Services IA & Développement",
-        url: "https://vincentbattez.dev",
-        description:
-          "Services de conseil et développement en intelligence artificielle, spécialisé en RAG, LLMs et développement Full Stack.",
-        provider: {
-          "@type": "Person",
-          name: "Vincent Battez",
-        },
-        areaServed: {
-          "@type": "Country",
-          name: "France",
-        },
-        serviceType: [
-          "Conseil en Intelligence Artificielle",
-          "Développement RAG",
-          "Intégration LLM",
-          "Développement Full Stack",
-          "Architecture Logicielle",
-        ],
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: "Lille",
-          addressCountry: "FR",
-        },
-      },
-    ],
-  },
+  // Sous-module Schema.org désactivé : nuxt-schema-org 6.x est incompatible avec le moteur
+  // head unhead 3.x de Nuxt 4.5 (le hook `entries:resolve` ne s'exécute pas → crash `resolveGraph`).
+  // Le JSON-LD structuré (Person + ProfessionalService + WebSite) est injecté manuellement
+  // dans app.vue via useHead, ce qui contourne le plugin cassé.
+  schemaOrg: false,
 
   // Additional runtime configuration
   runtimeConfig: {
