@@ -4,8 +4,10 @@ import { lookupTable, sendIOSNotification } from "~/utils/redirect";
 const route = useRoute();
 
 // const source = route.query.s;
-const redirectId = route.params.id;
-const redirectURL = lookupTable.redirectId[redirectId] || "/";
+const redirectId = String(route.params.id);
+const redirectURL =
+  lookupTable.redirectId[redirectId as keyof typeof lookupTable.redirectId] ||
+  "/";
 
 // 📲 Send iOS notification
 sendIOSNotification(redirectId, redirectURL);

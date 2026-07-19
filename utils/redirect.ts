@@ -22,7 +22,10 @@ export const lookupTable = {
   },
 };
 
-export async function sendIOSNotification(redirectId, url): Promise<void> {
+export async function sendIOSNotification(
+  redirectId: string,
+  url: string,
+): Promise<void> {
   if (redirectId !== "call") {
     return;
   }
@@ -44,7 +47,7 @@ export async function sendIOSNotification(redirectId, url): Promise<void> {
   );
 }
 
-export function injectUtmSourceInUrl(source: string, baseUrl?: string): string {
+export function injectUtmSourceInUrl(source: string, baseUrl: string): string {
   const utmUrlRedirect = new URL(baseUrl);
   utmUrlRedirect.searchParams.append("utm_source", source);
   return utmUrlRedirect.toString();

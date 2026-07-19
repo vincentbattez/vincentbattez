@@ -42,7 +42,7 @@ const props = defineProps<{
 
 // Dupliquer les skills pour créer un effet de boucle infinie
 const duplicatedSkills = computed(() => {
-  const duplicated = [];
+  const duplicated: (IVbSkill & { index: string })[] = [];
   // Créer 3 copies pour assurer une boucle fluide
   for (let i = 0; i < 3; i++) {
     props.skillList.forEach((skill, index) => {
