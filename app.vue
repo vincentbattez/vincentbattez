@@ -20,7 +20,7 @@ const schemaOrgGraph = {
       "@id": `${siteUrl}/#person`,
       name: "Vincent Battez",
       url: siteUrl,
-      image: `${siteUrl}/vincent-battez-photo.jpg`,
+      image: `${siteUrl}/og/vincent-battez-photo.jpg`,
       description:
         "Développeur Full Stack spécialisé en IA, expert RAG et LLMs. Services de conseil et développement en intelligence artificielle.",
       jobTitle: "AI Engineer & Full Stack Developer",
