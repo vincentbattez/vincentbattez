@@ -76,6 +76,21 @@ export default defineNuxtConfig({
           property: "og:site_name",
           content: "Vincent Battez - AI Engineer Portfolio",
         },
+        // Twitter Card meta tags
+        // twitter:image et twitter:image:* sont injectés automatiquement par og-image
+        // (defineOgImage dans app.vue), tout comme og:image. twitter:site/twitter:creator
+        // proviennent de site.twitter ("@vincentbattez").
+        { name: "twitter:card", content: "summary_large_image" },
+        {
+          name: "twitter:title",
+          content:
+            "Vincent Battez - AI Engineer & Full Stack Developer | Expert RAG, LLMs, Node.js",
+        },
+        {
+          name: "twitter:description",
+          content:
+            "Développeur Full Stack spécialisé en IA : Expert RAG (Retrieval-Augmented Generation), LLMs, Context Engineering. Technologies : Node.js, React, observabilité. Services IA à Lille, France.",
+        },
       ],
     },
   },
