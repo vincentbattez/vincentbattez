@@ -13,14 +13,14 @@
 </template>
 
 <script lang="ts" setup>
-import {
+import type {
   vbButtonShapeEnum,
   vbButtonTypeEnum,
 } from "~/ui/components/forms/VbButton.type";
 
 const props = defineProps<{
   type: vbButtonTypeEnum;
-  href?: String;
+  href?: string;
   shape?: vbButtonShapeEnum;
 }>();
 </script>

@@ -10,8 +10,8 @@
 </template>
 
 <script setup lang="ts">
-import { VbIconEnum } from "~/types/vb-icon";
-import { vbButtonSizeEnum } from "~/ui/components/icon/VbIcon.type";
+import type { VbIconEnum } from "~/types/vb-icon";
+import type { vbButtonSizeEnum } from "~/ui/components/icon/VbIcon.type";
 
 const props = defineProps<{
   name: VbIconEnum;

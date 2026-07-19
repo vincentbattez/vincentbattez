@@ -7,8 +7,6 @@ import VbIcon from "~/ui/components/icon/VbIcon.vue";
 import VbFooter from "~/components/footer/VbFooter.vue";
 import VbButton from "~/ui/components/forms/VbButton.vue";
 import VbNavbar from "~/components/footer/VbNavbar.vue";
-
-const route = useRoute();
 </script>
 
 <template>

@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { type IVbSkill } from "~/components/footer/vbSkill.type";
+import type { IVbSkill } from "~/components/footer/vbSkill.type";
 import VbIcon from "~/ui/components/icon/VbIcon.vue";
 import { VbIconEnum } from "~/types/vb-icon";
 import { vbButtonSizeEnum } from "~/ui/components/icon/VbIcon.type";
