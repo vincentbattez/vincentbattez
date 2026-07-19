@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { lookupTable, sendIOSNotification } from "~/utils/redirect";
+import { resolveRedirectURL, sendIOSNotification } from "~/utils/redirect";
 
 const route = useRoute();
+const config = useRuntimeConfig();
 
 // const source = route.query.s;
 const redirectId = String(route.params.id);
-const redirectURL =
-  lookupTable.redirectId[redirectId as keyof typeof lookupTable.redirectId] ||
-  "/";
+const redirectURL = resolveRedirectURL(redirectId, {
+  cvLink: config.public.cvLink,
+  callLink: config.public.callLink,
+});
 
 // SEO pages de redirection.
 // La redirection est côté CLIENT (cf. onMounted plus bas) : le SSR renvoie un
