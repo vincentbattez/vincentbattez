@@ -13,11 +13,11 @@ export const lookupTable = {
     recommandation:
       "https://www.linkedin.com/in/vincentbattez/details/recommendations/edit/write/?profileUrn=urn%3Ali%3Afsd_profile%3AACoAABx8RLABL3SOZC3R86qDOhYgJZwNmmSBKWY",
     entretien: "https://hub.flexibits.com/openings/vincentbattez/entretien/",
-    call: "https://meet.google.com/zri-nmgp-tqc",
+    call: process.env.GOOGLE_MEET_LINK,
     envoyer_message: "https://www.linkedin.com/messaging/thread/new/",
     linkedin: "https://www.linkedin.com/in/vincentbattez/",
     github: "https://github.com/vincentbattez/",
-    cv: "https://drive.google.com/file/d/0B_qtZh6a-s4cVTFkMU42bU9LTU0/view?resourcekey=0-77krpT-fBdI0BbSikISLBQ",
+    cv: process.env.CV_LINK,
     mail: "mailto:vincentbattez",
   },
 };
@@ -37,8 +37,8 @@ export async function sendIOSNotification(
 
   await fetch(
     `https://api.pushover.net/1/messages.json
-        ?token=${process.env.PUSHEROVER_APP_TOKEN}
-        &user=${process.env.PUSHEROVER_USER_KEY}
+        ?token=${process.env.PUSHOVER_APP_TOKEN}
+        &user=${process.env.PUSHOVER_USER_KEY}
         &title=${title}
         &message=${message}
         &url=${url}
