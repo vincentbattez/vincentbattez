@@ -47,8 +47,11 @@ if (import.meta.server) {
 
 // ✅ Redirection vers l'URL externe, côté client (après hydratation) pour
 // préserver le rendu 200 lisible par les crawlers.
+// `replace()` (et non `href = …`) remplace l'entrée /go dans l'historique au
+// lieu d'en créer une nouvelle : le retour arrière ramène ainsi à la page
+// précédant /go plutôt que de re-déclencher la redirection.
 onMounted(() => {
-  window.location.href = redirectURL;
+  window.location.replace(redirectURL);
 });
 </script>
 
