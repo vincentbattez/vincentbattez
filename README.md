@@ -1,75 +1,17 @@
-# Nuxt 3 Minimal Starter
+## 🙋🏻‍♂️ Vincent Battez
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+[![Linkedin](https://img.shields.io/badge/Profil-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://vincentbattez.dev/go/linkedin?s=gh)
+[![Portfolio](https://img.shields.io/badge/Portfolio-FFFFFF?style=for-the-badge&logo=react&logoColor=black)](https://vincentbattez.dev/)
+[![Freelance](https://img.shields.io/badge/Freelance-DB5762?style=for-the-badge&logo=MasterCard&logoColor=white)](https://vincentbattez.dev/go/linkedin?s=gh)
 
-## Setup
+---
 
-Make sure to install the dependencies:
+🏅 Développeur front-end (vuejs) UX & accessibilité
 
-```bash
-# npm
-npm install
+🚀 Forte affinité pour l'UX, l'UI et l’accessibilité
 
-# pnpm
-pnpm install
+---
 
-# yarn
-yarn install
+✅ Disponible pour mission freelance (développeur front-end)
 
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+[![Prendre rendez-vous](https://img.shields.io/badge/Prendre_RDV-00897B?style=for-the-badge&logo=GoogleMeet&logoColor=white)](https://vincentbattez.dev/go/entretien?s=gh)
