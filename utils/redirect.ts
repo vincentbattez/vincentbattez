@@ -13,32 +13,17 @@ export const lookupTable = {
     recommandation:
       "https://www.linkedin.com/in/vincentbattez/details/recommendations/edit/write/?profileUrn=urn%3Ali%3Afsd_profile%3AACoAABx8RLABL3SOZC3R86qDOhYgJZwNmmSBKWY",
     entretien: "https://hub.flexibits.com/openings/vincentbattez/entretien/",
+    // Liens publics par nature (ce sont les cibles de redirection visibles par
+    // le visiteur) : codés en dur, comme les autres. Inutile de passer par des
+    // variables d'env / runtimeConfig, ça ne les rendrait pas plus secrets.
+    call: "https://meet.google.com/zri-nmgp-tqc",
     envoyer_message: "https://www.linkedin.com/messaging/thread/new/",
     linkedin: "https://www.linkedin.com/in/vincentbattez/",
     github: "https://github.com/vincentbattez/",
+    cv: "https://drive.google.com/file/d/0B_qtZh6a-s4cVTFkMU42bU9LTU0/view?resourcekey=0-77krpT-fBdI0BbSikISLBQ",
     mail: "mailto:vincentbattez",
   },
 };
-
-// Résout l'URL cible d'une redirection /go/<id>.
-// `call` et `cv` proviennent de l'env (runtimeConfig.public) et non de la table
-// statique : elles doivent être disponibles côté client, où `process.env` est
-// indisponible. On les passe donc explicitement depuis useRuntimeConfig().
-export function resolveRedirectURL(
-  redirectId: string,
-  config: { cvLink?: string; callLink?: string },
-): string {
-  const dynamic: Record<string, string | undefined> = {
-    call: config.callLink,
-    cv: config.cvLink,
-  };
-
-  return (
-    dynamic[redirectId] ??
-    lookupTable.redirectId[redirectId as keyof typeof lookupTable.redirectId] ??
-    "/"
-  );
-}
 
 export async function sendIOSNotification(
   redirectId: string,

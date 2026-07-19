@@ -145,13 +145,6 @@ export default defineNuxtConfig({
   // Additional runtime configuration
   runtimeConfig: {
     public: {
-      // URLs de redirection /go/*. Exposées en config PUBLIQUE car la
-      // redirection s'effectue côté client (pages/go/[id].vue) : un
-      // `process.env.*` lu au niveau module serait `undefined` dans le bundle
-      // navigateur. Valeurs lues au build depuis l'env (Netlify : CV_LINK,
-      // GOOGLE_MEET_LINK) et bakées dans le payload client.
-      cvLink: process.env.CV_LINK,
-      callLink: process.env.GOOGLE_MEET_LINK,
       siteUrl: "https://vincentbattez.dev",
       siteName: "Vincent Battez - AI Engineer & Full Stack Developer",
       siteDescription:
