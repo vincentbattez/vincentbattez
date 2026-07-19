@@ -7,6 +7,21 @@ import VbIcon from "~/ui/components/icon/VbIcon.vue";
 import VbFooter from "~/components/footer/VbFooter.vue";
 import VbButton from "~/ui/components/forms/VbButton.vue";
 import VbNavbar from "~/components/footer/VbNavbar.vue";
+
+// SEO page d'accueil : mots-clés IA/Full Stack ciblant le marché français.
+// Le titre est absolu (titleTemplate désactivé) car il contient déjà la marque,
+// ce qui évite le doublon avec le template global défini dans nuxt.config.
+useSeoMeta({
+  title: "Vincent Battez - IA Engineer & Développeur Full Stack Sénior",
+  description:
+    "IA Engineer et Développeur Full Stack Sénior à Lille. Expert RAG (Retrieval-Augmented Generation), LLMs et Context Engineering. J'accompagne entreprises et CTOs dans l'intégration de l'intelligence artificielle et le développement d'applications Full Stack robustes (Node.js, React, Vue.js).",
+  keywords:
+    "IA Engineer, Développeur Full Stack, Expert RAG, Spécialiste LLM, Context Engineering, Prompt Engineering, Développeur IA freelance Lille, Consultant intelligence artificielle, Intégration IA entreprise, Architecture LLM",
+});
+
+useHead({
+  titleTemplate: null,
+});
 </script>
 
 <template>

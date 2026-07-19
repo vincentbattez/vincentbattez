@@ -39,15 +39,15 @@
   - Set up twitter:image for professional presentation
   - _Requirements: 2.2, 2.3_
 
-- [ ] 5. Implement page-specific SEO optimization
-- [ ] 5.1 Optimize homepage SEO
+- [x] 5. Implement page-specific SEO optimization
+- [x] 5.1 Optimize homepage SEO
   - Update index.vue with useSeoMeta for AI engineering keywords
   - Configure title with "IA Engineer", "Développeur Full Stack" keywords
   - Set meta description mentioning RAG, LLMs, context engineering and senior full stack expertise
   - Add keywords targeting French AI development terms
   - _Requirements: 1.1, 1.4, 3.1, 3.3_
 
-- [ ] 5.2 Optimize dynamic redirect pages SEO
+- [x] 5.2 Optimize dynamic redirect pages SEO
   - Configure SEO meta for /go/[id].vue pages
   - Set appropriate noindex directives for redirect pages
   - Ensure canonical URLs point to main portfolio

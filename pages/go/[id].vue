@@ -9,6 +9,18 @@ const redirectURL =
   lookupTable.redirectId[redirectId as keyof typeof lookupTable.redirectId] ||
   "/";
 
+// SEO pages de redirection : à placer AVANT navigateTo, qui émet le 302 et
+// interrompt le setup en SSR (tout ce qui suit serait ignoré).
+// - noindex : useRobotsRule pose le meta ET l'en-tête X-Robots-Tag, seul signal
+//   robots visible par un crawler sur une redirection 302.
+// - canonical : pointe vers le portfolio principal pour éviter le duplicate content.
+useRobotsRule("noindex, nofollow");
+
+const siteConfig = useSiteConfig();
+useHead({
+  link: [{ rel: "canonical", href: `${siteConfig.url}/` }],
+});
+
 // 📲 Send iOS notification
 sendIOSNotification(redirectId, redirectURL);
 
