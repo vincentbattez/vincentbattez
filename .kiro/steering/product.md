@@ -4,12 +4,12 @@ inclusion: always
 
 # Product Overview
 
-Vincent Battez's personal portfolio website - a freelance Vue.js developer based in Lille, France. Professional showcase designed to attract clients for senior-level Vue.js development work.
+Vincent Battez's personal portfolio website - a freelance AI Engineer and Full Stack developer based in Lille, France. Professional showcase designed to attract clients for senior-level AI engineering and full stack development work.
 
 ## Content Guidelines
 - **Language**: French content for local market targeting
 - **Tone**: Professional, confident, showcasing senior expertise
-- **Focus**: Vue.js specialization and project architecture capabilities
+- **Focus**: AI engineering specialization and full stack architecture capabilities
 - **Call-to-actions**: Direct scheduling and CV viewing links
 
 ## Brand Identity
@@ -25,8 +25,8 @@ Vincent Battez's personal portfolio website - a freelance Vue.js developer based
 - Professional call-to-action buttons
 
 ## Target Audience
-- Potential clients seeking Vue.js developers
-- Companies needing freelance frontend expertise
+- Companies needing freelance full stack development expertise
+- Businesses looking for AI integration and automation solutions
 - Professional network connections in French market
 
 ## Development Principles
