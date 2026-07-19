@@ -9,10 +9,12 @@ const redirectURL =
   lookupTable.redirectId[redirectId as keyof typeof lookupTable.redirectId] ||
   "/";
 
-// SEO pages de redirection : à placer AVANT navigateTo, qui émet le 302 et
-// interrompt le setup en SSR (tout ce qui suit serait ignoré).
-// - noindex : useRobotsRule pose le meta ET l'en-tête X-Robots-Tag, seul signal
-//   robots visible par un crawler sur une redirection 302.
+// SEO pages de redirection.
+// La redirection est côté CLIENT (cf. onMounted plus bas) : le SSR renvoie un
+// 200 avec l'écran « Redirection en cours… » pour que les crawlers sociaux
+// lisent les balises (og:image, etc.) avant de suivre le lien externe.
+// - noindex : on ne veut pas indexer ces endpoints (useRobotsRule pose le meta
+//   ET l'en-tête X-Robots-Tag).
 // - canonical : pointe vers le portfolio principal pour éviter le duplicate content.
 useRobotsRule("noindex, nofollow");
 
@@ -21,8 +23,21 @@ useHead({
   link: [{ rel: "canonical", href: `${siteConfig.url}/` }],
 });
 
-// 📲 Send iOS notification
-sendIOSNotification(redirectId, redirectURL);
+// OG image statique dédiée à chaque redirection : public/og/go-<id>.png
+// (fournie manuellement). Override le défaut global posé dans app.vue.
+const ogImageUrl = `${siteConfig.url}/og/go-${redirectId}.png`;
+useSeoMeta({
+  ogImage: ogImageUrl,
+  twitterImage: ogImageUrl,
+});
+
+// 📲 Notification iOS : côté serveur uniquement. Le token Pushover est une
+// variable d'env serveur (indisponible côté client), et le SSR s'exécute déjà
+// à chaque requête réelle. import.meta.server évite un double appel à
+// l'hydratation.
+if (import.meta.server) {
+  sendIOSNotification(redirectId, redirectURL);
+}
 
 // ➡️ Redirect to UTM url
 // if (source) {
@@ -30,9 +45,10 @@ sendIOSNotification(redirectId, redirectURL);
 //   injectUtmSourceInUrl(source);
 // }
 
-// ✅ Redirect to external URL
-await navigateTo(redirectURL, {
-  external: true,
+// ✅ Redirection vers l'URL externe, côté client (après hydratation) pour
+// préserver le rendu 200 lisible par les crawlers.
+onMounted(() => {
+  window.location.href = redirectURL;
 });
 </script>
 

@@ -53,24 +53,28 @@
   - Ensure canonical URLs point to main portfolio
   - _Requirements: 4.1, 4.2_
 
-- [ ] 6. Configure robots.txt and sitemap
-- [ ] 6.1 Set up robots.txt configuration
+- [x] 6. Configure robots.txt and sitemap
+- [x] 6.1 Set up robots.txt configuration
   - Configure @nuxtjs/robots for proper search engine crawling
   - Allow crawling of main content pages
   - Set appropriate crawl delays and directives
   - _Requirements: 4.1, 4.2_
 
-- [ ] 6.2 Configure automatic sitemap generation
+- [x] 6.2 Configure automatic sitemap generation
   - Set up @nuxtjs/sitemap for search engine discovery
   - Include main portfolio pages in sitemap
   - Configure sitemap with proper priority and change frequency
   - _Requirements: 4.1, 4.2_
 
-- [ ] 7. Set up Open Graph image generation
-  - Configure @nuxtjs/og-image for dynamic social media images
-  - Create template for professional AI engineer branding
-  - Set up image for social sharing
-  - Set up specific image for /go/cv page
+- [x] 7. Set up Open Graph images (static)
+  - Décision : images OG **statiques** (public/og/) plutôt que génération dynamique
+    Satori — plus simple et mieux contrôlé vu le faible nombre de pages
+    (og-image v6.7.2 désactivé : `ogImage.enabled: false`).
+  - Image par défaut pour le partage social : public/og/default.png (app.vue, useSeoMeta)
+  - Image spécifique par redirection : public/og/go-<id>.png (pages/go/[id].vue)
+  - /go/[id] basculé en redirection **côté client** (200 + interstitiel) pour que
+    les crawlers sociaux lisent les balises OG avant de suivre le lien externe
+    (le 302 serveur les en empêchait). Notification iOS conservée côté serveur.
   - _Requirements: 2.1, 2.2, 2.3_
 
 - [ ] 8. Test and validate SEO implementation

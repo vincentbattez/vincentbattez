@@ -1,8 +1,11 @@
 <script setup lang="ts">
-// OG image par défaut, appliquée à toutes les pages (og-image v6)
-defineOgImage("NuxtSeo.satori", {
-  title: "Vincent Battez - AI Engineer & Full Stack Developer",
-  description: "Expert RAG, LLMs, Node.js, React - Développeur IA à Lille",
+// OG image par défaut (statique), appliquée à toutes les pages.
+// Fichier fourni manuellement dans public/og/ → servi à la racine du site.
+// URL absolue requise par les crawlers sociaux.
+const { url: siteUrlBase } = useSiteConfig();
+useSeoMeta({
+  ogImage: `${siteUrlBase}/og/default.png`,
+  twitterImage: `${siteUrlBase}/og/default.png`,
 });
 
 // Données structurées Schema.org (JSON-LD) injectées manuellement.

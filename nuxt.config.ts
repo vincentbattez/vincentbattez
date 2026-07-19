@@ -23,12 +23,18 @@ export default defineNuxtConfig({
     },
     twitter: "@vincentbattez",
     language: "fr-FR",
+    // Force l'indexabilité en production. Sans ça, nuxt-robots désactive l'indexation
+    // (robots.txt "Disallow: /") tant que l'environnement n'est pas détecté comme prod.
+    // Portfolio mono-domaine → un booléen explicite est déterministe (cf. getSiteIndexable).
+    indexable: true,
   },
 
-  // Open Graph configuration (l'image par défaut est définie dans app.vue via defineOgImage)
-  // Le rendu utilise Satori (deps satori + @resvg/resvg-js)
+  // Génération dynamique d'images OG désactivée : on utilise des images
+  // statiques fournies dans public/og/ (plus simple et mieux contrôlé vu le
+  // faible nombre de pages). og:image / twitter:image sont posés à la main via
+  // useSeoMeta (défaut dans app.vue, spécifiques dans pages/go/[id].vue).
   ogImage: {
-    enabled: true,
+    enabled: false,
   },
 
   // Global SEO defaults
@@ -52,7 +58,9 @@ export default defineNuxtConfig({
             "IA Engineer, Développeur Full Stack, Expert RAG, LLM, Context Engineering, Prompt Engineering, Intelligence Artificielle, Lille, France",
         },
         { name: "author", content: "Vincent Battez" },
-        { name: "robots", content: "index, follow" },
+        // NB : le meta `robots` est géré par le module @nuxtjs/robots (metaTag: true),
+        // piloté par site.indexable et la config `robots` ci-dessous. On ne le pose donc
+        // pas à la main ici pour éviter deux sources concurrentes sur `name="robots"`.
         { name: "language", content: "French" },
         { name: "geo.region", content: "FR-59" },
         { name: "geo.placename", content: "Lille" },
@@ -77,8 +85,9 @@ export default defineNuxtConfig({
           content: "Vincent Battez - AI Engineer Portfolio",
         },
         // Twitter Card meta tags
-        // twitter:image et twitter:image:* sont injectés automatiquement par og-image
-        // (defineOgImage dans app.vue), tout comme og:image. twitter:site/twitter:creator
+        // twitter:image et og:image sont posés via useSeoMeta (défaut dans app.vue,
+        // spécifiques par redirection dans pages/go/[id].vue) car la génération
+        // dynamique og-image est désactivée (images statiques). twitter:site/creator
         // proviennent de site.twitter ("@vincentbattez").
         { name: "twitter:card", content: "summary_large_image" },
         {
@@ -98,6 +107,33 @@ export default defineNuxtConfig({
   // SEO module configuration
   seo: {
     redirectToCanonicalSiteUrl: true,
+  },
+
+  // robots.txt : autorise le crawl. On NE bloque PAS /go/* (contrairement à un
+  // premier réflexe) : ces pages renvoient désormais un 200 avec meta noindex
+  // (redirection côté client). Un `Disallow: /go/` serait contre-productif —
+  // (1) il empêcherait les crawlers sociaux (LinkedIn, Twitter) de lire l'og:image
+  //     de la page → aperçus de partage cassés ;
+  // (2) robots.txt et noindex ne s'additionnent pas : une URL bloquée n'est jamais
+  //     fetchée, donc Google n'y verrait jamais le noindex (risque d'indexation
+  //     "URL seule"). Le noindex servi sur le 200 suffit à les tenir hors de l'index.
+  // Le sitemap (@nuxtjs/sitemap, tâche 6.2) exclut déjà /go/**.
+  robots: {
+    allow: ["/"],
+  },
+
+  // Sitemap : découverte par les moteurs de recherche. Le portfolio est
+  // essentiellement mono-page → la home est prioritaire (1.0), les futures pages
+  // héritent d'un défaut raisonnable (0.8, mensuel). autoLastmod ajoute la date de
+  // build comme signal de fraîcheur. Les redirections /go/* sont exclues (cf. robots).
+  sitemap: {
+    autoLastmod: true,
+    defaults: {
+      changefreq: "monthly",
+      priority: 0.8,
+    },
+    urls: [{ loc: "/", changefreq: "yearly", priority: 1.0 }],
+    exclude: ["/go/**"],
   },
 
   // Sous-module Schema.org désactivé : nuxt-schema-org 6.x est incompatible avec le moteur
