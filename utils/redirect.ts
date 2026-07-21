@@ -25,6 +25,31 @@ export const lookupTable = {
   },
 };
 
+// Libellés humanisés des destinations, en parallèle de lookupTable.redirectId :
+// on affiche « Ouverture de votre appel visio… » plutôt que l'URL brute. Chaque
+// valeur est un groupe nominal inséré après « Ouverture de » côté loader.
+const redirectLabel = {
+  recommandation: "l'espace recommandation LinkedIn",
+  entretien: "la prise de rendez-vous",
+  call: "votre appel visio",
+  envoyer_message: "votre messagerie LinkedIn",
+  linkedin: "mon profil LinkedIn",
+  github: "mon GitHub",
+  cv: "mon CV",
+  mail: "votre messagerie",
+} as const;
+
+const defaultRedirectLabel = "votre destination";
+
+// Retombe sur un libellé générique pour tout id inconnu (parallèle du `|| "/"`
+// appliqué à redirectURL) — jamais de texte vide ou `undefined` à l'écran.
+export function getRedirectLabel(redirectId: string): string {
+  return (
+    redirectLabel[redirectId as keyof typeof redirectLabel] ??
+    defaultRedirectLabel
+  );
+}
+
 export async function sendIOSNotification(
   redirectId: string,
   url: string,

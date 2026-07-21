@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { lookupTable, sendIOSNotification } from "~/utils/redirect";
+import {
+  getRedirectLabel,
+  lookupTable,
+  sendIOSNotification,
+} from "~/utils/redirect";
+import GoRedirectLoader from "~/components/GoRedirectLoader.vue";
 
 const route = useRoute();
 
@@ -8,6 +13,7 @@ const redirectId = String(route.params.id);
 const redirectURL =
   lookupTable.redirectId[redirectId as keyof typeof lookupTable.redirectId] ||
   "/";
+const redirectLabel = getRedirectLabel(redirectId);
 
 // SEO pages de redirection.
 // La redirection est côté CLIENT (cf. onMounted plus bas) : le SSR renvoie un
@@ -50,22 +56,30 @@ if (import.meta.server) {
 // `replace()` (et non `href = …`) remplace l'entrée /go dans l'historique au
 // lieu d'en créer une nouvelle : le retour arrière ramène ainsi à la page
 // précédant /go plutôt que de re-déclencher la redirection.
+//
+// Délai fixe de 2 s pour laisser exister l'écran de transition premium. Le
+// fade-out de sortie (rebond, 280 ms) est armé vers 1720 ms et doit se terminer
+// AVANT le replace() à 2000 ms : on anime puis on redirige, jamais l'inverse.
+const isExiting = ref(false);
 onMounted(() => {
-  window.location.replace(redirectURL);
+  const exitTimer = setTimeout(() => (isExiting.value = true), 1720);
+  const redirectTimer = setTimeout(
+    () => window.location.replace(redirectURL),
+    2000,
+  );
+  onBeforeUnmount(() => {
+    clearTimeout(exitTimer);
+    clearTimeout(redirectTimer);
+  });
 });
 </script>
 
 <template>
-  <div class="vb-container flex items-center justify-center flex-1">
-    <div class="text-center">
-      <p class="mb-sm">⏳ Redirection en cours...</p>
-      <a
-        class="text-body-sm text-grey-100"
-        :href="redirectURL"
-        rel="noopener noreferrer"
-      >
-        {{ redirectURL }}
-      </a>
-    </div>
+  <div class="vb-container flex flex-1">
+    <GoRedirectLoader
+      :label="redirectLabel"
+      :url="redirectURL"
+      :exiting="isExiting"
+    />
   </div>
 </template>
