@@ -118,7 +118,6 @@ export default {
   },
   plugins: [
     plugin(function ({ addUtilities }) {
-      // Icons
       addUtilities({
         ".icon-sm": {
           "font-size": ".75rem",

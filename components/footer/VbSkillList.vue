@@ -40,10 +40,9 @@ const props = defineProps<{
   skillList: IVbSkill[];
 }>();
 
-// Dupliquer les skills pour créer un effet de boucle infinie
+// 3 copies pour une boucle de défilement sans couture
 const duplicatedSkills = computed(() => {
   const duplicated: (IVbSkill & { index: string })[] = [];
-  // Créer 3 copies pour assurer une boucle fluide
   for (let i = 0; i < 3; i++) {
     props.skillList.forEach((skill, index) => {
       duplicated.push({
@@ -112,14 +111,13 @@ const duplicatedSkills = computed(() => {
 
 @keyframes scroll-right {
   0% {
-    transform: translateX(-33.333%); // Commence par la gauche
+    transform: translateX(-33.333%);
   }
   100% {
-    transform: translateX(0); // Se déplace vers la droite
+    transform: translateX(0);
   }
 }
 
-// Pause l'animation au survol
 .vb-skill--container:hover .vb-skill--list {
   animation-play-state: paused;
 }

@@ -16,8 +16,6 @@ export default defineNuxtConfig({
     "@nuxt/fonts",
   ],
 
-  // Polices auto-hébergées. Déclaration explicite des graisses pour éviter tout
-  // FOUT : Nunito (corps, jusqu'à extrabold 800), Zilla Slab (titres, 700).
   fonts: {
     families: [
       { name: "Nunito", weights: [400, 600, 700, 800] },
@@ -25,7 +23,6 @@ export default defineNuxtConfig({
     ],
   },
 
-  // Site configuration for SEO modules
   site: {
     url: "https://vincentbattez.dev",
     name: "Vincent Battez - Développeur Full-Stack Senior Freelance",
@@ -37,21 +34,13 @@ export default defineNuxtConfig({
     },
     twitter: "@vincentbattez",
     language: "fr-FR",
-    // Force l'indexabilité en production. Sans ça, nuxt-robots désactive l'indexation
-    // (robots.txt "Disallow: /") tant que l'environnement n'est pas détecté comme prod.
-    // Portfolio mono-domaine → un booléen explicite est déterministe (cf. getSiteIndexable).
     indexable: true,
   },
 
-  // Génération dynamique d'images OG désactivée : on utilise des images
-  // statiques fournies dans public/og/ (plus simple et mieux contrôlé vu le
-  // faible nombre de pages). og:image / twitter:image sont posés à la main via
-  // useSeoMeta (défaut dans app.vue, spécifiques dans pages/go/[id].vue).
   ogImage: {
     enabled: false,
   },
 
-  // Global SEO defaults
   app: {
     head: {
       htmlAttrs: {
@@ -73,15 +62,11 @@ export default defineNuxtConfig({
             "Développeur Full-Stack, Développeur Senior, Freelance Lille, Node.js, React, Vue.js, TypeScript, Architecture logicielle, Développeur web freelance",
         },
         { name: "author", content: "Vincent Battez" },
-        // NB : le meta `robots` est géré par le module @nuxtjs/robots (metaTag: true),
-        // piloté par site.indexable et la config `robots` ci-dessous. On ne le pose donc
-        // pas à la main ici pour éviter deux sources concurrentes sur `name="robots"`.
         { name: "language", content: "French" },
         { name: "geo.region", content: "FR-59" },
         { name: "geo.placename", content: "Lille" },
         { name: "geo.position", content: "50.6292;3.0573" },
         { name: "ICBM", content: "50.6292, 3.0573" },
-        // Open Graph meta tags
         {
           property: "og:title",
           content:
@@ -99,11 +84,6 @@ export default defineNuxtConfig({
           property: "og:site_name",
           content: "Vincent Battez - Développeur Full-Stack Senior Freelance",
         },
-        // Twitter Card meta tags
-        // twitter:image et og:image sont posés via useSeoMeta (défaut dans app.vue,
-        // spécifiques par redirection dans pages/go/[id].vue) car la génération
-        // dynamique og-image est désactivée (images statiques). twitter:site/creator
-        // proviennent de site.twitter ("@vincentbattez").
         { name: "twitter:card", content: "summary_large_image" },
         {
           name: "twitter:title",
@@ -119,28 +99,14 @@ export default defineNuxtConfig({
     },
   },
 
-  // SEO module configuration
   seo: {
     redirectToCanonicalSiteUrl: true,
   },
 
-  // robots.txt : autorise le crawl. On NE bloque PAS /go/* (contrairement à un
-  // premier réflexe) : ces pages renvoient désormais un 200 avec meta noindex
-  // (redirection côté client). Un `Disallow: /go/` serait contre-productif —
-  // (1) il empêcherait les crawlers sociaux (LinkedIn, Twitter) de lire l'og:image
-  //     de la page → aperçus de partage cassés ;
-  // (2) robots.txt et noindex ne s'additionnent pas : une URL bloquée n'est jamais
-  //     fetchée, donc Google n'y verrait jamais le noindex (risque d'indexation
-  //     "URL seule"). Le noindex servi sur le 200 suffit à les tenir hors de l'index.
-  // Le sitemap (@nuxtjs/sitemap, tâche 6.2) exclut déjà /go/**.
   robots: {
     allow: ["/"],
   },
 
-  // Sitemap : découverte par les moteurs de recherche. Le portfolio est
-  // essentiellement mono-page → la home est prioritaire (1.0), les futures pages
-  // héritent d'un défaut raisonnable (0.8, mensuel). autoLastmod ajoute la date de
-  // build comme signal de fraîcheur. Les redirections /go/* sont exclues (cf. robots).
   sitemap: {
     autoLastmod: true,
     defaults: {
@@ -151,13 +117,9 @@ export default defineNuxtConfig({
     exclude: ["/go/**"],
   },
 
-  // Sous-module Schema.org désactivé : nuxt-schema-org 6.x est incompatible avec le moteur
-  // head unhead 3.x de Nuxt 4.5 (le hook `entries:resolve` ne s'exécute pas → crash `resolveGraph`).
-  // Le JSON-LD structuré (Person + ProfessionalService + WebSite) est injecté manuellement
-  // dans app.vue via useHead, ce qui contourne le plugin cassé.
+  // Schema.org désactivé (nuxt-schema-org 6 incompatible unhead 3) : JSON-LD injecté à la main dans app.vue.
   schemaOrg: false,
 
-  // Additional runtime configuration
   runtimeConfig: {
     public: {
       siteUrl: "https://vincentbattez.dev",

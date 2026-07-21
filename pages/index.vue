@@ -7,9 +7,6 @@ import VbFooter from "~/components/footer/VbFooter.vue";
 import VbButton from "~/ui/components/forms/VbButton.vue";
 import VbNavbar from "~/components/footer/VbNavbar.vue";
 
-// SEO page d'accueil : positionnement « Développeur Full-Stack Senior Freelance ».
-// Le titre est absolu (titleTemplate désactivé) car il contient déjà la marque,
-// ce qui évite le doublon avec le template global défini dans nuxt.config.
 useSeoMeta({
   title: "Vincent Battez - Développeur Full-Stack Senior Freelance à Lille",
   description:
@@ -37,16 +34,12 @@ useHead({
 
 <template>
   <div class="vb-frame">
-    <!-- Décor CSS pur : blob ambré (haut-droite) + hachures 45° (bas-gauche) -->
     <div class="vb-frame--decor" aria-hidden="true"></div>
 
     <div class="vb-frame--content">
-      <!-- Topbar -->
       <VbNavbar class="vb-frame--nav" />
 
-      <!-- Hero -->
       <div class="vb-hero">
-        <!-- Texte -->
         <div class="vb-hero--text">
           <p class="vb-hero--kicker">
             Développeur Full-Stack Freelance à Lille
@@ -79,7 +72,6 @@ useHead({
           </div>
         </div>
 
-        <!-- Portrait -->
         <div class="vb-hero--portrait">
           <div class="vb-medallion">
             <img
@@ -92,7 +84,6 @@ useHead({
         </div>
       </div>
 
-      <!-- Marquee compétences -->
       <VbFooter class="vb-frame--marquee" />
     </div>
   </div>
@@ -123,8 +114,7 @@ useHead({
     pointer-events: none;
     z-index: 0;
 
-    // blob ambré haut-droite : halo rond diffus, chute d'opacité progressive
-    // (pas de bord/anneau visible en atteignant transparent).
+    // Chute d'opacité progressive : pas de bord/anneau visible en atteignant transparent.
     &::before {
       content: "";
       position: absolute;
@@ -141,7 +131,6 @@ useHead({
       );
     }
 
-    // hachures 45° en triangle bas-gauche
     &::after {
       content: "";
       position: absolute;
@@ -256,7 +245,6 @@ useHead({
       @apply px-md;
     }
 
-    // décor repositionné et réduit
     &--decor::before {
       top: -80px;
       right: -100px;

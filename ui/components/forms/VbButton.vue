@@ -32,7 +32,6 @@ const props = defineProps<{
   @apply text-body-md;
   @apply transition-all duration-200 ease-in-out;
 
-  // type
   &--primary {
     @apply bg-secondary text-white;
     box-shadow: 0 12px 24px -10px rgba(35, 165, 247, 0.6);
@@ -76,7 +75,6 @@ const props = defineProps<{
     }
   }
 
-  // shape
   &--square {
     padding: 0;
     width: 42px;

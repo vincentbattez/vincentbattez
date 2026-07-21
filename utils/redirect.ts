@@ -13,9 +13,6 @@ export const lookupTable = {
     recommandation:
       "https://www.linkedin.com/in/vincentbattez/details/recommendations/edit/write/?profileUrn=urn%3Ali%3Afsd_profile%3AACoAABx8RLABL3SOZC3R86qDOhYgJZwNmmSBKWY",
     entretien: "https://hub.flexibits.com/openings/vincentbattez/entretien/",
-    // Liens publics par nature (ce sont les cibles de redirection visibles par
-    // le visiteur) : codés en dur, comme les autres. Inutile de passer par des
-    // variables d'env / runtimeConfig, ça ne les rendrait pas plus secrets.
     call: "https://meet.google.com/zri-nmgp-tqc",
     envoyer_message: "https://www.linkedin.com/messaging/thread/new/",
     linkedin: "https://www.linkedin.com/in/vincentbattez/",
@@ -25,9 +22,6 @@ export const lookupTable = {
   },
 };
 
-// Libellés humanisés des destinations, en parallèle de lookupTable.redirectId :
-// on affiche « Ouverture de votre appel visio… » plutôt que l'URL brute. Chaque
-// valeur est un groupe nominal inséré après « Ouverture de » côté loader.
 const redirectLabel = {
   recommandation: "l'espace recommandation LinkedIn",
   entretien: "la prise de rendez-vous",
@@ -41,8 +35,6 @@ const redirectLabel = {
 
 const defaultRedirectLabel = "votre destination";
 
-// Retombe sur un libellé générique pour tout id inconnu (parallèle du `|| "/"`
-// appliqué à redirectURL) — jamais de texte vide ou `undefined` à l'écran.
 export function getRedirectLabel(redirectId: string): string {
   return (
     redirectLabel[redirectId as keyof typeof redirectLabel] ??
@@ -58,9 +50,6 @@ export async function sendIOSNotification(
     return;
   }
 
-  // Corps encodé via URLSearchParams : chaque valeur est proprement échappée et
-  // aucun espace/retour-ligne parasite ne se glisse dans la requête (l'ancienne
-  // URL en template literal multi-lignes produisait une requête malformée).
   const body = new URLSearchParams({
     token: process.env.PUSHOVER_APP_TOKEN ?? "",
     user: process.env.PUSHOVER_USER_KEY ?? "",

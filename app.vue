@@ -1,16 +1,12 @@
 <script setup lang="ts">
-// OG image par défaut (statique), appliquée à toutes les pages.
-// Fichier fourni manuellement dans public/og/ → servi à la racine du site.
-// URL absolue requise par les crawlers sociaux.
+// OG image par défaut (statique) : URL absolue requise par les crawlers sociaux.
 const { url: siteUrlBase } = useSiteConfig();
 useSeoMeta({
   ogImage: `${siteUrlBase}/og/default.png`,
   twitterImage: `${siteUrlBase}/og/default.png`,
 });
 
-// Données structurées Schema.org (JSON-LD) injectées manuellement.
-// Le sous-module @nuxtjs/seo schema-org est désactivé (incompatible unhead 3.x / Nuxt 4.5),
-// on émet donc un graphe brut via useHead, ce qui contourne le plugin cassé.
+// JSON-LD injecté à la main : sous-module schema-org désactivé (incompatible unhead 3).
 const siteUrl = "https://vincentbattez.dev";
 const schemaOrgGraph = {
   "@context": "https://schema.org",

@@ -1,6 +1,5 @@
 <template>
   <nav class="vb-navbar">
-    <!-- Badge disponibilité -->
     <a class="vb-navbar--badge" href="/go/envoyer_message?s=pf">
       <span class="vb-navbar--indicator"></span>
       <span class="vb-navbar--badge-text"
@@ -9,7 +8,6 @@
     </a>
 
     <div class="vb-navbar--socials">
-      <!-- Linkedin -->
       <VbButton
         href="/go/linkedin?s=pf"
         :shape="vbButtonShapeEnum.square"
@@ -18,7 +16,6 @@
         <VbIcon :size="vbButtonSizeEnum.lg" :name="VbIconEnum.VbLinkedin" />
       </VbButton>
 
-      <!-- Github -->
       <VbButton
         href="/go/github?s=pf"
         :shape="vbButtonShapeEnum.square"

@@ -9,7 +9,6 @@ body {
   @apply font-body text-black;
 }
 
-// Displays
 .display-xl, .display-lg {
   @apply font-heading leading-heading font-extrabold;
 }
@@ -28,7 +27,6 @@ body {
   }
 }
 
-// Headings
 .h1, .h2, .h3, .h4{
   @apply font-heading leading-heading;
 }
@@ -36,8 +34,6 @@ body {
   @apply font-semibold;
 }
 
-
-// H1
 .h1 {
   @apply text-h2 font-extrabold;
 
@@ -46,7 +42,6 @@ body {
   }
 }
 
-// H2
 .h2 {
   @apply text-h3 font-extrabold;
   @screen md {
@@ -54,7 +49,6 @@ body {
   }
 }
 
-// H3
 .h3 {
   @apply text-h4 font-extrabold;
   @screen md {
@@ -62,27 +56,22 @@ body {
   }
 }
 
-// H4
 .h4 {
   @apply text-h4 font-extrabold;
 }
 
-// Body
 .body-lg, .body-md, .body-sm {
   @apply font-semibold leading-body;
 }
 
-// body-lg
 .body-lg {
   @apply text-body-lg;
 }
 
-// body-md
 .body-md {
   @apply text-body-md;
 }
 
-// body-sm
 .body-sm {
   @apply text-body-sm;
 }

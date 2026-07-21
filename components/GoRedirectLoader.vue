@@ -1,11 +1,8 @@
 <script setup lang="ts">
 defineProps<{
-  // Groupe nominal humanisé (cf. getRedirectLabel) inséré après « Ouverture de ».
   label: string;
-  // Destination réelle : alimente le lien de contournement / fallback JS.
   url: string;
-  // Piloté par la page : passe à true vers ~1720 ms pour jouer le fade-out avant
-  // le replace() à 2000 ms (l'exit se termine toujours dans le budget de 2 s).
+  // Piloté par la page : passe à true à 1200 ms pour jouer le fade-out (300 ms) avant le replace() à 1500 ms — la redirection part juste après la sortie.
   exiting?: boolean;
 }>();
 </script>
@@ -49,17 +46,13 @@ defineProps<{
 .go-loader {
   @apply flex items-center justify-center flex-1;
 
-  // Fade-out de sortie avec rebond (anticipation) : léger plongée puis remontée
-  // + effacement. Déclenché par la page, se termine avant le replace().
   &--exiting {
-    animation: go-loader-exit 280ms cubic-bezier(0.36, 0, 0.66, -0.4) forwards;
+    animation: go-loader-exit 300ms cubic-bezier(0.36, 0, 0.66, -0.4) forwards;
   }
 
   &__card {
     @apply flex flex-col items-center text-center px-md;
-    // Apparition avec rebond : slide-up + léger scale, l'easing overshoot
-    // (back-out) fait dépasser puis revenir → effet ressort.
-    animation: go-loader-enter 640ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation: go-loader-enter 1640ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
   }
 
   &__arc {
@@ -85,8 +78,8 @@ defineProps<{
       stroke-linecap: round;
       stroke-dasharray: 289;
       stroke-dashoffset: 289;
-      // Se trace sur les 2 s (calé sur le délai de redirection).
-      animation: go-loader-arc 2000ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation: go-loader-arc 1200ms cubic-bezier(0.55, 0.055, 0.675, 0.19)
+        forwards;
     }
   }
 
@@ -121,7 +114,6 @@ defineProps<{
   &__dots {
     display: inline-block;
     animation: go-loader-dots 1.4s steps(1, end) infinite;
-    // Réserve la largeur des trois points pour éviter tout décalage du texte.
     width: 1.1ch;
     text-align: left;
   }
