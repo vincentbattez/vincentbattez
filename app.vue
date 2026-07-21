@@ -20,10 +20,10 @@ const schemaOrgGraph = {
       "@id": `${siteUrl}/#person`,
       name: "Vincent Battez",
       url: siteUrl,
-      image: `${siteUrl}/og/vincent-battez-photo.jpg`,
+      image: `${siteUrl}/images/vincentbattez.webp`,
       description:
-        "Développeur Full Stack spécialisé en IA, expert RAG et LLMs. Services de conseil et développement en intelligence artificielle.",
-      jobTitle: "AI Engineer & Full Stack Developer",
+        "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture des applications web robustes (Node.js, React, Vue.js, TypeScript).",
+      jobTitle: "Développeur Full-Stack Senior",
       email: "contact@vincentbattez.dev",
       sameAs: [
         "https://www.linkedin.com/in/vincentbattez",
@@ -50,32 +50,33 @@ const schemaOrgGraph = {
       ],
       hasOccupation: {
         "@type": "Occupation",
-        name: "AI Engineer",
+        name: "Développeur Full-Stack Senior",
         occupationLocation: { "@type": "City", name: "Lille, France" },
         skills: [
-          "Artificial Intelligence Development",
-          "RAG Implementation",
-          "LLM Integration",
           "Full Stack Development",
           "Software Architecture",
+          "Node.js",
+          "React",
+          "Vue.js",
+          "TypeScript",
         ],
       },
     },
     {
       "@type": "ProfessionalService",
       "@id": `${siteUrl}/#service`,
-      name: "Vincent Battez - Services IA & Développement",
+      name: "Vincent Battez - Développement Full-Stack Freelance",
       url: siteUrl,
       description:
-        "Services de conseil et développement en intelligence artificielle, spécialisé en RAG, LLMs et développement Full Stack.",
+        "Développeur Full-Stack Senior freelance : création et architecture d'applications web robustes (Node.js, React, Vue.js, TypeScript).",
       provider: { "@id": `${siteUrl}/#person` },
       areaServed: { "@type": "Country", name: "France" },
       serviceType: [
-        "Conseil en Intelligence Artificielle",
-        "Développement RAG",
-        "Intégration LLM",
         "Développement Full Stack",
+        "Développement Web",
         "Architecture Logicielle",
+        "Développement Node.js",
+        "Développement Front-end",
       ],
       address: {
         "@type": "PostalAddress",
@@ -87,7 +88,7 @@ const schemaOrgGraph = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       url: siteUrl,
-      name: "Vincent Battez - AI Engineer & Full Stack Developer",
+      name: "Vincent Battez - Développeur Full-Stack Senior Freelance",
       inLanguage: "fr-FR",
       publisher: { "@id": `${siteUrl}/#person` },
     },
@@ -115,7 +116,7 @@ useHead({
 @use "~/ui/styles/main.scss";
 
 body {
-  background: linear-gradient(180deg, #ffffff 0%, #f3f2ef 100%);
+  @apply bg-page;
 }
 
 .page {

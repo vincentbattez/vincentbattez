@@ -9,6 +9,7 @@ export default {
       secondary: "#23a5f7ff", // blue-500
       black: "#241605",
       white: "#FFFFFF",
+      page: "#E9E4DD", // fond neutre autour de la frame plafonnée
       orange: {
         100: "#FEF3D2",
         200: "#FDE4A6",
@@ -86,7 +87,7 @@ export default {
       xxxl: "5rem",
     },
     fontFamily: {
-      heading: ["Nunito", "sans-serif"],
+      heading: ["Zilla Slab", "serif"],
       body: ["Nunito", "sans-serif"],
     },
     fontSize: {

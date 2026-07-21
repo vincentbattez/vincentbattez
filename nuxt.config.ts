@@ -9,14 +9,28 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ["@nuxtjs/tailwindcss", "@nuxtjs/seo", "@nuxt/eslint", "@nuxt/fonts"],
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "@nuxtjs/seo",
+    "@nuxt/eslint",
+    "@nuxt/fonts",
+  ],
+
+  // Polices auto-hébergées. Déclaration explicite des graisses pour éviter tout
+  // FOUT : Nunito (corps, jusqu'à extrabold 800), Zilla Slab (titres, 700).
+  fonts: {
+    families: [
+      { name: "Nunito", weights: [400, 600, 700, 800] },
+      { name: "Zilla Slab", weights: [500, 600, 700] },
+    ],
+  },
 
   // Site configuration for SEO modules
   site: {
     url: "https://vincentbattez.dev",
-    name: "Vincent Battez - AI Engineer & Full Stack Developer",
+    name: "Vincent Battez - Développeur Full-Stack Senior Freelance",
     description:
-      "Développeur Full Stack spécialisé en IA, expert RAG et LLMs. Services de conseil et développement en intelligence artificielle à Lille, France.",
+      "Développeur Full-Stack Senior freelance à Lille. J'accompagne entreprises et CTOs pour créer et architecturer des applications web robustes (Node.js, React, Vue.js, TypeScript).",
     defaultLocale: "fr",
     identity: {
       type: "Person",
@@ -43,19 +57,20 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: "fr-FR",
       },
-      titleTemplate: "%s | Vincent Battez - AI Engineer & Full Stack Developer",
+      titleTemplate:
+        "%s | Vincent Battez - Développeur Full-Stack Senior Freelance",
       meta: [
         { charset: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         {
           name: "description",
           content:
-            "Développeur Full Stack spécialisé en IA, expert RAG et LLMs. Services de conseil et développement en intelligence artificielle à Lille, France.",
+            "Développeur Full-Stack Senior freelance à Lille. J'accompagne entreprises et CTOs pour créer et architecturer des applications web robustes (Node.js, React, Vue.js, TypeScript).",
         },
         {
           name: "keywords",
           content:
-            "IA Engineer, Développeur Full Stack, Expert RAG, LLM, Context Engineering, Prompt Engineering, Intelligence Artificielle, Lille, France",
+            "Développeur Full-Stack, Développeur Senior, Freelance Lille, Node.js, React, Vue.js, TypeScript, Architecture logicielle, Développeur web freelance",
         },
         { name: "author", content: "Vincent Battez" },
         // NB : le meta `robots` est géré par le module @nuxtjs/robots (metaTag: true),
@@ -70,19 +85,19 @@ export default defineNuxtConfig({
         {
           property: "og:title",
           content:
-            "Vincent Battez - AI Engineer & Full Stack Developer | Expert RAG, LLMs, Node.js",
+            "Vincent Battez - Développeur Full-Stack Senior Freelance à Lille",
         },
         {
           property: "og:description",
           content:
-            "Développeur Full Stack spécialisé en IA : Expert RAG (Retrieval-Augmented Generation), LLMs, Context Engineering. Technologies : Node.js, React, observabilité. Services IA à Lille, France.",
+            "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture des applications web robustes : Node.js, React, Vue.js, TypeScript.",
         },
         { property: "og:type", content: "profile" },
         { property: "og:locale", content: "fr_FR" },
         { property: "og:url", content: "https://vincentbattez.dev" },
         {
           property: "og:site_name",
-          content: "Vincent Battez - AI Engineer Portfolio",
+          content: "Vincent Battez - Développeur Full-Stack Senior Freelance",
         },
         // Twitter Card meta tags
         // twitter:image et og:image sont posés via useSeoMeta (défaut dans app.vue,
@@ -93,12 +108,12 @@ export default defineNuxtConfig({
         {
           name: "twitter:title",
           content:
-            "Vincent Battez - AI Engineer & Full Stack Developer | Expert RAG, LLMs, Node.js",
+            "Vincent Battez - Développeur Full-Stack Senior Freelance à Lille",
         },
         {
           name: "twitter:description",
           content:
-            "Développeur Full Stack spécialisé en IA : Expert RAG (Retrieval-Augmented Generation), LLMs, Context Engineering. Technologies : Node.js, React, observabilité. Services IA à Lille, France.",
+            "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture des applications web robustes : Node.js, React, Vue.js, TypeScript.",
         },
       ],
     },
@@ -146,9 +161,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       siteUrl: "https://vincentbattez.dev",
-      siteName: "Vincent Battez - AI Engineer & Full Stack Developer",
+      siteName: "Vincent Battez - Développeur Full-Stack Senior Freelance",
       siteDescription:
-        "Développeur Full Stack spécialisé en IA, expert RAG et LLMs. Services de conseil et développement en intelligence artificielle à Lille, France.",
+        "Développeur Full-Stack Senior freelance à Lille. J'accompagne entreprises et CTOs pour créer et architecturer des applications web robustes (Node.js, React, Vue.js, TypeScript).",
       language: "fr-FR",
       author: {
         name: "Vincent Battez",

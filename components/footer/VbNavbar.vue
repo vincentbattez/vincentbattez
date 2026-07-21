@@ -1,35 +1,32 @@
 <template>
   <nav class="vb-navbar">
-    <!-- Freelance -->
-    <a
-      class="vb-navbar--item vb-navbar--freelance"
-      href="/go/envoyer_message?s=pf"
-    >
-      <div class="vb-navbar--freelance-indicator"></div>
-      <span class="vb-navbar--freelance-text"
+    <!-- Badge disponibilité -->
+    <a class="vb-navbar--badge" href="/go/envoyer_message?s=pf">
+      <span class="vb-navbar--indicator"></span>
+      <span class="vb-navbar--badge-text"
         >Disponible pour mission freelance</span
       >
     </a>
 
-    <!-- Linkedin -->
-    <VbButton
-      class="vb-navbar--item"
-      href="/go/linkedin?s=pf"
-      :shape="vbButtonShapeEnum.square"
-      :type="vbButtonTypeEnum.primary"
-    >
-      <VbIcon :size="vbButtonSizeEnum.lg" :name="VbIconEnum.VbLinkedin" />
-    </VbButton>
+    <div class="vb-navbar--socials">
+      <!-- Linkedin -->
+      <VbButton
+        href="/go/linkedin?s=pf"
+        :shape="vbButtonShapeEnum.square"
+        :type="vbButtonTypeEnum.soft"
+      >
+        <VbIcon :size="vbButtonSizeEnum.lg" :name="VbIconEnum.VbLinkedin" />
+      </VbButton>
 
-    <!-- Github -->
-    <VbButton
-      class="vb-navbar--item"
-      href="/go/github?s=pf"
-      :shape="vbButtonShapeEnum.square"
-      :type="vbButtonTypeEnum.primary"
-    >
-      <VbIcon :size="vbButtonSizeEnum.lg" :name="VbIconEnum.VbGithub" />
-    </VbButton>
+      <!-- Github -->
+      <VbButton
+        href="/go/github?s=pf"
+        :shape="vbButtonShapeEnum.square"
+        :type="vbButtonTypeEnum.soft"
+      >
+        <VbIcon :size="vbButtonSizeEnum.lg" :name="VbIconEnum.VbGithub" />
+      </VbButton>
+    </div>
   </nav>
 </template>
 
@@ -46,66 +43,37 @@ import { vbButtonSizeEnum } from "~/ui/components/icon/VbIcon.type";
 
 <style lang="scss" scoped>
 .vb-navbar {
-  @apply mt-md flex sm:flex-row justify-center sm:justify-end items-center gap-md sm:gap-lg;
+  @apply flex items-center justify-between gap-md;
 
-  &--item {
-    @apply text-center;
-
-    // On mobile, make the freelance text smaller and wrap better
-    &:first-child {
-      @apply text-body-sm sm:text-body-md;
-    }
-  }
-
-  &--freelance {
-    @apply flex items-center;
+  &--badge {
+    @apply inline-flex items-center gap-sm;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #fef3d2, #fde4a6);
+    border: 1px solid #f6ba57;
 
     &:focus {
       outline: 2px solid #3b82f6;
     }
   }
 
-  &--freelance:hover &--freelance-text::before,
-  &--freelance:focus &--freelance-text::before {
-    width: 100%;
+  &--badge-text {
+    @apply text-body-sm sm:text-body-md text-orange-800;
+    font-weight: 700;
   }
 
-  &--freelance-text {
-    position: relative;
-
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background-color: #3b82f6; // Tailwind blue-500
-      border-radius: 2px;
-    }
-
-    &::before {
-      content: "";
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background-color: #56c25f; // Green color matching the indicator
-      border-radius: 2px;
-      transition: width 0.3s ease-in-out;
-      z-index: 1;
-    }
-  }
-
-  &--freelance-indicator {
-    @apply mr-md flex-shrink-0;
+  &--indicator {
+    @apply flex-shrink-0;
     width: 11px;
     height: 11px;
     border-radius: 11px;
-    background: var(--Green-600, #56c25f);
-    box-shadow: 0px 0px 4px 0px #56c25f;
+    background: #56c25f; // green-600
+    box-shadow: 0 0 4px 0 #56c25f;
     animation: live-pulse 2s ease-in-out infinite;
+  }
+
+  &--socials {
+    @apply flex items-center gap-sm;
   }
 }
 
@@ -114,12 +82,18 @@ import { vbButtonSizeEnum } from "~/ui/components/icon/VbIcon.type";
   100% {
     opacity: 1;
     transform: scale(1);
-    box-shadow: 0px 0px 4px 0px #56c25f;
+    box-shadow: 0 0 4px 0 #56c25f;
   }
   50% {
     opacity: 0.7;
     transform: scale(1.1);
-    box-shadow: 0px 0px 8px 2px #56c25f;
+    box-shadow: 0 0 8px 2px #56c25f;
+  }
+}
+
+@media (max-width: 820px) {
+  .vb-navbar--badge-text {
+    @apply text-body-sm;
   }
 }
 </style>

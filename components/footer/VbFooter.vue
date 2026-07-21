@@ -62,6 +62,8 @@ const skillList: IVbSkill[] = [
 
 <style lang="scss" scoped>
 .vb-skill {
-  @apply mb-md;
+  @apply py-md;
+  border-top: 1px solid rgba(240, 145, 15, 0.18);
+  background: rgba(253, 243, 226, 0.6); // crème translucide
 }
 </style>

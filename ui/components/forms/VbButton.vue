@@ -35,6 +35,7 @@ const props = defineProps<{
   // type
   &--primary {
     @apply bg-secondary text-white;
+    box-shadow: 0 12px 24px -10px rgba(35, 165, 247, 0.6);
 
     &:hover {
       @apply bg-blue-400;
@@ -63,9 +64,24 @@ const props = defineProps<{
     }
   }
 
+  // Boutons sociaux : carré blanc, fine bordure grise.
+  &--soft {
+    @apply bg-white text-grey-600 border border-grey-200;
+
+    &:hover {
+      @apply border-grey-300 text-black;
+    }
+    &:focus {
+      outline: 4px solid #d2f7fdff;
+    }
+  }
+
   // shape
   &--square {
-    @apply ps-sm pe-sm pt-sm pb-sm;
+    padding: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
   }
 }
 </style>

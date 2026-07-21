@@ -6,7 +6,7 @@
         :key="`${skill.name}-${skill.index}`"
         class="vb-skill--item"
         :class="{
-          [`vb-skill--hastag__${skill.type}`]: skill.type,
+          [`vb-skill--item__${skill.type}`]: skill.type,
         }"
       >
         <VbIcon
@@ -78,6 +78,14 @@ const duplicatedSkills = computed(() => {
   &--item {
     @apply flex items-center whitespace-nowrap flex-shrink-0;
     @apply text-body-sm sm:text-body-md;
+    font-weight: 700;
+
+    &__primary {
+      @apply text-primary;
+    }
+    &__secondary {
+      @apply text-secondary;
+    }
   }
 
   &--heart {
