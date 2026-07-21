@@ -64,6 +64,6 @@ const skillList: IVbSkill[] = [
 .vb-skill {
   @apply py-md;
   border-top: 1px solid rgba(240, 145, 15, 0.18);
-  background: rgba(253, 243, 226, 0.6); // crème translucide
+  background: white;
 }
 </style>

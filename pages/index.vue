@@ -100,13 +100,17 @@ useHead({
 
 <style lang="scss" scoped>
 .vb-frame {
+  // Gouttière garantie autour de la carte : le fond de page reste visible sur
+  // tous les côtés, même quand le viewport est plus petit que la frame — la
+  // carte flotte toujours (coins arrondis + ombre jamais collés au bord).
+  --vb-gap: clamp(1rem, 2.5vw, 2rem);
   position: relative;
   margin: auto;
-  width: min(100%, 1180px);
-  height: min(100vh, 900px);
+  width: min(100% - var(--vb-gap) * 2, 1180px);
+  height: min(100vh - var(--vb-gap) * 2, 900px);
   overflow: hidden;
   border-radius: 28px;
-  box-shadow: 0 40px 80px -30px rgba(36, 22, 5, 0.35);
+  box-shadow: 0 40px 80px -30px rgb(225 159 80 / 55%);
   // Dégradé lissé (2 stops) : évite le palier plat #fff→#fff qui créait une
   // bande verticale perçue (Mach band) au milieu de la carte.
   background: linear-gradient(115deg, #ffffff 0%, #fdf3e2 100%);
@@ -240,15 +244,13 @@ useHead({
 // Responsive : un seul breakpoint à 820px (aligné sur le prototype).
 @media (max-width: 820px) {
   .vb-frame {
-    // Sur mobile le conteneur remplit l'écran : pas de carte flottante,
-    // donc pas d'ombre ni de coins arrondis. height:auto laisse le cadre
-    // grandir selon le contenu (aucun rognage vertical, CTA toujours
-    // atteignables, la page défile si besoin) tout en gardant overflow:hidden
-    // pour clipper le décor (sinon le blob déborde → scroll horizontal).
+    // La carte reste flottante (coins arrondis + ombre conservés) avec sa
+    // gouttière tout autour. height:auto laisse le cadre grandir selon le
+    // contenu (aucun rognage vertical, CTA toujours atteignables, la page
+    // défile si besoin) ; margin fixe = gouttière constante en haut/bas.
     height: auto;
-    min-height: 100vh;
-    border-radius: 0;
-    box-shadow: none;
+    min-height: calc(100vh - var(--vb-gap) * 2);
+    margin: var(--vb-gap) auto;
 
     &--nav {
       @apply px-md;

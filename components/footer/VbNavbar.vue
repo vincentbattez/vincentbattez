@@ -49,8 +49,6 @@ import { vbButtonSizeEnum } from "~/ui/components/icon/VbIcon.type";
     @apply inline-flex items-center gap-sm;
     padding: 0.4rem 0.9rem;
     border-radius: 999px;
-    background: linear-gradient(90deg, #fef3d2, #fde4a6);
-    border: 1px solid #f6ba57;
 
     &:focus {
       outline: 2px solid #3b82f6;

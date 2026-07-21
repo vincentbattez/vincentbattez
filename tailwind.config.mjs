@@ -9,7 +9,7 @@ export default {
       secondary: "#23a5f7ff", // blue-500
       black: "#241605",
       white: "#FFFFFF",
-      page: "#E9E4DD", // fond neutre autour de la frame plafonnée
+      page: "#feecd1",
       orange: {
         100: "#FEF3D2",
         200: "#FDE4A6",
