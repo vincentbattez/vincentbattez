@@ -10,6 +10,7 @@
     <div class="vb-navbar--socials">
       <VbButton
         href="/go/linkedin?s=pf"
+        aria-label="Profil LinkedIn de Vincent Battez"
         :shape="vbButtonShapeEnum.square"
         :type="vbButtonTypeEnum.soft"
       >
@@ -18,6 +19,7 @@
 
       <VbButton
         href="/go/github?s=pf"
+        aria-label="Profil GitHub de Vincent Battez"
         :shape="vbButtonShapeEnum.square"
         :type="vbButtonTypeEnum.soft"
       >
