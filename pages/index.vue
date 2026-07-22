@@ -31,13 +31,6 @@ useHead({
       fetchpriority: "high",
     },
   ],
-  meta: [
-    {
-      name: "keywords",
-      content:
-        "Développeur Full-Stack, Développeur Senior, Freelance Lille, Node.js, React, Vue.js, TypeScript, Architecture logicielle, Développeur web freelance",
-    },
-  ],
 });
 </script>
 
