@@ -25,10 +25,11 @@ const props = defineProps<{
 }>();
 
 // Liens internes (/) → NuxtLink (navigation SPA) ; externes → <a> ; sinon <button>.
+const NuxtLink = resolveComponent("NuxtLink");
 const isInternal = computed(() => props.href?.startsWith("/") ?? false);
 
 const tag = computed(() => {
-  if (isInternal.value) return resolveComponent("NuxtLink");
+  if (isInternal.value) return NuxtLink;
   return props.href ? "a" : "button";
 });
 
