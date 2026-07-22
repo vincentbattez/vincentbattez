@@ -1,3 +1,5 @@
+import { lookupTable } from "./utils/redirect";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2026-07-19",
@@ -19,8 +21,32 @@ export default defineNuxtConfig({
   fonts: {
     families: [
       { name: "Nunito", weights: [400, 600, 700, 800] },
-      { name: "Zilla Slab", weights: [500, 600, 700] },
+      { name: "Zilla Slab", weights: [600, 700] },
     ],
+    // Site 100% français, aucun italique utilisé : évite de générer les
+    // subsets cyrillique/grec/vietnamien et les variantes italic (~15 fichiers).
+    defaults: {
+      styles: ["normal"],
+      subsets: ["latin", "latin-ext"],
+    },
+  },
+
+  features: {
+    // Sans ça, tout entry.css est inliné dans le HTML EN PLUS du <link> : payé 2×.
+    inlineStyles: false,
+  },
+
+  experimental: {
+    // Évite une requête _payload.json (69 octets) préchargée sur chaque page.
+    payloadExtraction: false,
+  },
+
+  nitro: {
+    prerender: {
+      // Le crawler ignore les liens avec query (?s=pf) : sans cette liste, les
+      // pages /go n'ont pas de HTML statique et l'accès direct renvoie 404.
+      routes: Object.keys(lookupTable.redirectId).map((id) => `/go/${id}`),
+    },
   },
 
   site: {

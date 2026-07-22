@@ -8,7 +8,6 @@
     "generate": "nuxt generate",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "generate:icon": "svgo -f ./assets/icons && fantasticon",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
@@ -21,18 +20,13 @@
     "eslint": "^10.7.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.6",
-    "fantasticon": "^4.1.0",
     "nuxt": "^4.5.0",
     "prettier": "^3.9.5",
+    "sass": "^1.101.0",
     "satori": "^0.28.0",
-    "svgo": "^4.0.2",
     "typescript": "^6.0.3",
     "vue": "^3.5.40",
     "vue-router": "^5.2.0",
     "vue-tsc": "^3.3.7"
-  },
-  "dependencies": {
-    "normalize.css": "^8.0.1",
-    "sass": "^1.101.0"
   }
 }

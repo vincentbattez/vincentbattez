@@ -3,7 +3,7 @@
 // métriques de secours générées automatiquement (size-adjust) → plus de FOUT
 // ni de saut de mise en page au chargement. Nunito est détecté via la config
 // Tailwind (font-body/font-heading). Inter n'était plus utilisé nulle part.
-@import url('assets/fonts/vb-icon/vb-icon.css');
+// Les icônes sont des SVG inline (VbIcon.vue) : plus de police d'icônes.
 
 body {
   @apply font-body text-black;

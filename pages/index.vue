@@ -78,6 +78,7 @@ useHead({
               src="/images/vincentbattez.webp"
               width="640"
               height="640"
+              fetchpriority="high"
               alt="Portrait de Vincent Battez, développeur Full-Stack Senior freelance"
             />
           </div>
