@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     "@nuxtjs/seo",
     "@nuxt/eslint",
     "@nuxt/fonts",
+    "@posthog/nuxt",
   ],
 
   fonts: {
@@ -147,8 +148,26 @@ export default defineNuxtConfig({
   // Schema.org désactivé (nuxt-schema-org 6 incompatible unhead 3) : JSON-LD injecté à la main dans app.vue.
   schemaOrg: false,
 
+  posthogConfig: {
+    publicKey: process.env.NUXT_PUBLIC_POSTHOG_PROJECT_TOKEN,
+    host: process.env.NUXT_PUBLIC_POSTHOG_HOST,
+    clientConfig: {
+      capture_exceptions: true,
+      __add_tracing_headers: ["localhost", "vincentbattez.dev"],
+      // Pas de session replay : évite le chargement du recorder (~30-50 KB) au runtime.
+      disable_session_recording: true,
+    },
+    serverConfig: {
+      enableExceptionAutocapture: true,
+    },
+  },
+
   runtimeConfig: {
     public: {
+      posthog: {
+        publicKey: process.env.NUXT_PUBLIC_POSTHOG_PROJECT_TOKEN,
+        host: process.env.NUXT_PUBLIC_POSTHOG_HOST,
+      },
       siteUrl: "https://vincentbattez.dev",
       siteName: "Vincent Battez - Développeur Full-Stack Senior Freelance",
       siteDescription:

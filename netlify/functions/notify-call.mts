@@ -1,8 +1,10 @@
+import { trackServerEvent } from "../lib/analytics";
+
 // Notif Pushover quand quelqu'un passe par /go/call.
 // Isolée en Netlify Function : le site est statique (SSG), les secrets restent côté serveur.
 const CALL_URL = "https://meet.google.com/zri-nmgp-tqc";
 
-export default async (): Promise<Response> => {
+export default async (request: Request): Promise<Response> => {
   const token = process.env.PUSHOVER_APP_TOKEN;
   const user = process.env.PUSHOVER_USER_KEY;
 
@@ -19,11 +21,25 @@ export default async (): Promise<Response> => {
     url_title: "Rejoindre l'appel",
   });
 
-  await fetch("https://api.pushover.net/1/messages.json", {
+  const response = await fetch("https://api.pushover.net/1/messages.json", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body,
   });
+
+  if (!response.ok) {
+    return new Response("Pushover request failed", { status: 502 });
+  }
+
+  // Analytique best-effort : découplée de la notif, ne la bloque jamais.
+  await trackServerEvent(
+    "call_notification_sent",
+    request.headers.get("x-posthog-distinct-id") ?? "anonymous",
+    {
+      source: "netlify_function",
+      $session_id: request.headers.get("x-posthog-session-id"),
+    },
+  );
 
   return new Response(null, { status: 204 });
 };

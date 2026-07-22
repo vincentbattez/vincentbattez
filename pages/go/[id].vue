@@ -3,6 +3,7 @@ import { getRedirectLabel, lookupTable, notifyCall } from "~/utils/redirect";
 import GoRedirectLoader from "~/components/GoRedirectLoader.vue";
 
 const route = useRoute();
+const { track } = useAnalytics();
 
 const redirectId = String(route.params.id);
 const redirectURL =
@@ -25,6 +26,10 @@ useSeoMeta({
 
 const isExiting = ref(false);
 onMounted(() => {
+  track("outbound_link_opened", {
+    destination: redirectId,
+    source: typeof route.query.s === "string" ? route.query.s : "direct",
+  });
   notifyCall(redirectId);
 
   const exitTimer = setTimeout(() => (isExiting.value = true), 1500);

@@ -28,5 +28,9 @@
     "vue": "^3.5.40",
     "vue-router": "^5.2.0",
     "vue-tsc": "^3.3.7"
+  },
+  "dependencies": {
+    "@posthog/nuxt": "^1.7.80",
+    "posthog-node": "^5.46.0"
   }
 }

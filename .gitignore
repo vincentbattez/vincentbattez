@@ -22,3 +22,7 @@ logs
 .env
 .env.*
 !.env.example
+
+# PostHog wizard artifacts
+posthog-setup-report.md
+.posthog-events.json
