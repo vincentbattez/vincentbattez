@@ -32,14 +32,18 @@ export default async (request: Request): Promise<Response> => {
   }
 
   // Analytique best-effort : découplée de la notif, ne la bloque jamais.
-  await trackServerEvent(
-    "call_notification_sent",
-    request.headers.get("x-posthog-distinct-id") ?? "anonymous",
-    {
-      source: "netlify_function",
-      $session_id: request.headers.get("x-posthog-session-id"),
-    },
-  );
+  try {
+    await trackServerEvent(
+      "call_notification_sent",
+      request.headers.get("x-posthog-distinct-id") ?? "anonymous",
+      {
+        source: "netlify_function",
+        $session_id: request.headers.get("x-posthog-session-id"),
+      },
+    );
+  } catch {
+    // ignore : la notif est déjà partie, l'analytique ne doit pas casser la réponse
+  }
 
   return new Response(null, { status: 204 });
 };
