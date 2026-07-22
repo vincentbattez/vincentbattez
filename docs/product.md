@@ -1,7 +1,3 @@
----
-inclusion: always
----
-
 # Product Overview
 
 Vincent Battez's personal portfolio website - a freelance AI Engineer and Full Stack developer based in Lille, France. Professional showcase designed to attract clients for senior-level AI engineering and full stack development work.
