@@ -1,0 +1,15 @@
+{
+  "name": "Vincent Battez - Développeur Full-Stack Senior Freelance",
+  "short_name": "Vincent Battez",
+  "description": "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture des applications web robustes : Node.js, React, Vue.js, TypeScript.",
+  "lang": "fr-FR",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#feecd1",
+  "theme_color": "#F0910F",
+  "icons": [
+    { "src": "/pwa-192x192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/pwa-512x512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/pwa-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
