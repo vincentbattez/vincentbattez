@@ -30,7 +30,7 @@ onMounted(() => {
   const exitTimer = setTimeout(() => (isExiting.value = true), 1500);
   const redirectTimer = setTimeout(
     () => window.location.replace(redirectURL),
-    800,
+    1500,
   );
   onBeforeUnmount(() => {
     clearTimeout(exitTimer);

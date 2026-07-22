@@ -18,6 +18,7 @@ defineProps<{
         <svg viewBox="0 0 100 100" aria-hidden="true">
           <circle cx="50" cy="50" r="46" />
         </svg>
+        <div class="go-loader__flash" aria-hidden="true"></div>
         <div class="go-loader__medallion">
           <img
             src="/images/vincentbattez.webp"
@@ -81,6 +82,21 @@ defineProps<{
       animation: go-loader-arc 1200ms cubic-bezier(0.55, 0.055, 0.675, 0.19)
         forwards;
     }
+  }
+
+  &__flash {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(240, 145, 15, 0.55) 0%,
+      rgba(240, 145, 15, 0) 70%
+    );
+    opacity: 0;
+    pointer-events: none;
+    // Se déclenche à la fin de l'arc (1200 ms).
+    animation: go-loader-flash 520ms ease-out 1200ms both;
   }
 
   &__medallion {
@@ -158,6 +174,21 @@ defineProps<{
 @keyframes go-loader-arc {
   to {
     stroke-dashoffset: 0;
+  }
+}
+
+@keyframes go-loader-flash {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  35% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.28);
   }
 }
 
