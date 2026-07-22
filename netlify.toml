@@ -36,6 +36,11 @@ X-Content-Type-Options = "nosniff"
 X-Frame-Options = "DENY"
 Referrer-Policy = "strict-origin-when-cross-origin"
 Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+# CSP de base : durcit sans script-src/style-src (nonces impraticables en SSG
+# statique + importmap Nuxt inline). Bloque injection de <base>, plugins, et
+# détournement de formulaire/framing. Le volet anti-XSS strict reste à faire.
+Content-Security-Policy = "base-uri 'self'; object-src 'none'; form-action 'self'; frame-ancestors 'none'"
 
 # Assets fingerprintés (hash dans le nom) : cache immutable 1 an.
 [[headers]]
