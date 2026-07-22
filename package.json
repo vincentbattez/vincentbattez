@@ -8,10 +8,14 @@
     "generate": "nuxt generate",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "typecheck": "nuxt typecheck",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "audit:lighthouse": "lhci autorun",
+    "audit:quality": "pnpm lint && pnpm typecheck && pnpm generate && pnpm audit:lighthouse"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.15.1",
     "@nuxt/eslint": "^1.16.0",
     "@nuxt/fonts": "^0.14.0",
     "@nuxtjs/seo": "^5.3.2",

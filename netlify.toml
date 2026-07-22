@@ -8,6 +8,25 @@ directory = "netlify/functions"
 [build.environment]
 NODE_VERSION = "22"
 
+# Lighthouse à chaque déploiement, contre l'URL HTTPS réelle : seul point qui
+# valide HSTS/CSP (invisibles sur localhost). Non bloquant volontairement — les
+# échecs de contraste sur les couleurs de marque sont assumés (cf. a11y). Pour
+# rendre bloquant : décommenter [plugins.inputs.thresholds].
+[[plugins]]
+package = "@netlify/plugin-lighthouse"
+
+  [plugins.inputs]
+  output_path = "reports/lighthouse.html"
+
+  [plugins.inputs.audits]
+  path = "index.html"
+
+  # [plugins.inputs.thresholds]
+  # performance = 0.9
+  # seo = 1.0
+  # best-practices = 0.95
+  # accessibility = 0.9
+
 # En-têtes de sécurité appliqués à toutes les réponses.
 [[headers]]
 for = "/*"

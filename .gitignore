@@ -26,3 +26,7 @@ logs
 # PostHog wizard artifacts
 posthog-setup-report.md
 .posthog-events.json
+
+# Lighthouse CI artifacts
+.lighthouseci
+reports
