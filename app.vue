@@ -1,9 +1,16 @@
 <script setup lang="ts">
 // OG image par défaut (statique) : URL absolue requise par les crawlers sociaux.
 const { url: siteUrlBase } = useSiteConfig();
+const ogImageAlt =
+  "Vincent Battez, Développeur Full-Stack Senior freelance à Lille";
 useSeoMeta({
   ogImage: `${siteUrlBase}/og/default.png`,
+  ogImageAlt,
+  ogImageWidth: 1200,
+  ogImageHeight: 630,
+  ogImageType: "image/png",
   twitterImage: `${siteUrlBase}/og/default.png`,
+  twitterImageAlt: ogImageAlt,
 });
 
 // JSON-LD injecté à la main : sous-module schema-org désactivé (incompatible unhead 3).
@@ -65,9 +72,9 @@ const schemaOrgGraph = {
       url: siteUrl,
       description:
         "Développeur Full-Stack Senior freelance : création et architecture d'applications web robustes (Node.js, React, Vue.js, TypeScript).",
-      provider: { "@id": `${siteUrl}/#person` },
+      founder: { "@id": `${siteUrl}/#person` },
       areaServed: { "@type": "Country", name: "France" },
-      serviceType: [
+      knowsAbout: [
         "Développement Full Stack",
         "Développement Web",
         "Architecture Logicielle",
