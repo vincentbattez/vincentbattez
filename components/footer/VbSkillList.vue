@@ -8,6 +8,7 @@
         :class="{
           [`vb-skill--item__${skill.type}`]: skill.type,
         }"
+        :aria-hidden="skill.ariaHidden || undefined"
       >
         <VbIcon
           class="vb-skill--hashtag"
@@ -40,14 +41,16 @@ const props = defineProps<{
   skillList: IVbSkill[];
 }>();
 
-// 3 copies pour une boucle de défilement sans couture
+// 3 copies pour une boucle de défilement sans couture. Seul le 1er jeu est
+// annoncé : les copies (i > 0) sont aria-hidden pour ne pas lire 3× la liste.
 const duplicatedSkills = computed(() => {
-  const duplicated: (IVbSkill & { index: string })[] = [];
+  const duplicated: (IVbSkill & { index: string; ariaHidden: boolean })[] = [];
   for (let i = 0; i < 3; i++) {
     props.skillList.forEach((skill, index) => {
       duplicated.push({
         ...skill,
         index: `${i}-${index}`,
+        ariaHidden: i > 0,
       });
     });
   }

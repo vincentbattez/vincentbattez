@@ -184,7 +184,7 @@ useHead({
   gap: var(--vb-hero-gap, 3rem);
 
   &--kicker {
-    @apply font-body text-body-sm text-grey-500 uppercase mb-md;
+    @apply font-body text-body-sm text-grey-600 uppercase mb-md;
     letter-spacing: 0.18em;
     font-weight: 700;
   }

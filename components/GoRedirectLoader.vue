@@ -36,9 +36,7 @@ defineProps<{
         }}<span class="go-loader__dots" aria-hidden="true">…</span>
       </p>
 
-      <a class="go-loader__bypass" :href="url" rel="noopener noreferrer">
-        Continuer sans attendre
-      </a>
+      <a class="go-loader__bypass" :href="url"> Continuer sans attendre </a>
     </div>
   </div>
 </template>
@@ -135,7 +133,7 @@ defineProps<{
   }
 
   &__bypass {
-    @apply font-body text-body-sm text-grey-400 mt-lg;
+    @apply font-body text-body-sm text-grey-600 mt-lg;
     text-decoration: none;
     letter-spacing: 0.01em;
     transition: color 160ms ease;
