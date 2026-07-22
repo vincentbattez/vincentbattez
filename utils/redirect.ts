@@ -42,28 +42,17 @@ export function getRedirectLabel(redirectId: string): string {
   );
 }
 
-export async function sendIOSNotification(
-  redirectId: string,
-  url: string,
-): Promise<void> {
-  if (redirectId !== "call") {
+// Déclenche la notif Pushover côté client (site statique, pas de serveur runtime).
+// keepalive : la requête survit au window.location.replace qui suit.
+export function notifyCall(redirectId: string): void {
+  if (redirectId !== "call" || !import.meta.client) {
     return;
   }
 
-  const body = new URLSearchParams({
-    token: process.env.PUSHOVER_APP_TOKEN ?? "",
-    user: process.env.PUSHOVER_USER_KEY ?? "",
-    title: "Quelqu'un essaye de me joindre",
-    message: 'Quelqu\'un est passé par le lien "vincentbattez.dev/go/call"',
-    url,
-    url_title: "Rejoindre l'appel",
-  });
-
-  await fetch("https://api.pushover.net/1/messages.json", {
+  fetch("/.netlify/functions/notify-call", {
     method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body,
-  });
+    keepalive: true,
+  }).catch(() => {});
 }
 
 export function injectUtmSourceInUrl(source: string, baseUrl: string): string {

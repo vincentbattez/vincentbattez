@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import {
-  getRedirectLabel,
-  lookupTable,
-  sendIOSNotification,
-} from "~/utils/redirect";
+import { getRedirectLabel, lookupTable, notifyCall } from "~/utils/redirect";
 import GoRedirectLoader from "~/components/GoRedirectLoader.vue";
 
 const route = useRoute();
@@ -27,13 +23,11 @@ useSeoMeta({
   twitterImage: ogImageUrl,
 });
 
-if (import.meta.server) {
-  sendIOSNotification(redirectId, redirectURL);
-}
-
 const isExiting = ref(false);
 onMounted(() => {
-  const exitTimer = setTimeout(() => (isExiting.value = true), 750);
+  notifyCall(redirectId);
+
+  const exitTimer = setTimeout(() => (isExiting.value = true), 1500);
   const redirectTimer = setTimeout(
     () => window.location.replace(redirectURL),
     800,
