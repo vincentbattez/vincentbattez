@@ -8,6 +8,16 @@ directory = "netlify/functions"
 [build.environment]
 NODE_VERSION = "22"
 
+# En-têtes de sécurité appliqués à toutes les réponses.
+[[headers]]
+for = "/*"
+
+[headers.values]
+X-Content-Type-Options = "nosniff"
+X-Frame-Options = "DENY"
+Referrer-Policy = "strict-origin-when-cross-origin"
+Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
 # Assets fingerprintés (hash dans le nom) : cache immutable 1 an.
 [[headers]]
 for = "/_nuxt/*"
