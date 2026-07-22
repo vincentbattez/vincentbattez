@@ -22,6 +22,15 @@ useSeoMeta({
 
 useHead({
   titleTemplate: null,
+  link: [
+    // Portrait = élément LCP : préchargé pour un rendu plus rapide.
+    {
+      rel: "preload",
+      as: "image",
+      href: "/images/vincentbattez.webp",
+      fetchpriority: "high",
+    },
+  ],
   meta: [
     {
       name: "keywords",
