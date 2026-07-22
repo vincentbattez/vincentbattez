@@ -1,7 +1,7 @@
 <template>
   <component
-    :is="props.href ? 'a' : 'button'"
-    :href="props.href"
+    :is="tag"
+    v-bind="linkAttrs"
     class="btn"
     :class="{
       [`btn--${props.type}`]: props.type,
@@ -23,6 +23,19 @@ const props = defineProps<{
   href?: string;
   shape?: vbButtonShapeEnum;
 }>();
+
+// Liens internes (/) → NuxtLink (navigation SPA) ; externes → <a> ; sinon <button>.
+const isInternal = computed(() => props.href?.startsWith("/") ?? false);
+
+const tag = computed(() => {
+  if (isInternal.value) return resolveComponent("NuxtLink");
+  return props.href ? "a" : "button";
+});
+
+const linkAttrs = computed(() => {
+  if (isInternal.value) return { to: props.href };
+  return props.href ? { href: props.href } : {};
+});
 </script>
 
 <style lang="scss" scoped>

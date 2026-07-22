@@ -118,4 +118,15 @@ body {
 .page {
   @apply min-h-screen;
 }
+
+// Transition de page globale (fondu séquentiel out-in, ~200 ms).
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 200ms ease;
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+}
 </style>

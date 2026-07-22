@@ -1,11 +1,11 @@
 <template>
   <nav class="vb-navbar">
-    <a class="vb-navbar--badge" href="/go/envoyer_message?s=pf">
+    <NuxtLink class="vb-navbar--badge" to="/go/envoyer_message?s=pf">
       <span class="vb-navbar--indicator"></span>
       <span class="vb-navbar--badge-text"
         >Disponible pour mission freelance</span
       >
-    </a>
+    </NuxtLink>
 
     <div class="vb-navbar--socials">
       <VbButton
