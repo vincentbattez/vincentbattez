@@ -17,4 +17,4 @@ Single-context: `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/do
 
 ### Déploiement
 
-La prod est un **site statique généré par Nuxt (SSG)** : `nuxt generate` → `dist`, déployé sur Netlify. **Pas de serveur au runtime.** Le code sous `import.meta.server` s'exécute au build, pas à chaque visite. Pour de la logique par-requête, utiliser une **Netlify Function** (`netlify/functions/`).
+La prod est un **site statique généré par Nuxt (SSG)** : `nuxt generate` → `dist`, déployé sur Netlify. **Pas de serveur au runtime.**
