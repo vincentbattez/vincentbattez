@@ -51,7 +51,8 @@ defineProps<{
 
   &__card {
     @apply flex flex-col items-center text-center px-md;
-    animation: go-loader-enter 1640ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    // 700 ms : la carte se pose bien avant le fondu de sortie, l'entrée n'est plus coupée par la redirection.
+    animation: go-loader-enter 700ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
   }
 
   &__arc {
