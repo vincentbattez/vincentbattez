@@ -18,10 +18,10 @@
 
   // ─ Durées ─
   --vb-dur-frame: 0.5s;
-  --vb-dur-fade: 0.6s;
+  --vb-dur-fade: 1.3s;
   --vb-dur-word: 0.7s;
   --vb-dur-underline: 0.5s;
-  --vb-dur-medallion: 0.8s;
+  --vb-dur-medallion: 1.7s;
   --vb-dur-float: 6s;
 
   // Écart standard entre deux animations enchaînées (le « pas » de la cascade).
@@ -29,7 +29,7 @@
 
   // ─ Timeline : instants de départ, chacun relatif à un autre ─
   // Avant le texte : la carte, la navbar, le médaillon.
-  --vb-at-frame: 0s;
+  --vb-at-frame: 0.2s;
   --vb-at-nav: 0.05s; //                              ~ avec la carte
   --vb-at-medallion: 0.2s; //                         pendant la montée de la carte
 
@@ -39,13 +39,13 @@
   --vb-at-word-2: calc(var(--vb-at-word-1) + var(--vb-stagger)); //  après word-1
   --vb-at-word-3: calc(var(--vb-at-word-2) + var(--vb-stagger)); //  après word-2
   --vb-at-lead: calc(var(--vb-at-word-3) + var(--vb-stagger)); //    après les mots
-  --vb-at-actions: calc(var(--vb-at-lead) + var(--vb-stagger)); //   après le lead
+  --vb-at-actions: calc(var(--vb-at-lead) + var(--vb-stagger) * 3); //   après le lead
 
   // Dérivés d'autres animations (relations « pendant / après »).
   // Le trait se trace EN MÊME TEMPS que la fin de la révélation de « Senior ».
   --vb-at-underline: calc(var(--vb-at-word-3) + var(--vb-dur-word) - 0.2s);
   // La liste des skills ferme la séquence, bien après les CTA.
-  --vb-at-marquee: calc(var(--vb-at-actions) + var(--vb-stagger) * 3);
+  --vb-at-marquee: calc(var(--vb-at-actions) + var(--vb-stagger) * 4);
   // Le flottement du portrait démarre APRÈS le marquee, puis boucle.
   --vb-at-float: calc(var(--vb-at-marquee) + var(--vb-stagger));
 }
@@ -113,9 +113,11 @@
 // le portrait reste l'élément LCP sans retard.
 @keyframes vb-medallion-in {
   from {
+    opacity: 0;
     transform: scale(0.9);
   }
   to {
+    opacity: 1;
     transform: scale(1);
   }
 }
