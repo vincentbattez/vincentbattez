@@ -1,30 +1,34 @@
 <template>
-  <div class="vb-skill--container">
-    <ul class="vb-skill--list">
+  <div ref="containerRef" class="vb-skill--container" v-on="events">
+    <ul ref="listRef" class="vb-skill--list">
       <li
         v-for="skill in duplicatedSkills"
         :key="`${skill.name}-${skill.index}`"
         class="vb-skill--item"
         :class="{
           [`vb-skill--item__${skill.type}`]: skill.type,
+          'vb-skill--item__loop': skill.isLoopMarker,
         }"
-        :aria-hidden="skill.ariaHidden || undefined"
+        :aria-hidden="skill.ariaHidden || skill.isLoopMarker || undefined"
       >
-        <VbIcon
-          class="vb-skill--hashtag"
-          :class="{
-            [`vb-skill--hashtag__${skill.type}`]: skill.type,
-          }"
-          :name="VbIconEnum.VbHashtag"
-          :size="vbButtonSizeEnum.md"
-        />
-        <span class="vb-skill--text">{{ skill.name }}</span>
-        <VbIcon
-          v-if="skill.love"
-          class="vb-skill--heart text-red-600"
-          :name="VbIconEnum.VbHeart"
-          :size="vbButtonSizeEnum.sm"
-        />
+        <span v-if="skill.isLoopMarker" class="vb-skill--infinity">|</span>
+        <template v-else>
+          <VbIcon
+            class="vb-skill--hashtag"
+            :class="{
+              [`vb-skill--hashtag__${skill.type}`]: skill.type,
+            }"
+            :name="VbIconEnum.VbHashtag"
+            :size="vbButtonSizeEnum.md"
+          />
+          <span class="vb-skill--text">{{ skill.name }}</span>
+          <VbIcon
+            v-if="skill.love"
+            class="vb-skill--heart text-red-600"
+            :name="VbIconEnum.VbHeart"
+            :size="vbButtonSizeEnum.sm"
+          />
+        </template>
       </li>
     </ul>
   </div>
@@ -36,16 +40,25 @@ import type { IVbSkill } from "~/components/footer/vbSkill.type";
 import VbIcon from "~/ui/components/icon/VbIcon.vue";
 import { VbIconEnum } from "~/types/vb-icon";
 import { vbButtonSizeEnum } from "~/ui/components/icon/VbIcon.type";
+import { useInfiniteMarquee } from "~/composables/useInfiniteMarquee.ts";
 
 const props = defineProps<{
   skillList: IVbSkill[];
 }>();
 
-// 3 copies pour une boucle de défilement sans couture. Seul le 1er jeu est
-// annoncé : les copies (i > 0) sont aria-hidden pour ne pas lire 3× la liste.
+const COPIES = 3;
+
+// COPIES copies pour une boucle sans couture. Seul le 1er jeu est annoncé :
+// les copies (i > 0) sont aria-hidden pour ne pas lire 3× la liste. Un marqueur
+// ∞ ferme chaque cycle pour signaler le défilement infini.
+type SkillEntry = Partial<IVbSkill> & {
+  index: string;
+  ariaHidden: boolean;
+  isLoopMarker?: boolean;
+};
 const duplicatedSkills = computed(() => {
-  const duplicated: (IVbSkill & { index: string; ariaHidden: boolean })[] = [];
-  for (let i = 0; i < 3; i++) {
+  const duplicated: SkillEntry[] = [];
+  for (let i = 0; i < COPIES; i++) {
     props.skillList.forEach((skill, index) => {
       duplicated.push({
         ...skill,
@@ -53,8 +66,18 @@ const duplicatedSkills = computed(() => {
         ariaHidden: i > 0,
       });
     });
+    duplicated.push({
+      index: `${i}-loop`,
+      ariaHidden: true,
+      isLoopMarker: true,
+    });
   }
   return duplicated;
+});
+
+// +1 : le marqueur ∞ fait partie de la période à répéter.
+const { containerRef, listRef, events } = useInfiniteMarquee({
+  itemsPerPeriod: () => props.skillList.length + 1,
 });
 </script>
 
@@ -62,6 +85,8 @@ const duplicatedSkills = computed(() => {
 .vb-skill {
   &--container {
     @apply w-full overflow-hidden;
+    touch-action: pan-y; // gestes horizontaux gérés par nous, vertical → page
+    cursor: grab;
     mask-image: linear-gradient(
       to right,
       transparent 0%,
@@ -69,12 +94,16 @@ const duplicatedSkills = computed(() => {
       black 90%,
       transparent 100%
     );
+
+    &:active {
+      cursor: grabbing;
+    }
   }
 
   &--list {
-    @apply flex gap-sm sm:gap-md;
-    animation: scroll-right 30s linear infinite;
+    @apply flex gap-sm sm:gap-md select-none;
     width: max-content;
+    will-change: transform;
   }
 
   &--item {
@@ -88,6 +117,16 @@ const duplicatedSkills = computed(() => {
     &__secondary {
       @apply text-secondary;
     }
+  }
+
+  &--item__loop {
+    @apply opacity-60;
+  }
+
+  &--infinity {
+    @apply text-body-md sm:text-body-lg;
+    font-weight: 700;
+    line-height: 1;
   }
 
   &--heart {
@@ -110,18 +149,5 @@ const duplicatedSkills = computed(() => {
   &--text {
     @apply text-body-sm sm:text-body-md;
   }
-}
-
-@keyframes scroll-right {
-  0% {
-    transform: translateX(-33.333%);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-
-.vb-skill--container:hover .vb-skill--list {
-  animation-play-state: paused;
 }
 </style>
