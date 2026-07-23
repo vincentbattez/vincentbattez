@@ -67,6 +67,18 @@
   }
 }
 
+// Sortie de page : fondu court. `from: 1` explicite car remplacer vb-frame-in
+// retire son fill `forwards` → sans ça l'élément retombe sur `opacity: 0` (base)
+// et le fondu partirait de 0 (disparition sèche).
+@keyframes vb-frame-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 @keyframes vb-fade-rise {
   from {
     opacity: 0;

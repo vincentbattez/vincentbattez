@@ -20,6 +20,14 @@
       var(--vb-at-frame);
   }
 
+  // Sortie de page (mode out-in) : sans ça, le fill `forwards` de vb-frame-in
+  // fige opacity:1 (le fondu ne joue pas) ET Vue lit 0.7s (delay+durée) comme
+  // durée de sortie → gel de ~700 ms avant que /go monte. On remplace donc
+  // l'animation pendant `page-leave-active` : fondu de 200 ms lisible par Vue.
+  .vb-frame.page-leave-active {
+    animation: vb-frame-out 200ms var(--vb-ease-fade) forwards;
+  }
+
   .vb-frame--nav {
     opacity: 0;
     animation: vb-fade-drop var(--vb-dur-fade) var(--vb-ease-fade) forwards
