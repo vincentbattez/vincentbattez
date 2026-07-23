@@ -6,7 +6,7 @@
         :key="`${skill.name}-${skill.index}`"
         class="vb-skill--item"
         :class="{
-          [`vb-skill--item__${skill.type}`]: skill.type,
+          'vb-skill--item__love': skill.love,
           'vb-skill--item__loop': skill.isLoopMarker,
         }"
         :aria-hidden="skill.ariaHidden || skill.isLoopMarker || undefined"
@@ -15,16 +15,13 @@
         <template v-else>
           <VbIcon
             class="vb-skill--hashtag"
-            :class="{
-              [`vb-skill--hashtag__${skill.type}`]: skill.type,
-            }"
             :name="VbIconEnum.VbHashtag"
             :size="vbButtonSizeEnum.md"
           />
           <span class="vb-skill--text">{{ skill.name }}</span>
           <VbIcon
             v-if="skill.love"
-            class="vb-skill--heart text-red-600"
+            class="vb-skill--heart"
             :name="VbIconEnum.VbHeart"
             :size="vbButtonSizeEnum.sm"
           />
@@ -108,14 +105,12 @@ const { containerRef, listRef, events } = useInfiniteMarquee({
 
   &--item {
     @apply flex items-center whitespace-nowrap flex-shrink-0;
-    @apply text-body-sm sm:text-body-md;
+    @apply text-body-sm sm:text-body-md text-black;
     font-weight: 700;
 
-    &__primary {
-      @apply text-primary;
-    }
-    &__secondary {
-      @apply text-secondary;
+    // Seuls les skills likés sont colorés (bleu 500), le reste en noir.
+    &__love {
+      @apply text-blue-500;
     }
   }
 
@@ -130,6 +125,7 @@ const { containerRef, listRef, events } = useInfiniteMarquee({
   }
 
   &--heart {
+    @apply text-blue-500;
     position: relative;
     top: -0.25rem;
     left: 0.12rem;
@@ -137,13 +133,6 @@ const { containerRef, listRef, events } = useInfiniteMarquee({
 
   &--hashtag {
     @apply mr-xs;
-
-    &__primary {
-      @apply text-primary;
-    }
-    &__secondary {
-      @apply text-secondary;
-    }
   }
 
   &--text {

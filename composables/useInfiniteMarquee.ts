@@ -18,8 +18,6 @@ interface UseInfiniteMarqueeOptions {
   itemsPerPeriod: MaybeRefOrGetter<number>;
   // Durée pour parcourir une copie, en secondes.
   secondsPerPeriod?: number;
-  // Délai avant reprise de l'auto-défilement après une interaction, en ms.
-  resumeDelay?: number;
 }
 
 interface UseInfiniteMarqueeReturn {
@@ -32,7 +30,7 @@ interface UseInfiniteMarqueeReturn {
 export function useInfiniteMarquee(
   options: UseInfiniteMarqueeOptions,
 ): UseInfiniteMarqueeReturn {
-  const { itemsPerPeriod, secondsPerPeriod = 30, resumeDelay = 600 } = options;
+  const { itemsPerPeriod, secondsPerPeriod = 30 } = options;
 
   const containerRef = ref<HTMLElement | null>(null);
   const listRef = ref<HTMLElement | null>(null);
@@ -41,8 +39,9 @@ export function useInfiniteMarquee(
   let period = 0; // largeur d'une copie + son gap
   let rafId = 0;
   let lastTime = 0;
-  let paused = false;
-  let resumeTimeout: ReturnType<typeof setTimeout> | undefined;
+  // L'auto-défilement est en pause tant que la souris survole OU qu'on glisse.
+  let hovering = false;
+  let dragging = false;
 
   // Période réelle mesurée via offsetLeft (intègre largeurs ET gaps flex, à la
   // différence de scrollWidth/n qui laisserait un micro-saut de gap au wrap).
@@ -62,24 +61,13 @@ export function useInfiniteMarquee(
   }
 
   function tick(time: number) {
-    if (!paused && period > 0) {
+    if (!hovering && !dragging && period > 0) {
       const dt = lastTime ? (time - lastTime) / 1000 : 0;
-      offset -= (period / secondsPerPeriod) * dt; // sens gauche→droite
+      offset += (period / secondsPerPeriod) * dt; // sens droite→gauche
       apply();
     }
     lastTime = time;
     rafId = requestAnimationFrame(tick);
-  }
-
-  function pause() {
-    paused = true;
-  }
-  function resume() {
-    paused = false;
-  }
-  function resumeSoon() {
-    clearTimeout(resumeTimeout);
-    resumeTimeout = setTimeout(resume, resumeDelay);
   }
 
   // Molette verticale → défilement horizontal (boucle infinie : toujours du rab).
@@ -89,17 +77,13 @@ export function useInfiniteMarquee(
     e.preventDefault();
     offset += delta;
     apply();
-    pause();
-    resumeSoon();
   }
 
   // Glisser (tactile / souris).
-  let dragging = false;
   let lastX = 0;
   function onPointerDown(e: PointerEvent) {
     dragging = true;
     lastX = e.clientX;
-    pause();
     containerRef.value?.setPointerCapture(e.pointerId);
   }
   function onPointerMove(e: PointerEvent) {
@@ -109,15 +93,13 @@ export function useInfiniteMarquee(
     apply();
   }
   function onPointerUp() {
-    if (!dragging) return;
     dragging = false;
-    resumeSoon();
   }
   function onPointerEnter() {
-    if (!dragging) pause();
+    hovering = true;
   }
   function onPointerLeave() {
-    if (!dragging) resumeSoon();
+    hovering = false;
   }
 
   function remeasure() {
@@ -136,7 +118,6 @@ export function useInfiniteMarquee(
 
   onBeforeUnmount(() => {
     cancelAnimationFrame(rafId);
-    clearTimeout(resumeTimeout);
     window.removeEventListener("resize", remeasure);
   });
 
