@@ -110,6 +110,7 @@ useHead({
 
 <template>
   <main class="page flex flex-col">
+    <NuxtPwaManifest />
     <NuxtLoadingIndicator />
     <NuxtPage />
   </main>

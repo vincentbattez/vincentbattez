@@ -17,7 +17,43 @@ export default defineNuxtConfig({
     "@nuxt/eslint",
     "@nuxt/fonts",
     "@posthog/nuxt",
+    "@vite-pwa/nuxt",
   ],
+
+  // PWA : service worker + manifest gérés par le plugin (Workbox).
+  // registerType "autoUpdate" : le nouveau SW prend le contrôle à la visite
+  // suivante, évite de servir un HTML précaché périmé après un déploiement.
+  pwa: {
+    registerType: "autoUpdate",
+    manifest: {
+      name: "Vincent Battez - Développeur Full-Stack Senior Freelance",
+      short_name: "Vincent Battez",
+      description:
+        "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture des applications web robustes : Node.js, React, Vue.js, TypeScript.",
+      lang: "fr-FR",
+      start_url: "/",
+      display: "standalone",
+      background_color: "#feecd1",
+      theme_color: "#F0910F",
+      icons: [
+        { src: "/pwa-192x192.png", sizes: "192x192", type: "image/png" },
+        { src: "/pwa-512x512.png", sizes: "512x512", type: "image/png" },
+        {
+          src: "/pwa-512x512.png",
+          sizes: "512x512",
+          type: "image/png",
+          purpose: "maskable",
+        },
+      ],
+    },
+    workbox: {
+      globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff2}"],
+    },
+    // Pas de bouton d'installation custom : le site n'est pas une app installable.
+    client: {
+      installPrompt: false,
+    },
+  },
 
   fonts: {
     families: [
@@ -95,7 +131,6 @@ export default defineNuxtConfig({
           sizes: "180x180",
           href: "/apple-touch-icon.png",
         },
-        { rel: "manifest", href: "/site.webmanifest" },
       ],
       meta: [
         { charset: "utf-8" },
