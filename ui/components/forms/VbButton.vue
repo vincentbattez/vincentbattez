@@ -51,6 +51,10 @@ const linkAttrs = computed(() => {
     outline: 4px solid;
   }
 
+  &:active {
+    transform: scale(0.96);
+  }
+
   &--primary {
     @apply bg-secondary text-white;
     box-shadow: 0 12px 24px -10px rgba(35, 165, 247, 0.6);
@@ -91,6 +95,9 @@ const linkAttrs = computed(() => {
     }
     &:focus-visible {
       @apply outline-grey-500;
+    }
+    &:active {
+      @apply bg-grey-100 border-grey-400 text-black;
     }
   }
 
