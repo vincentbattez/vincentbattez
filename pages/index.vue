@@ -47,8 +47,15 @@ useHead({
             Développeur Full-Stack Freelance à Lille
           </p>
           <h1 class="vb-hero--title">
-            Développeur Full-Stack
-            <span class="vb-hero--accent">Senior</span>
+            <span class="vb-word"
+              ><span class="vb-word--i">Développeur</span></span
+            >
+            <span class="vb-word"
+              ><span class="vb-word--i">Full-Stack</span></span
+            >
+            <span class="vb-word"
+              ><span class="vb-word--i vb-hero--accent">Senior</span></span
+            >
           </h1>
           <p class="vb-hero--lead">
             Disponible dès maintenant pour <strong>créer</strong> ou
@@ -191,6 +198,27 @@ useHead({
 
   &--accent {
     @apply text-primary;
+    position: relative;
+  }
+
+  // Typo cinétique : chaque mot glisse depuis un masque (overflow caché).
+  // padding/margin compensés pour ne pas rogner les jambages (« pp »).
+  .vb-word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    padding-bottom: 0.14em;
+    margin-bottom: -0.14em;
+    // Vue condense le whitespace entre les masques : espacement porté en CSS.
+    margin-right: 0.22em;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &--i {
+      display: inline-block;
+    }
   }
 
   &--lead {
@@ -230,6 +258,95 @@ useHead({
     border-radius: 50%;
     object-fit: cover;
     display: block;
+  }
+}
+
+// ─── Timeline d'entrée (colocée avec le markup qu'elle anime) ────────────
+// Keyframes + tokens de rythme (--vb-*) définis dans ui/styles/base/_motion.scss.
+// NE PAS déplacer cette timeline en global : Vue réécrit les noms de keyframes
+// des blocs scoped, la réf resterait alors désalignée du nom global.
+//
+// Orchestration CSS-only (pas de flash d'hydratation, SSG-safe). Tout l'état
+// caché est gated derrière `no-preference` : la règle reduced-motion globale ne
+// neutralise PAS `animation-delay`, donc masquer par défaut laisserait le contenu
+// invisible pendant le stagger. Ici, au repos = état final visible.
+@media (prefers-reduced-motion: no-preference) {
+  .vb-frame {
+    opacity: 0;
+    animation: vb-frame-in var(--vb-dur-frame) var(--vb-ease-fade) forwards
+      var(--vb-at-frame);
+  }
+
+  .vb-frame--nav {
+    opacity: 0;
+    animation: vb-fade-drop var(--vb-dur-fade) var(--vb-ease-fade) forwards
+      var(--vb-at-nav);
+  }
+
+  .vb-hero--kicker {
+    opacity: 0;
+    animation: vb-fade-rise var(--vb-dur-fade) var(--vb-ease-fade) forwards
+      var(--vb-at-kicker);
+  }
+
+  .vb-hero .vb-word--i {
+    transform: translateY(115%);
+    animation: vb-word-rise var(--vb-dur-word) var(--vb-ease-reveal) forwards;
+  }
+  .vb-word:nth-child(1) .vb-word--i {
+    animation-delay: var(--vb-at-word-1);
+  }
+  .vb-word:nth-child(2) .vb-word--i {
+    animation-delay: var(--vb-at-word-2);
+  }
+  .vb-word:nth-child(3) .vb-word--i {
+    animation-delay: var(--vb-at-word-3);
+  }
+
+  // L'accent cumule la révélation ET le tracé du soulignement (2 animations).
+  // Sélecteur renforcé (0,3,0) pour battre la règle générale `.vb-word--i`.
+  .vb-hero .vb-word--i.vb-hero--accent {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 3px;
+    padding-bottom: 2px;
+    animation:
+      vb-word-rise var(--vb-dur-word) var(--vb-ease-reveal) forwards
+        var(--vb-at-word-3),
+      vb-accent-underline var(--vb-dur-underline) var(--vb-ease-fade) forwards
+        var(--vb-at-underline);
+  }
+
+  .vb-hero--lead {
+    opacity: 0;
+    animation: vb-fade-rise var(--vb-dur-fade) var(--vb-ease-fade) forwards
+      var(--vb-at-lead);
+  }
+
+  .vb-hero--actions {
+    opacity: 0;
+    animation: vb-fade-rise var(--vb-dur-fade) var(--vb-ease-fade) forwards
+      var(--vb-at-actions);
+  }
+
+  .vb-medallion {
+    transform: scale(0.9);
+    animation: vb-medallion-in var(--vb-dur-medallion) var(--vb-ease-reveal)
+      forwards var(--vb-at-medallion);
+  }
+
+  // Flottement porté par le wrapper (pas le médaillon) → aucun conflit de
+  // transform avec la révélation, et aucun opacity sur un ancêtre du portrait.
+  .vb-hero--portrait {
+    animation: vb-portrait-float var(--vb-dur-float) var(--vb-ease-float)
+      var(--vb-at-float) infinite;
+  }
+
+  .vb-frame--marquee {
+    opacity: 0;
+    animation: vb-fade-rise var(--vb-dur-fade) var(--vb-ease-fade) forwards
+      var(--vb-at-marquee);
   }
 }
 

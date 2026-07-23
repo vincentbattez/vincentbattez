@@ -51,6 +51,10 @@ const linkAttrs = computed(() => {
     outline: 4px solid;
   }
 
+  &:hover {
+    transform: translateY(-2px);
+  }
+
   &:active {
     transform: scale(0.96);
   }
@@ -61,6 +65,7 @@ const linkAttrs = computed(() => {
 
     &:hover {
       @apply bg-blue-400;
+      box-shadow: 0 18px 30px -12px rgba(35, 165, 247, 0.7);
     }
     &:focus-visible {
       @apply bg-blue-400;

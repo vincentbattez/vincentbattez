@@ -1,0 +1,132 @@
+// Vocabulaire de motion (global, non-scoped) : tokens de rythme + keyframes.
+// La *timeline* (quel élément joue quel keyframe) reste colocée dans les
+// composants ; ici on ne définit que le langage partagé.
+//
+// Modèle de séquençage : chaque instant `--vb-at-*` est exprimé RELATIVEMENT
+// à un autre (via calc), pour que « avant / après / en même temps » soit lisible
+// directement dans le token. Décaler `--vb-stagger` ou `--vb-at-kicker` propage
+// tout l'enchaînement du texte sans retoucher chaque valeur.
+//
+// Les custom properties traversent le scoping (héritage de cascade) : elles sont
+// consommables depuis un `<style scoped>` sans `@use` par SFC.
+
+:root {
+  // ─ Courbes ─
+  --vb-ease-fade: ease;
+  --vb-ease-reveal: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --vb-ease-float: ease-in-out;
+
+  // ─ Durées ─
+  --vb-dur-frame: 0.5s;
+  --vb-dur-fade: 0.6s;
+  --vb-dur-word: 0.7s;
+  --vb-dur-underline: 0.5s;
+  --vb-dur-medallion: 0.8s;
+  --vb-dur-float: 6s;
+
+  // Écart standard entre deux animations enchaînées (le « pas » de la cascade).
+  --vb-stagger: 0.12s;
+
+  // ─ Timeline : instants de départ, chacun relatif à un autre ─
+  // Avant le texte : la carte, la navbar, le médaillon.
+  --vb-at-frame: 0s;
+  --vb-at-nav: 0.05s; //                              ~ avec la carte
+  --vb-at-medallion: 0.2s; //                         pendant la montée de la carte
+
+  // Cascade du texte : chacun APRÈS le précédent (+1 stagger).
+  --vb-at-kicker: 0.3s; //                            après la carte
+  --vb-at-word-1: calc(var(--vb-at-kicker) + var(--vb-stagger)); //  après le kicker
+  --vb-at-word-2: calc(var(--vb-at-word-1) + var(--vb-stagger)); //  après word-1
+  --vb-at-word-3: calc(var(--vb-at-word-2) + var(--vb-stagger)); //  après word-2
+  --vb-at-lead: calc(var(--vb-at-word-3) + var(--vb-stagger)); //    après les mots
+  --vb-at-actions: calc(var(--vb-at-lead) + var(--vb-stagger)); //   après le lead
+
+  // Dérivés d'autres animations (relations « pendant / après »).
+  // Le trait se trace EN MÊME TEMPS que la fin de la révélation de « Senior ».
+  --vb-at-underline: calc(var(--vb-at-word-3) + var(--vb-dur-word) - 0.2s);
+  // La liste des skills ferme la séquence, bien après les CTA.
+  --vb-at-marquee: calc(var(--vb-at-actions) + var(--vb-stagger) * 3);
+  // Le flottement du portrait démarre APRÈS le marquee, puis boucle.
+  --vb-at-float: calc(var(--vb-at-marquee) + var(--vb-stagger));
+}
+
+// ─── Keyframes ────────────────────────────────────────────────────────────
+// Globales : les noms `vb-` évitent toute collision. Référencées depuis les
+// blocs scoped des composants (la réf `animation:` scoped n'est pas réécrite,
+// donc elle matche bien ces noms nus).
+
+// Toute la carte monte en fondu court (englobe le portrait/LCP : bref + sans délai).
+@keyframes vb-frame-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes vb-fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes vb-fade-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Mot cinétique : remonte depuis le bas de son masque.
+@keyframes vb-word-rise {
+  from {
+    transform: translateY(115%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+// Trait tracé sous « Senior » une fois le mot révélé.
+@keyframes vb-accent-underline {
+  from {
+    background-size: 0% 3px;
+  }
+  to {
+    background-size: 100% 3px;
+  }
+}
+
+// Médaillon : transform seul (jamais d'opacity) → pixels peints d'emblée,
+// le portrait reste l'élément LCP sans retard.
+@keyframes vb-medallion-in {
+  from {
+    transform: scale(0.9);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+// Flottement doux en boucle (translate seul, sur le parent du portrait).
+@keyframes vb-portrait-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
