@@ -45,6 +45,11 @@ const linkAttrs = computed(() => {
   @apply rounded;
   @apply text-body-md;
   @apply transition-all duration-200 ease-in-out;
+  outline: 0px solid white;
+
+  &:focus-visible {
+    outline: 4px solid;
+  }
 
   &--primary {
     @apply bg-secondary text-white;
@@ -53,9 +58,9 @@ const linkAttrs = computed(() => {
     &:hover {
       @apply bg-blue-400;
     }
-    &:focus {
+    &:focus-visible {
       @apply bg-blue-400;
-      outline: 4px solid #d2f7fdff;
+      @apply outline-blue-500;
     }
     &:active {
       @apply bg-blue-500;
@@ -68,8 +73,8 @@ const linkAttrs = computed(() => {
     &:hover {
       @apply bg-blue-100;
     }
-    &:focus {
-      outline: 4px solid #d2f7fdff;
+    &:focus-visible {
+      @apply outline-blue-500;
     }
     &:active {
       @apply text-blue-600;
@@ -84,8 +89,8 @@ const linkAttrs = computed(() => {
     &:hover {
       @apply border-grey-300 text-black;
     }
-    &:focus {
-      outline: 4px solid #d2f7fdff;
+    &:focus-visible {
+      @apply outline-grey-500;
     }
   }
 

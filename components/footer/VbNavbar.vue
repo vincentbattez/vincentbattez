@@ -49,7 +49,7 @@ import { vbButtonSizeEnum } from "~/ui/components/icon/VbIcon.type";
     padding: 0.4rem 0.9rem;
     border-radius: 999px;
 
-    &:focus {
+    &:focus-visible {
       outline: 2px solid #3b82f6;
     }
   }
