@@ -303,6 +303,10 @@ onMounted(() => {
     // Vue condense le whitespace entre les masques : espacement porté en CSS.
     margin-right: 0.22em;
 
+    @media (max-width: 820px) {
+      display: inline-block;
+    }
+
     &:last-child {
       margin-right: 0;
     }

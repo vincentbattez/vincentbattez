@@ -38,6 +38,9 @@
     opacity: 0;
     animation: vb-fade-rise var(--vb-dur-fade) var(--vb-ease-fade) forwards
       var(--vb-at-kicker);
+    @media (max-width: 440px) {
+      display: none;
+    }
   }
 
   .vb-hero .vb-word--i {
