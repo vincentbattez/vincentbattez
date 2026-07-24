@@ -100,21 +100,10 @@
       var(--vb-at-marquee);
   }
 
-  // ─ Décor vivant (compositor-only, en boucle) ─
-  // Le halo haut-droite respire (scale + opacity, pas de repaint).
-  .vb-frame--decor::before {
-    transform-origin: 70% 30%;
-    animation: vb-glow-breathe var(--vb-dur-glow) var(--vb-ease-float) infinite;
-  }
-
   // Les deux trames de points respirent en opacity, désynchronisées (délais
   // opposés) pour éviter un clignotement jumeau.
   .vb-frame--dots {
     animation: vb-soft-breathe var(--vb-dur-breathe) var(--vb-ease-float)
       infinite;
-  }
-  .vb-frame--decor::after {
-    animation: vb-soft-breathe var(--vb-dur-breathe) var(--vb-ease-float)
-      calc(var(--vb-dur-breathe) / -2) infinite;
   }
 }

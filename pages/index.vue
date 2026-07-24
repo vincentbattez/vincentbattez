@@ -10,14 +10,14 @@ import VbNavbar from "~/components/footer/VbNavbar.vue";
 useSeoMeta({
   title: "Vincent Battez - Développeur Full-Stack Senior Freelance à Lille",
   description:
-    "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture des applications web robustes : Node.js, React, Vue.js, TypeScript.",
+    "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture vos applications web robustes : Node.js, React, Vue.js, TypeScript.",
   ogTitle: "Vincent Battez - Développeur Full-Stack Senior Freelance à Lille",
   ogDescription:
-    "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture des applications web robustes : Node.js, React, Vue.js, TypeScript.",
+    "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture vos applications web robustes : Node.js, React, Vue.js, TypeScript.",
   twitterTitle:
     "Vincent Battez - Développeur Full-Stack Senior Freelance à Lille",
   twitterDescription:
-    "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture des applications web robustes : Node.js, React, Vue.js, TypeScript.",
+    "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture vos applications web robustes : Node.js, React, Vue.js, TypeScript.",
 });
 
 useHead({
@@ -105,8 +105,10 @@ onMounted(() => {
             >
           </h1>
           <p class="vb-hero--lead">
-            Disponible dès maintenant pour <strong>créer</strong> ou
-            <strong>architecturer</strong> des applications web robustes.
+            Disponible dès maintenant pour
+            <strong>vous accompagner</strong> dans la
+            <strong>création et l’architecture</strong>
+            de vos applications web solides et évolutives
           </p>
 
           <div class="vb-hero--actions">
@@ -135,7 +137,7 @@ onMounted(() => {
               width="640"
               height="640"
               fetchpriority="high"
-              alt="Portrait de Vincent Battez, développeur Full-Stack Senior freelance"
+              alt="Photo de Vincent Battez, développeur Full-Stack Senior freelance"
             />
           </div>
         </div>
@@ -179,7 +181,7 @@ onMounted(() => {
     &::before {
       content: "";
       position: absolute;
-      top: -120px;
+      top: -60px;
       right: -140px;
       width: 620px;
       height: 620px;
@@ -293,7 +295,7 @@ onMounted(() => {
   // Typo cinétique : chaque mot glisse depuis un masque (overflow caché).
   // padding/margin compensés pour ne pas rogner les jambages (« pp »).
   .vb-word {
-    display: inline-block;
+    display: block;
     overflow: hidden;
     vertical-align: top;
     padding-bottom: 0.14em;
