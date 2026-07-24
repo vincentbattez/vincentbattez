@@ -1,77 +1,107 @@
 <template>
   <nav class="vb-navbar">
-    <NuxtLink class="vb-navbar--badge" to="/go/envoyer_message?s=pf">
-      <span class="vb-navbar--indicator"></span>
-      <span class="vb-navbar--badge-text"
-        >Disponible pour mission freelance</span
+    <div class="vb-navbar--status">
+      <NuxtLink
+        v-if="isAvailableForFreelance"
+        class="vb-navbar--badge"
+        to="/go/entretien?s=pf"
       >
-    </NuxtLink>
-
-    <div class="vb-navbar--socials">
-      <VbButton
-        href="/go/linkedin?s=pf"
-        aria-label="Profil LinkedIn de Vincent Battez"
-        :shape="vbButtonShapeEnum.square"
-        :type="vbButtonTypeEnum.soft"
+        <span class="vb-navbar--indicator"></span>
+        <span class="vb-navbar--badge-text"
+          >Disponible pour mission freelance</span
+        >
+      </NuxtLink>
+      <span v-else class="vb-navbar--badge is-unavailable">
+        <span class="vb-navbar--indicator"></span>
+        <span class="vb-navbar--badge-text">Indisponible pour le moment</span>
+      </span>
+      <span class="vb-navbar--status-date"
+        >Mise à jour: {{ formattedStatusUpdatedAt }}</span
       >
-        <VbIcon :size="vbButtonSizeEnum.lg" :name="VbIconEnum.VbLinkedin" />
-      </VbButton>
-
-      <VbButton
-        href="/go/github?s=pf"
-        aria-label="Profil GitHub de Vincent Battez"
-        :shape="vbButtonShapeEnum.square"
-        :type="vbButtonTypeEnum.soft"
-      >
-        <VbIcon :size="vbButtonSizeEnum.lg" :name="VbIconEnum.VbGithub" />
-      </VbButton>
     </div>
+
+    <VbSocials class="vb-navbar--socials" />
   </nav>
 </template>
 
 <script lang="ts" setup>
-import VbButton from "~/ui/components/forms/VbButton.vue";
-import VbIcon from "~/ui/components/icon/VbIcon.vue";
-import { VbIconEnum } from "~/types/vb-icon";
-import {
-  vbButtonTypeEnum,
-  vbButtonShapeEnum,
-} from "~/ui/components/forms/VbButton.type";
-import { vbButtonSizeEnum } from "~/ui/components/icon/VbIcon.type";
+import VbSocials from "~/components/footer/VbSocials.vue";
+
+// Passer à `false` quand je suis indisponible pour une mission freelance.
+const isAvailableForFreelance = true;
+
+// Date de dernière mise à jour du statut (format ISO).
+const statusUpdatedAt = "2026-07-24";
+
+const formattedStatusUpdatedAt = computed(() => {
+  const rtf = new Intl.RelativeTimeFormat("fr-FR", { numeric: "auto" });
+  const diffMs = new Date(statusUpdatedAt).getTime() - Date.now();
+  const diffDays = Math.round(diffMs / 86_400_000);
+
+  if (Math.abs(diffDays) >= 30) {
+    const diffMonths = Math.round(diffDays / 30);
+    return rtf.format(diffMonths, "month");
+  }
+  if (Math.abs(diffDays) >= 7) {
+    return rtf.format(Math.round(diffDays / 7), "week");
+  }
+  return rtf.format(diffDays, "day");
+});
 </script>
 
 <style lang="scss" scoped>
 .vb-navbar {
   @apply flex items-center justify-between gap-md;
 
+  &--status {
+    @apply flex flex-wrap items-baseline gap-x-sm flex-col;
+    align-items: flex-end;
+  }
+
+  &--status-date {
+    @apply text-grey-500;
+    font-size: 0.7rem;
+    font-style: italic;
+  }
+
   &--badge {
     @apply inline-flex items-center gap-sm;
-    padding: 0.4rem 0.9rem;
     border-radius: 999px;
 
     &:focus-visible {
       outline: 2px solid #3b82f6;
     }
+
+    &.is-unavailable {
+      cursor: default;
+      opacity: 0.55;
+
+      .vb-navbar--badge-text {
+        @apply text-grey-600;
+      }
+
+      .vb-navbar--indicator {
+        @apply bg-grey-400;
+        box-shadow: none;
+        animation: none;
+      }
+    }
   }
 
   &--badge-text {
-    @apply text-body-sm sm:text-body-md text-green-600;
+    @apply text-body-sm sm:text-body-md text-blue-500;
     font-weight: 800;
   }
 
   &--indicator {
-    @apply flex-shrink-0;
+    @apply flex-shrink-0 bg-blue-500;
     width: 11px;
     height: 11px;
     border-radius: 11px;
-    background: #56c25f; // green-600
-    box-shadow: 0 0 4px 0 #56c25f;
+    box-shadow: 0 0 4px 0 #3b82f6;
     animation: live-pulse 2s ease-in-out infinite;
   }
 
-  &--socials {
-    @apply flex items-center gap-sm;
-  }
 }
 
 @keyframes live-pulse {
@@ -79,18 +109,23 @@ import { vbButtonSizeEnum } from "~/ui/components/icon/VbIcon.type";
   100% {
     opacity: 1;
     transform: scale(1);
-    box-shadow: 0 0 4px 0 #56c25f;
+    box-shadow: 0 0 4px 0 #3b82f6;
   }
   50% {
     opacity: 0.7;
     transform: scale(1.1);
-    box-shadow: 0 0 8px 2px #56c25f;
+    box-shadow: 0 0 8px 2px #3b82f6;
   }
 }
 
 @media (max-width: 820px) {
   .vb-navbar--badge-text {
     @apply text-body-sm;
+  }
+
+  // En mobile, les socials passent sous la photo (rendus dans le hero).
+  .vb-navbar--socials {
+    display: none;
   }
 }
 </style>

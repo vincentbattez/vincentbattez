@@ -6,6 +6,9 @@ import VbIcon from "~/ui/components/icon/VbIcon.vue";
 import VbFooter from "~/components/footer/VbFooter.vue";
 import VbButton from "~/ui/components/forms/VbButton.vue";
 import VbNavbar from "~/components/footer/VbNavbar.vue";
+import VbSocials from "~/components/footer/VbSocials.vue";
+
+const { outboundHref, trackOutbound } = useOutbound();
 
 useSeoMeta({
   title: "Vincent Battez - Développeur Full-Stack Senior Freelance à Lille",
@@ -124,7 +127,11 @@ onMounted(() => {
               Prendre rendez-vous
             </VbButton>
 
-            <VbButton href="/go/cv?s=pf" :type="vbButtonTypeEnum.outline">
+            <VbButton
+              :href="outboundHref('cv', 'pf')"
+              :type="vbButtonTypeEnum.outline"
+              @click="trackOutbound('cv', 'pf')"
+            >
               Voir mon CV
             </VbButton>
           </div>
@@ -140,6 +147,8 @@ onMounted(() => {
               alt="Photo de Vincent Battez, développeur Full-Stack Senior freelance"
             />
           </div>
+
+          <VbSocials class="vb-hero--socials" />
         </div>
       </div>
 
@@ -267,7 +276,7 @@ onMounted(() => {
 }
 
 .vb-hero {
-  @apply px-xl;
+  @apply px-xxl;
   flex: 1;
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -337,6 +346,11 @@ onMounted(() => {
     display: flex;
     justify-content: center;
   }
+
+  // Socials sous la photo : uniquement en mobile (voir media query).
+  &--socials {
+    display: none;
+  }
 }
 
 .vb-medallion {
@@ -346,6 +360,10 @@ onMounted(() => {
   border-radius: 50%;
   background: linear-gradient(160deg, #fde4a6, #f6ba57);
   box-shadow: 0 24px 48px -18px rgba(240, 145, 15, 0.55);
+
+  @media (max-width: 440px) {
+    width: min(200px, 50vw);
+  }
 
   img {
     width: 100%;
@@ -398,6 +416,11 @@ onMounted(() => {
 
     &--portrait {
       order: -1;
+      @apply flex-col items-center gap-lg;
+    }
+
+    &--socials {
+      @apply flex justify-center;
     }
 
     &--lead {
