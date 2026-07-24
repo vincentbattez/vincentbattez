@@ -25,7 +25,7 @@ const schemaOrgGraph = {
       url: siteUrl,
       image: `${siteUrl}/images/vincentbattez.webp`,
       description:
-        "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture des applications web robustes (Node.js, React, Vue.js, TypeScript).",
+        "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture vos applications web robustes (Node.js, React, Vue.js, TypeScript).",
       jobTitle: "Développeur Full-Stack Senior",
       email: "contact@vincentbattez.dev",
       sameAs: [

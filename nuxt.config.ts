@@ -29,7 +29,7 @@ export default defineNuxtConfig({
       name: "Vincent Battez - Développeur Full-Stack Senior Freelance",
       short_name: "Vincent Battez",
       description:
-        "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture des applications web robustes : Node.js, React, Vue.js, TypeScript.",
+        "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture vos applications web robustes : Node.js, React, Vue.js, TypeScript.",
       lang: "fr-FR",
       start_url: "/",
       display: "standalone",
@@ -90,7 +90,7 @@ export default defineNuxtConfig({
     url: "https://vincentbattez.dev",
     name: "Vincent Battez - Développeur Full-Stack Senior Freelance",
     description:
-      "Développeur Full-Stack Senior freelance à Lille. J'accompagne entreprises et CTOs pour créer et architecturer des applications web robustes (Node.js, React, Vue.js, TypeScript).",
+      "Développeur Full-Stack Senior freelance à Lille. J'accompagne entreprises et CTOs pour créer et architecturer vos applications web robustes (Node.js, React, Vue.js, TypeScript).",
     defaultLocale: "fr",
     identity: {
       type: "Person",
@@ -139,7 +139,7 @@ export default defineNuxtConfig({
         {
           name: "description",
           content:
-            "Développeur Full-Stack Senior freelance à Lille. J'accompagne entreprises et CTOs pour créer et architecturer des applications web robustes (Node.js, React, Vue.js, TypeScript).",
+            "Développeur Full-Stack Senior freelance à Lille. J'accompagne entreprises et CTOs pour créer et architecturer vos applications web robustes (Node.js, React, Vue.js, TypeScript).",
         },
         {
           name: "keywords",
@@ -160,7 +160,7 @@ export default defineNuxtConfig({
         {
           property: "og:description",
           content:
-            "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture des applications web robustes : Node.js, React, Vue.js, TypeScript.",
+            "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture vos applications web robustes : Node.js, React, Vue.js, TypeScript.",
         },
         { property: "og:type", content: "profile" },
         { property: "og:locale", content: "fr_FR" },
@@ -178,7 +178,7 @@ export default defineNuxtConfig({
         {
           name: "twitter:description",
           content:
-            "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture des applications web robustes : Node.js, React, Vue.js, TypeScript.",
+            "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture vos applications web robustes : Node.js, React, Vue.js, TypeScript.",
         },
       ],
     },
@@ -228,7 +228,7 @@ export default defineNuxtConfig({
       siteUrl: "https://vincentbattez.dev",
       siteName: "Vincent Battez - Développeur Full-Stack Senior Freelance",
       siteDescription:
-        "Développeur Full-Stack Senior freelance à Lille. J'accompagne entreprises et CTOs pour créer et architecturer des applications web robustes (Node.js, React, Vue.js, TypeScript).",
+        "Développeur Full-Stack Senior freelance à Lille. J'accompagne entreprises et CTOs pour créer et architecturer vos applications web robustes (Node.js, React, Vue.js, TypeScript).",
       language: "fr-FR",
       author: {
         name: "Vincent Battez",
