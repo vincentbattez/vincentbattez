@@ -30,7 +30,7 @@ interface UseInfiniteMarqueeReturn {
 export function useInfiniteMarquee(
   options: UseInfiniteMarqueeOptions,
 ): UseInfiniteMarqueeReturn {
-  const { itemsPerPeriod, secondsPerPeriod = 30 } = options;
+  const { itemsPerPeriod, secondsPerPeriod = 60 } = options;
 
   const containerRef = ref<HTMLElement | null>(null);
   const listRef = ref<HTMLElement | null>(null);

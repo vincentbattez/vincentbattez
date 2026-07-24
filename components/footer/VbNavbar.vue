@@ -56,7 +56,7 @@ import { vbButtonSizeEnum } from "~/ui/components/icon/VbIcon.type";
 
   &--badge-text {
     @apply text-body-sm sm:text-body-md text-green-600;
-    font-weight: 700;
+    font-weight: 800;
   }
 
   &--indicator {

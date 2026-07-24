@@ -43,7 +43,7 @@ const props = defineProps<{
   skillList: IVbSkill[];
 }>();
 
-const COPIES = 3;
+const COPIES = 2;
 
 // COPIES copies pour une boucle sans couture. Seul le 1er jeu est annoncé :
 // les copies (i > 0) sont aria-hidden pour ne pas lire 3× la liste. Un marqueur
@@ -98,7 +98,7 @@ const { containerRef, listRef, events } = useInfiniteMarquee({
   }
 
   &--list {
-    @apply flex gap-sm sm:gap-md select-none;
+    @apply flex gap-xl select-none;
     width: max-content;
     will-change: transform;
   }
@@ -106,11 +106,14 @@ const { containerRef, listRef, events } = useInfiniteMarquee({
   &--item {
     @apply flex items-center whitespace-nowrap flex-shrink-0;
     @apply text-body-sm sm:text-body-md text-black;
-    font-weight: 700;
+    font-weight: 800;
 
-    // Seuls les skills likés sont colorés (bleu 500), le reste en noir.
     &__love {
-      @apply text-blue-500;
+      @apply text-blue-700;
+
+      .vb-skill--hashtag {
+        @apply text-blue-500;
+      }
     }
   }
 
@@ -119,7 +122,7 @@ const { containerRef, listRef, events } = useInfiniteMarquee({
   }
 
   &--infinity {
-    @apply text-body-md sm:text-body-lg;
+    @apply text-body-md sm:text-body-lg text-orange-500;
     font-weight: 700;
     line-height: 1;
   }

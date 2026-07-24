@@ -44,6 +44,7 @@ const linkAttrs = computed(() => {
   @apply inline-flex ps-md pe-md pt-sm pb-sm items-center justify-center;
   @apply rounded;
   @apply text-body-md;
+  font-weight: 800;
   @apply transition-all duration-200 ease-in-out;
   outline: 0px solid white;
 
