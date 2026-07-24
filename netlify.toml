@@ -7,6 +7,9 @@ directory = "netlify/functions"
 
 [build.environment]
 NODE_VERSION = "22"
+# Épingle le runtime des Netlify Functions sur Node 22 (aligné sur le build).
+# Sans ça, le runtime peut rester sur nodejs16.x (déprécié).
+AWS_LAMBDA_JS_RUNTIME = "nodejs22.x"
 
 # Lighthouse à chaque déploiement, contre l'URL HTTPS réelle : seul point qui
 # valide HSTS/CSP (invisibles sur localhost). Non bloquant volontairement — les
