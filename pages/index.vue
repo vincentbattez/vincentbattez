@@ -392,16 +392,16 @@ onMounted(() => {
       @apply px-md;
     }
 
-    &--decor::before {
-      top: -80px;
-      right: -100px;
-      width: 380px;
-      height: 380px;
+    // En mobile, on masque le décor (glow + trame bas-gauche) et on recolore
+    // la trame haut-droite en orange, comme celle en bas à gauche.
+    &--decor {
+      display: none;
     }
-    &--decor::after,
+
     &--dots {
       width: 200px;
       height: 180px;
+      background: linear-gradient(45deg, #f0910f 0%, #ffffff 100%);
     }
   }
 

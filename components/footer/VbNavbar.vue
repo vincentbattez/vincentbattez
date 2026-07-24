@@ -119,6 +119,14 @@ const formattedStatusUpdatedAt = computed(() => {
 }
 
 @media (max-width: 820px) {
+  .vb-navbar {
+    justify-content: center;
+  }
+
+  .vb-navbar--status {
+    align-items: center;
+  }
+
   .vb-navbar--badge-text {
     @apply text-body-sm;
   }
