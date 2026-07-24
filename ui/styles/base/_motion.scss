@@ -23,6 +23,9 @@
   --vb-dur-underline: 0.5s;
   --vb-dur-medallion: 1.7s;
   --vb-dur-float: 6s;
+  // Respirations décoratives (compositor-only : opacity + transform).
+  --vb-dur-breathe: 7s;
+  --vb-dur-glow: 9s;
 
   // Écart standard entre deux animations enchaînées (le « pas » de la cascade).
   --vb-stagger: 0.12s;
@@ -56,14 +59,16 @@
 // donc elle matche bien ces noms nus).
 
 // Toute la carte monte en fondu court (englobe le portrait/LCP : bref + sans délai).
+// NB : montée via le longhand `translate` (pas `transform`) — laisse la propriété
+// `transform` libre pour le parallaxe 3D du pointeur (les deux se composent).
 @keyframes vb-frame-in {
   from {
     opacity: 0;
-    transform: translateY(14px);
+    translate: 0 14px;
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    translate: 0 0;
   }
 }
 
@@ -142,5 +147,31 @@
   }
   50% {
     transform: translateY(-9px);
+  }
+}
+
+// Respiration douce des trames de points (opacity seule → compositor-friendly).
+// Au repos = état final visible ; ne joue que sous no-preference.
+@keyframes vb-soft-breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.62;
+  }
+}
+
+// Halo qui « respire » : léger scale + opacity (transform composité, pas de
+// repaint). transform-origin porté par le pseudo-élément.
+@keyframes vb-glow-breathe {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.07);
   }
 }

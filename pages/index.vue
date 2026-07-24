@@ -32,11 +32,58 @@ useHead({
     },
   ],
 });
+
+// Parallaxe 3D du pointeur (très subtil). Piloté par la propriété `transform`
+// (l'entrée utilise le longhand `translate` → aucun conflit). Compositor-only,
+// throttlé en rAF, suivi instantané. Ignoré si reduced-motion ou pointeur
+// grossier (tactile).
+const frameEl = ref<HTMLElement | null>(null);
+
+onMounted(() => {
+  const fine = matchMedia("(pointer: fine)");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+  if (!fine.matches || reduce.matches) return;
+
+  const MAX_SHIFT = 1; // translation max en px
+  const MAX_TILT = 1; // inclinaison max en deg
+  let tx = 0;
+  let ty = 0;
+  let rx = 0;
+  let ry = 0;
+  let raf = 0;
+
+  const apply = () => {
+    raf = 0;
+    if (frameEl.value) {
+      frameEl.value.style.transform =
+        `perspective(1100px) rotateX(${rx}deg) rotateY(${ry}deg) ` +
+        `translate3d(${tx}px, ${ty}px, 0)`;
+    }
+  };
+
+  const onMove = (e: MouseEvent) => {
+    const nx = (e.clientX / window.innerWidth - 0.5) * 2; // -1..1
+    const ny = (e.clientY / window.innerHeight - 0.5) * 2; // -1..1
+    tx = nx * MAX_SHIFT;
+    ty = ny * MAX_SHIFT;
+    ry = nx * MAX_TILT; // souris à droite → bord droit s'éloigne
+    rx = -ny * MAX_TILT; // souris en bas → bord bas se rapproche
+    if (!raf) raf = requestAnimationFrame(apply);
+  };
+
+  window.addEventListener("mousemove", onMove, { passive: true });
+
+  onBeforeUnmount(() => {
+    window.removeEventListener("mousemove", onMove);
+    if (raf) cancelAnimationFrame(raf);
+  });
+});
 </script>
 
 <template>
-  <div class="vb-frame">
+  <div ref="frameEl" class="vb-frame">
     <div class="vb-frame--decor" aria-hidden="true"></div>
+    <div class="vb-frame--dots" aria-hidden="true"></div>
 
     <div class="vb-frame--content">
       <VbNavbar class="vb-frame--nav" />
@@ -114,9 +161,13 @@ useHead({
   box-shadow: 0 40px 80px -30px rgb(225 159 80 / 55%);
   // Dégradé lissé (2 stops) : évite le palier plat #fff→#fff qui créait une
   // bande verticale perçue (Mach band) au milieu de la carte.
-  background: linear-gradient(115deg, #ffffff 0%, #fdf3e2 100%);
+  background: linear-gradient(115deg, #ffffff 0%, #fffaf1 100%);
   display: flex;
   flex-direction: column;
+  // Parallaxe 3D du pointeur piloté par `transform` en JS (suivi instantané).
+  // L'entrée utilise le longhand `translate` → aucun conflit.
+  transform-style: preserve-3d;
+  will-change: transform;
 
   &--decor {
     position: absolute;
@@ -128,19 +179,21 @@ useHead({
     &::before {
       content: "";
       position: absolute;
-      top: -160px;
+      top: -120px;
       right: -140px;
       width: 620px;
       height: 620px;
       background: radial-gradient(
-        circle at 50% 50%,
-        rgba(246, 186, 87, 0.34) 0%,
-        rgba(246, 186, 87, 0.16) 34%,
-        rgba(240, 145, 15, 0.05) 56%,
-        transparent 78%
+        circle at 60% 40%,
+        rgba(246, 186, 87, 0.32),
+        rgba(240, 145, 15, 0.06) 60%,
+        transparent 0%
       );
     }
 
+    // Matrice de points : le dégradé blanc→orange n'est révélé qu'à travers la
+    // trame de points, puis estompé en diagonale (composite intersect) pour se
+    // fondre progressivement vers l'intérieur de la carte.
     &::after {
       content: "";
       position: absolute;
@@ -148,13 +201,49 @@ useHead({
       left: 0;
       width: 360px;
       height: 320px;
-      background: repeating-linear-gradient(
-        45deg,
-        rgba(240, 145, 15, 0.16) 0 5px,
-        transparent 5px 12px
+      background: linear-gradient(45deg, #f0910f 0%, #ffffff 100%);
+      --vb-dot: radial-gradient(
+        circle at center,
+        #000 1.3px,
+        transparent 1.7px
       );
-      clip-path: polygon(0 100%, 0 0, 100% 100%);
+      --vb-fade: linear-gradient(45deg, #000 0%, transparent 68%);
+      -webkit-mask-image: var(--vb-dot), var(--vb-fade);
+      mask-image: var(--vb-dot), var(--vb-fade);
+      -webkit-mask-size:
+        16px 16px,
+        cover;
+      mask-size:
+        16px 16px,
+        cover;
+      -webkit-mask-composite: source-in;
+      mask-composite: intersect;
     }
+  }
+
+  // Matrice de points blancs en haut à droite, estompée en diagonale vers
+  // l'intérieur de la carte (même trame que la décoration bas-gauche).
+  &--dots {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 360px;
+    height: 320px;
+    pointer-events: none;
+    z-index: 0;
+    background: #ffffff;
+    --vb-dot: radial-gradient(circle at center, #000 1.3px, transparent 1.7px);
+    --vb-fade: linear-gradient(225deg, #000 0%, transparent 68%);
+    -webkit-mask-image: var(--vb-dot), var(--vb-fade);
+    mask-image: var(--vb-dot), var(--vb-fade);
+    -webkit-mask-size:
+      16px 16px,
+      cover;
+    mask-size:
+      16px 16px,
+      cover;
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
   }
 
   &--content {
@@ -285,7 +374,8 @@ useHead({
       width: 380px;
       height: 380px;
     }
-    &--decor::after {
+    &--decor::after,
+    &--dots {
       width: 200px;
       height: 180px;
     }
