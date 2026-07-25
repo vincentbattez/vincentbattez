@@ -1,98 +1,72 @@
 <script setup lang="ts">
+import { seo } from "~/config/seo";
+
 // OG image par défaut (statique) : URL absolue requise par les crawlers sociaux.
-const { url: siteUrlBase } = useSiteConfig();
-const ogImageAlt =
-  "Vincent Battez, Développeur Full-Stack Senior freelance à Lille";
+const ogImageUrl = `${seo.siteUrl}${seo.ogImage.path}`;
 useSeoMeta({
-  ogImage: `${siteUrlBase}/og/default.png`,
-  ogImageAlt,
-  ogImageWidth: 1200,
-  ogImageHeight: 630,
-  ogImageType: "image/png",
-  twitterImage: `${siteUrlBase}/og/default.png`,
-  twitterImageAlt: ogImageAlt,
+  ogImage: ogImageUrl,
+  ogImageAlt: seo.ogImage.alt,
+  ogImageWidth: seo.ogImage.width,
+  ogImageHeight: seo.ogImage.height,
+  ogImageType: seo.ogImage.type,
+  twitterImage: ogImageUrl,
+  twitterImageAlt: seo.ogImage.alt,
 });
 
 // JSON-LD injecté à la main : sous-module schema-org désactivé (incompatible unhead 3).
-const siteUrl = "https://vincentbattez.dev";
+const siteUrl = seo.siteUrl;
 const schemaOrgGraph = {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "Person",
       "@id": `${siteUrl}/#person`,
-      name: "Vincent Battez",
+      name: seo.author.name,
       url: siteUrl,
-      image: `${siteUrl}/images/vincentbattez.webp`,
-      description:
-        "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture vos applications web robustes (Node.js, React, Vue.js, TypeScript).",
-      jobTitle: "Développeur Full-Stack Senior",
-      email: "contact@vincentbattez.dev",
-      sameAs: [
-        "https://www.linkedin.com/in/vincentbattez",
-        "https://github.com/vincentbattez",
-      ],
+      image: `${siteUrl}${seo.portrait}`,
+      description: seo.schema.personDescription,
+      jobTitle: seo.jobTitle,
+      email: seo.author.email,
+      sameAs: [seo.social.linkedin, seo.social.github],
       worksFor: { "@type": "Organization", name: "Freelance" },
       address: {
         "@type": "PostalAddress",
-        addressLocality: "Lille",
-        addressRegion: "Hauts-de-France",
-        addressCountry: "FR",
+        addressLocality: seo.location.city,
+        addressRegion: seo.location.region,
+        addressCountry: seo.location.countryCode,
       },
-      knowsAbout: [
-        "Artificial Intelligence",
-        "RAG (Retrieval-Augmented Generation)",
-        "Large Language Models",
-        "Context Engineering",
-        "Prompt Engineering",
-        "Full Stack Development",
-        "Node.js",
-        "React",
-        "Vue.js",
-        "TypeScript",
-      ],
+      knowsAbout: seo.schema.personKnowsAbout,
       hasOccupation: {
         "@type": "Occupation",
-        name: "Développeur Full-Stack Senior",
-        occupationLocation: { "@type": "City", name: "Lille, France" },
-        skills: [
-          "Full Stack Development",
-          "Software Architecture",
-          "Node.js",
-          "React",
-          "Vue.js",
-          "TypeScript",
-        ],
+        name: seo.jobTitle,
+        occupationLocation: {
+          "@type": "City",
+          name: `${seo.location.city}, ${seo.location.country}`,
+        },
+        skills: seo.schema.occupationSkills,
       },
     },
     {
       "@type": "ProfessionalService",
       "@id": `${siteUrl}/#service`,
-      name: "Vincent Battez - Développement Full-Stack Freelance",
+      name: seo.schema.serviceName,
       url: siteUrl,
-      description:
-        "Développeur Full-Stack Senior freelance : création et architecture d'applications web robustes (Node.js, React, Vue.js, TypeScript).",
+      description: seo.schema.serviceDescription,
       founder: { "@id": `${siteUrl}/#person` },
-      areaServed: { "@type": "Country", name: "France" },
-      knowsAbout: [
-        "Développement Full Stack",
-        "Développement Web",
-        "Architecture Logicielle",
-        "Développement Node.js",
-        "Développement Front-end",
-      ],
+      areaServed: { "@type": "Country", name: seo.location.country },
+      knowsAbout: seo.schema.serviceKnowsAbout,
       address: {
         "@type": "PostalAddress",
-        addressLocality: "Lille",
-        addressCountry: "FR",
+        addressLocality: seo.location.city,
+        addressCountry: seo.location.countryCode,
       },
     },
     {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       url: siteUrl,
-      name: "Vincent Battez - Développeur Full-Stack Senior Freelance",
-      inLanguage: "fr-FR",
+      name: seo.name,
+      inLanguage: seo.language,
       publisher: { "@id": `${siteUrl}/#person` },
     },
   ],

@@ -1,4 +1,5 @@
 import { lookupTable } from "./utils/redirect";
+import { seo } from "./config/seo";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -26,15 +27,14 @@ export default defineNuxtConfig({
   pwa: {
     registerType: "autoUpdate",
     manifest: {
-      name: "Vincent Battez - Développeur Full-Stack Senior Freelance",
-      short_name: "Vincent Battez",
-      description:
-        "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture vos applications web robustes : Node.js, React, Vue.js, TypeScript.",
-      lang: "fr-FR",
+      name: seo.pwa.name,
+      short_name: seo.pwa.shortName,
+      description: seo.descriptionCard,
+      lang: seo.language,
       start_url: "/",
       display: "standalone",
-      background_color: "#feecd1",
-      theme_color: "#F0910F",
+      background_color: seo.backgroundColor,
+      theme_color: seo.themeColor,
       icons: [
         { src: "/pwa-192x192.png", sizes: "192x192", type: "image/png" },
         { src: "/pwa-512x512.png", sizes: "512x512", type: "image/png" },
@@ -87,16 +87,15 @@ export default defineNuxtConfig({
   },
 
   site: {
-    url: "https://vincentbattez.dev",
-    name: "Vincent Battez - Développeur Full-Stack Senior Freelance",
-    description:
-      "Développeur Full-Stack Senior freelance à Lille. J'accompagne entreprises et CTOs pour créer et architecturer vos applications web robustes (Node.js, React, Vue.js, TypeScript).",
-    defaultLocale: "fr",
+    url: seo.siteUrl,
+    name: seo.name,
+    description: seo.descriptionMeta,
+    defaultLocale: seo.defaultLocale,
     identity: {
       type: "Person",
     },
-    twitter: "@vincentbattez",
-    language: "fr-FR",
+    twitter: seo.twitter,
+    language: seo.language,
     indexable: true,
   },
 
@@ -108,10 +107,9 @@ export default defineNuxtConfig({
     pageTransition: { name: "page", mode: "out-in" },
     head: {
       htmlAttrs: {
-        lang: "fr-FR",
+        lang: seo.htmlLang,
       },
-      titleTemplate:
-        "%s | Vincent Battez - Développeur Full-Stack Senior Freelance",
+      titleTemplate: seo.titleTemplate,
       link: [
         { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
         {
@@ -135,51 +133,30 @@ export default defineNuxtConfig({
       meta: [
         { charset: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
-        { name: "theme-color", content: "#F0910F" },
-        {
-          name: "description",
-          content:
-            "Développeur Full-Stack Senior freelance à Lille. J'accompagne entreprises et CTOs pour créer et architecturer vos applications web robustes (Node.js, React, Vue.js, TypeScript).",
-        },
-        {
-          name: "keywords",
-          content:
-            "Développeur Full-Stack, Développeur Senior, Freelance Lille, Node.js, React, Vue.js, TypeScript, Architecture logicielle, Développeur web freelance",
-        },
-        { name: "author", content: "Vincent Battez" },
+        { name: "theme-color", content: seo.themeColor },
+        { name: "description", content: seo.descriptionMeta },
+        { name: "keywords", content: seo.keywords },
+        { name: "author", content: seo.author.name },
         { name: "language", content: "French" },
-        { name: "geo.region", content: "FR-59" },
-        { name: "geo.placename", content: "Lille" },
-        { name: "geo.position", content: "50.6292;3.0573" },
-        { name: "ICBM", content: "50.6292, 3.0573" },
+        { name: "geo.region", content: seo.location.regionCode },
+        { name: "geo.placename", content: seo.location.city },
         {
-          property: "og:title",
-          content:
-            "Vincent Battez - Développeur Full-Stack Senior Freelance à Lille",
+          name: "geo.position",
+          content: `${seo.location.latitude};${seo.location.longitude}`,
         },
         {
-          property: "og:description",
-          content:
-            "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture vos applications web robustes : Node.js, React, Vue.js, TypeScript.",
+          name: "ICBM",
+          content: `${seo.location.latitude}, ${seo.location.longitude}`,
         },
+        { property: "og:title", content: seo.title },
+        { property: "og:description", content: seo.descriptionCard },
         { property: "og:type", content: "profile" },
-        { property: "og:locale", content: "fr_FR" },
-        { property: "og:url", content: "https://vincentbattez.dev/" },
-        {
-          property: "og:site_name",
-          content: "Vincent Battez - Développeur Full-Stack Senior Freelance",
-        },
+        { property: "og:locale", content: seo.locale },
+        { property: "og:url", content: seo.siteUrlWithSlash },
+        { property: "og:site_name", content: seo.name },
         { name: "twitter:card", content: "summary_large_image" },
-        {
-          name: "twitter:title",
-          content:
-            "Vincent Battez - Développeur Full-Stack Senior Freelance à Lille",
-        },
-        {
-          name: "twitter:description",
-          content:
-            "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture vos applications web robustes : Node.js, React, Vue.js, TypeScript.",
-        },
+        { name: "twitter:title", content: seo.title },
+        { name: "twitter:description", content: seo.descriptionCard },
       ],
     },
   },
@@ -225,19 +202,18 @@ export default defineNuxtConfig({
         publicKey: process.env.NUXT_PUBLIC_POSTHOG_PROJECT_TOKEN,
         host: process.env.NUXT_PUBLIC_POSTHOG_HOST,
       },
-      siteUrl: "https://vincentbattez.dev",
-      siteName: "Vincent Battez - Développeur Full-Stack Senior Freelance",
-      siteDescription:
-        "Développeur Full-Stack Senior freelance à Lille. J'accompagne entreprises et CTOs pour créer et architecturer vos applications web robustes (Node.js, React, Vue.js, TypeScript).",
-      language: "fr-FR",
+      siteUrl: seo.siteUrl,
+      siteName: seo.name,
+      siteDescription: seo.descriptionMeta,
+      language: seo.language,
       author: {
-        name: "Vincent Battez",
-        email: "contact@vincentbattez.dev",
-        url: "https://vincentbattez.dev",
+        name: seo.author.name,
+        email: seo.author.email,
+        url: seo.author.url,
       },
       location: {
-        city: "Lille",
-        country: "France",
+        city: seo.location.city,
+        country: seo.location.country,
       },
     },
   },

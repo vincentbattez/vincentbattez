@@ -7,20 +7,17 @@ import VbFooter from "~/components/footer/VbFooter.vue";
 import VbButton from "~/ui/components/forms/VbButton.vue";
 import VbNavbar from "~/components/footer/VbNavbar.vue";
 import VbSocials from "~/components/footer/VbSocials.vue";
+import { seo } from "~/config/seo";
 
 const { outboundHref, trackOutbound } = useOutbound();
 
 useSeoMeta({
-  title: "Vincent Battez - Développeur Full-Stack Senior Freelance à Lille",
-  description:
-    "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture vos applications web robustes : Node.js, React, Vue.js, TypeScript.",
-  ogTitle: "Vincent Battez - Développeur Full-Stack Senior Freelance à Lille",
-  ogDescription:
-    "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture vos applications web robustes : Node.js, React, Vue.js, TypeScript.",
-  twitterTitle:
-    "Vincent Battez - Développeur Full-Stack Senior Freelance à Lille",
-  twitterDescription:
-    "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture vos applications web robustes : Node.js, React, Vue.js, TypeScript.",
+  title: seo.title,
+  description: seo.descriptionCard,
+  ogTitle: seo.title,
+  ogDescription: seo.descriptionCard,
+  twitterTitle: seo.title,
+  twitterDescription: seo.descriptionCard,
 });
 
 useHead({
@@ -30,7 +27,7 @@ useHead({
     {
       rel: "preload",
       as: "image",
-      href: "/images/vincentbattez.webp",
+      href: seo.portrait,
       fetchpriority: "high",
     },
   ],
