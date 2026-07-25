@@ -242,7 +242,7 @@ onMounted(() => {
     height: 320px;
     pointer-events: none;
     z-index: 0;
-    background: #ffffff;
+    background: #f6ba57;
     --vb-dot: radial-gradient(circle at center, #000 1.3px, transparent 1.7px);
     --vb-fade: linear-gradient(225deg, #000 0%, transparent 68%);
     -webkit-mask-image: var(--vb-dot), var(--vb-fade);
@@ -358,7 +358,7 @@ onMounted(() => {
   aspect-ratio: 1;
   padding: 10px;
   border-radius: 50%;
-  background: linear-gradient(160deg, #fde4a6, #f6ba57);
+  background: linear-gradient(160deg, #facf79, #f0910f);
   box-shadow: 0 24px 48px -18px rgba(240, 145, 15, 0.55);
 
   @media (max-width: 440px) {
