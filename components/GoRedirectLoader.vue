@@ -51,6 +51,8 @@ defineProps<{
 
   &__card {
     @apply flex flex-col items-center text-center px-md;
+    // Jamais plus large que le viewport : contenu centré, aucun débordement H.
+    max-width: 100vw;
     // 700 ms : la carte se pose bien avant le fondu de sortie, l'entrée n'est plus coupée par la redirection.
     animation: go-loader-enter 700ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
   }
@@ -139,6 +141,9 @@ defineProps<{
     text-decoration: none;
     letter-spacing: 0.01em;
     transition: color 160ms ease;
+    // URL longue et insécable : force la coupure pour rester dans le viewport.
+    max-width: 100%;
+    overflow-wrap: anywhere;
 
     &:hover {
       @apply text-primary;
