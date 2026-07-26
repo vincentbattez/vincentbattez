@@ -26,12 +26,7 @@
 
 <script lang="ts" setup>
 import VbSocials from "~/components/footer/VbSocials.vue";
-
-// Passer à `false` quand je suis indisponible pour une mission freelance.
-const isAvailableForFreelance = true;
-
-// Date de dernière mise à jour du statut (format ISO).
-const statusUpdatedAt = "2026-07-24";
+import { isAvailableForFreelance, statusUpdatedAt } from "~/config/status";
 
 const formattedStatusUpdatedAt = computed(() => {
   const rtf = new Intl.RelativeTimeFormat("fr-FR", { numeric: "auto" });
@@ -101,7 +96,6 @@ const formattedStatusUpdatedAt = computed(() => {
     box-shadow: 0 0 4px 0 #3b82f6;
     animation: live-pulse 2s ease-in-out infinite;
   }
-
 }
 
 @keyframes live-pulse {
