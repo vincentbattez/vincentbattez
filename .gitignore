@@ -30,3 +30,6 @@ posthog-setup-report.md
 # Lighthouse CI artifacts
 .lighthouseci
 reports
+
+# Local Netlify folder
+.netlify
