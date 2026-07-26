@@ -30,7 +30,7 @@ const author = {
   name: "Vincent Battez",
   givenName: "Vincent",
   familyName: "Battez",
-  email: "contact@vincentbattez.dev",
+  email: "vincent.battez.pro@gmail.com",
   url: siteUrl,
 } as const;
 
