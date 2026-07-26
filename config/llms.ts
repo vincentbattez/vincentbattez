@@ -24,11 +24,13 @@ export const llmsOptions = {
       description: [
         "**Vincent Battez** — Développeur Full-Stack Senior, freelance à Lille (Hauts-de-France, France).",
         "",
+        "Profil rare combinant une **architecture backend robuste** (DDD, hexagonale, APIs critiques haute volumétrie) et une **maîtrise avancée du développement assisté par IA** (agents LLM, context engineering).",
+        "",
         "- 8 ans d'expérience, dont React/Remix, Vue.js/Nuxt, TypeScript et Node.js/Fastify.",
         "- Spécialités : architecture logicielle (DDD, Clean/Hexagonale), qualité (TDD, code review, observabilité) et développement assisté par IA (agents LLM, context engineering).",
         "- Certifié accessibilité web OPQUAST (850/1000).",
-        "- Langues : français (natif), anglais (compréhension B2).",
-        "- **Disponible pour des contrats freelance.**",
+        "- Langues : français (natif), anglais professionnel (compréhension B2).",
+        "- **Disponible pour des contrats freelance** — 100 % remote ou hybride, missions de longue durée privilégiées.",
       ].join("\n"),
     },
     {
@@ -44,7 +46,7 @@ export const llmsOptions = {
     {
       title: "Expériences clés",
       description: [
-        "- **Norauto** (2022–2026, freelance, Lille) — API Fastify critique *from scratch*, refonte d'un référentiel PostgreSQL haute volumétrie (>200 req/s), refonte front Vue.js 3/Pinia, standards d'équipe et observabilité.",
+        "- **Norauto** (2022–2026, freelance, Lille, équipe de 11) — API Fastify critique *from scratch*, refonte d'un référentiel PostgreSQL haute volumétrie (>200 req/s), refonte front Vue.js 3/Pinia, standards d'équipe et observabilité.",
         "- **Québecor** (2021–2022, Montréal) — Architecte Front-End : refonte architecturale, Design patterns, Storybook, observabilité GTM/GA.",
         "- **Decathlon** (2018–2020, Lille) — Co-conception du Design System (Springboard), bonnes pratiques A11Y.",
       ].join("\n"),
@@ -55,6 +57,15 @@ export const llmsOptions = {
         "- **Second brain** — Système de contexte pour agents IA : base de connaissances structurée, modèle de données, règles et skills garantissant fiabilité et maintenance automatique.",
         "- **Raredrop Studio** — Générateur de goodies gaming : API Fastify multi-modèles (OpenRouter), batch parallèle, workflow modulaire (Remix) et prompt engineering composable.",
         "- **Somnia** — Générateur de méditations personnalisées : architecture multi-agents, contexte injecté dynamiquement, pipeline IoT → haut-parleur.",
+      ].join("\n"),
+    },
+    {
+      title: "Modalités de collaboration",
+      description: [
+        "- **Statut** : freelance, disponible pour de nouveaux contrats.",
+        "- **Organisation** : 100 % remote ou hybride.",
+        "- **Durée** : missions de longue durée privilégiées.",
+        "- **Prise de contact** : LinkedIn ou email.",
       ].join("\n"),
     },
     {
@@ -80,7 +91,7 @@ export const llmsOptions = {
   ],
 
   notes: [
-    "Disponible pour des contrats freelance — prise de contact via LinkedIn ou par email.",
+    "Disponible pour des contrats freelance (100 % remote ou hybride, longue durée) — prise de contact via LinkedIn ou par email.",
     `Contact : ${seo.author.email}`,
   ],
 
@@ -105,8 +116,17 @@ export const llmsFullContent = `# Vincent Battez — Développeur Full-Stack Sen
 - LinkedIn : ${seo.social.linkedin}
 - GitHub : ${seo.social.github}
 - Localisation : ${seo.location.city}, ${seo.location.region}, ${seo.location.country}
-- Statut : freelance, **disponible pour de nouveaux contrats**
-- Langues : français (langue maternelle), anglais (compréhension B2, expression A2/B1)
+- Statut : freelance, **disponible pour de nouveaux contrats** (100 % remote ou hybride, missions de longue durée privilégiées)
+- Langues : français (langue maternelle), anglais professionnel (compréhension B2)
+
+## Ce que je recherche
+
+- **Type** : missions freelance de longue durée.
+- **Organisation** : 100 % remote ou hybride.
+- **Contexte idéal** : produits à forte exigence technique (APIs critiques, architecture, qualité) et/ou projets tirant parti des agents IA et du context engineering.
+- **Qualité** : culture craftsmanship poussée (TDD, tests Vitest/Playwright/k6, code review, observabilité OpenTelemetry/Datadog).
+- **Fiabilité** : conçoit des systèmes robustes, testables et durables, avec un vrai sens du produit (user-centric, UX/UI, accessibilité certifiée OPQUAST).
+- **Longévité** : missions longues (4 ans chez Norauto), gage d'engagement et de confiance.
 
 ## Compétences
 
@@ -138,7 +158,7 @@ Cette exigence s'accompagne d'une démarche qualité forte — Spec-Driven Devel
 ## Expériences professionnelles (8 ans)
 
 ### Développeur Full-Stack — Norauto (freelance)
-*2022 – 2026 (51 mois) · Lille, France*
+*2022 – 2026 (51 mois) · Lille, France · équipe de 11*
 - Développement *from scratch* d'une API Fastify critique avec contraintes de charge.
 - Refonte d'un référentiel (API + base PostgreSQL) à haute volumétrie (> 200 req/s).
 - Gestion d'incidents et fiabilisation de la production.
@@ -212,6 +232,6 @@ Générateur de méditations à thème personnalisé.
 - Domotique (Home Assistant, IoT Zigbee) - 7 ans
 - IA générative (veille active & R&D appliquée) - 3 ans 
 - Cartomagie - 12 ans
-- Design - 11 ans 
+- Design - 11 ans
 - Photographie - 5 ans
 `;
