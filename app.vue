@@ -38,7 +38,7 @@ const schemaOrgGraph = {
       knowsLanguage: seo.knowsLanguage,
       sameAs: [seo.social.linkedin, seo.social.github],
       mainEntityOfPage: { "@id": webpageId },
-      worksFor: { "@type": "Organization", name: "Freelance" },
+      worksFor: { "@type": "Organization", name: seo.employment.label },
       address: {
         "@type": "PostalAddress",
         addressLocality: seo.location.city,

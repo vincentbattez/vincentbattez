@@ -47,6 +47,8 @@
   // Dérivés d'autres animations (relations « pendant / après »).
   // Le trait se trace EN MÊME TEMPS que la fin de la révélation de « Senior ».
   --vb-at-underline: calc(var(--vb-at-word-3) + var(--vb-dur-word) - 0.2s);
+  // Le sceau d'ancienneté se pose après le médaillon, une fois le texte lancé.
+  --vb-at-xp: calc(var(--vb-at-actions) + var(--vb-stagger) * 2);
   // La liste des skills ferme la séquence, bien après les CTA.
   --vb-at-marquee: calc(var(--vb-at-actions) + var(--vb-stagger) * 4);
   // Le flottement du portrait démarre APRÈS le marquee, puis boucle.

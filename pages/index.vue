@@ -7,9 +7,16 @@ import VbFooter from "~/components/footer/VbFooter.vue";
 import VbButton from "~/ui/components/forms/VbButton.vue";
 import VbNavbar from "~/components/footer/VbNavbar.vue";
 import VbSocials from "~/components/footer/VbSocials.vue";
+import VbNextSlot from "~/components/VbNextSlot.vue";
+import VbTooltip from "~/ui/components/overlay/VbTooltip.vue";
 import { seo } from "~/config/seo";
 
 const { outboundHref, trackOutbound } = useOutbound();
+
+// Hero dérivé du positionnement (SSOT config/seo). Le <h1> anime chaque mot du
+// rôle (dernier accentué) ; voir index-motion.scss (stagger calibré sur 3 mots).
+const heroWords = seo.role.split(" ");
+const kicker = `${seo.role} ${seo.employment.label} à ${seo.location.city}`;
 
 useSeoMeta({
   title: seo.title,
@@ -90,26 +97,81 @@ onMounted(() => {
 
       <div class="vb-hero">
         <div class="vb-hero--text">
-          <p class="vb-hero--kicker">
-            Développeur Full-Stack Freelance à Lille
-          </p>
-          <h1 class="vb-hero--title">
+          <h1 class="vb-hero--kicker">{{ kicker }}</h1>
+          <p class="vb-hero--title">
+            <!--            <span v-for="(word, i) in heroWords" :key="i" class="vb-word">-->
+            <!--              <span-->
+            <!--                class="vb-word--i"-->
+            <!--                :class="{ 'vb-hero--accent': i === heroWords.length - 1 }"-->
+            <!--                >{{ word }}</span-->
+            <!--              >-->
+            <!--            </span>-->
             <span class="vb-word">
               <span class="vb-word--i">Développeur </span>
             </span>
             <span class="vb-word">
-              <span class="vb-word--i">Full-Stack </span>
+              <span class="vb-word--i">Full-Stack</span>
             </span>
             <span class="vb-word">
-              <span class="vb-word--i vb-hero--accent">Senior</span>
+              <span class="vb-word--i vb-hero--accent">Sénior</span>
             </span>
-          </h1>
-          <p class="vb-hero--lead">
-            Disponible dès maintenant pour
-            <strong>vous accompagner</strong> dans la
-            <strong>création et l’architecture</strong>
-            de vos applications web solides et évolutives
           </p>
+          <div class="vb-hero--lead">
+            <p class="vb-hero--tension">
+              J'intègre l'IA au cœur de mon workflow quotidien. Elle démultiplie
+              la vitesse mais sans
+              <VbTooltip
+                align="start"
+                term="Architecture"
+                :content="[
+                  'Produire du code n\'est plus le bottleneck : c\'est la compréhension profonde d\'un système qui l\'est devenue. Les principes d\'architecture d\'il y a +20 ans n\'ont jamais été aussi décisifs.',
+                  'Poser des frontières qui tiennent dans la durée, ça ne s\'improvise pas.',
+                ]"
+                :keywords="[
+                  'Couplage fort',
+                  'Big ball of mud',
+                  'Dépendances circulaires',
+                  'Abstractions fuyantes',
+                ]"
+                >architecture</VbTooltip
+              >
+              ni
+              <VbTooltip
+                align="start"
+                term="Compréhension solides"
+                :content="[
+                  'L\'IA ne produit de façon fiable que si on connaît ses angles morts. Et cela ne concerne pas que le dev :',
+                  'Du besoin à la rédaction du ticket, jusqu\'à la mise en prod et à la documentation, toute la chaîne est en jeu. Sans ce recul, on empile ce qu\'on ne maîtrise plus.',
+                ]"
+                :keywords="[
+                  'Hallucinations',
+                  'Contexte manquant',
+                  'Dérive silencieuse',
+                  'Sur-confiance',
+                ]"
+                >compréhension</VbTooltip
+              >
+              solides, elle accélère aussi
+              <VbTooltip
+                align="end"
+                term="Dette technique"
+                :content="[
+                  'L\'IA amplifie le meilleur comme le pire : elle s\'appuie sur ton code existant. Une base saine la tire vers le haut ; truffée de mauvaises pratiques, elle les reproduit et les répand à pleine vitesse.',
+                  'Sans le contexte ni le recul pour trancher, la dette s\'accumule aussi vite que le reste.',
+                ]"
+                :keywords="[
+                  'God object',
+                  'Flaky tests',
+                  'Code mort',
+                  'Duplication',
+                  'Rustines empilées',
+                ]"
+                >la dette</VbTooltip
+              >. <br />
+              C'est précisément là que j'interviens&nbsp;: profiter de la
+              vitesse sans jamais en payer la dette.
+            </p>
+          </div>
 
           <div class="vb-hero--actions">
             <VbButton
@@ -121,7 +183,7 @@ onMounted(() => {
                 :size="vbButtonSizeEnum.lg"
                 :name="VbIconEnum.VbCalendar"
               />
-              Prendre rendez-vous
+              Consulter mes disponibilités
             </VbButton>
 
             <VbButton
@@ -132,17 +194,24 @@ onMounted(() => {
               Voir mon CV
             </VbButton>
           </div>
+
+          <VbNextSlot />
         </div>
 
         <div class="vb-hero--portrait">
           <div class="vb-medallion">
             <img
-              src="/images/vincentbattez.webp"
+              :src="seo.portrait"
               width="640"
               height="640"
               fetchpriority="high"
-              alt="Photo de Vincent Battez, développeur Full-Stack Senior freelance"
+              :alt="seo.portraitAlt"
             />
+
+            <span class="vb-xp">
+              <span class="vb-xp--num">+8</span>
+              <span class="vb-xp--label">ans<br />d'expériences</span>
+            </span>
           </div>
 
           <VbSocials class="vb-hero--socials" />
@@ -322,15 +391,23 @@ onMounted(() => {
     }
   }
 
+  // Direction B — raffinement typographique pur (même Nunito, même gris).
+  // Taille fluide, interligne aéré, rythme entre les deux phrases.
   &--lead {
     @apply font-body text-grey-700;
-    font-size: 19px;
-    font-weight: 700;
-    line-height: 1.5;
-    max-width: 29rem;
+    font-size: clamp(17px, 0.6vw + 15px, 19px);
+    font-weight: 600;
+    line-height: 1.65;
+    max-width: 35rem;
 
-    strong {
-      @apply text-black;
+    p + p {
+      margin-top: 1rem;
+    }
+
+    // Antithèse dramatisée : « vitesse » ↔ « prix » en accent orange.
+    em {
+      @apply text-primary;
+      font-style: normal;
       font-weight: 800;
     }
   }
@@ -351,6 +428,7 @@ onMounted(() => {
 }
 
 .vb-medallion {
+  position: relative;
   width: min(310px, 70vw);
   aspect-ratio: 1;
   padding: 10px;
@@ -368,6 +446,52 @@ onMounted(() => {
     border-radius: 50%;
     object-fit: cover;
     display: block;
+  }
+}
+
+// Sceau « ancienneté » qui chevauche le bas du médaillon (overlap = repère
+// visuel fort). Carte blanche + ombre ambrée pour rester dans la charte.
+.vb-xp {
+  position: absolute;
+  left: 50%;
+  bottom: 6%;
+  transform: translate(-50%, 50%);
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid rgba(240, 145, 15, 0.16);
+  box-shadow: 0 16px 32px -14px rgba(240, 145, 15, 0.6);
+
+  &--num {
+    @apply font-heading text-primary;
+    font-weight: 700;
+    font-size: 1.7rem;
+    line-height: 1;
+  }
+
+  &--label {
+    @apply font-body text-grey-600 uppercase;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    line-height: 1.2;
+    text-align: left;
+  }
+
+  @media (max-width: 440px) {
+    padding: 0.4rem 0.8rem;
+    gap: 0.45rem;
+
+    &--num {
+      font-size: 1.35rem;
+    }
+
+    &--label {
+      font-size: 0.55rem;
+    }
   }
 }
 

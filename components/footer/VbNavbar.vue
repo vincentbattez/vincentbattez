@@ -8,7 +8,7 @@
       >
         <span class="vb-navbar--indicator"></span>
         <span class="vb-navbar--badge-text"
-          >Disponible pour mission freelance</span
+          >Disponible pour {{ seo.employment.seeking }}</span
         >
       </NuxtLink>
       <span v-else class="vb-navbar--badge is-unavailable">
@@ -27,6 +27,7 @@
 <script lang="ts" setup>
 import VbSocials from "~/components/footer/VbSocials.vue";
 import { isAvailableForFreelance, statusUpdatedAt } from "~/config/status";
+import { seo } from "~/config/seo";
 
 const formattedStatusUpdatedAt = computed(() => {
   const rtf = new Intl.RelativeTimeFormat("fr-FR", { numeric: "auto" });

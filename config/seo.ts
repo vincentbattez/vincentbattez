@@ -5,15 +5,21 @@
  * `./config/seo`) et par les composants (`~/config/seo`). Toute modification
  * de titre, description, mots-clés, URL, géoloc, etc. se fait ICI.
  *
+ * ── Positionnement (SSOT) ──────────────────────────────────────────────────
+ * Le rôle et le statut sont exprimés en BRIQUES ATOMIQUES (`roleShort`,
+ * `seniority`, `employment`) d'où dérivent titres, descriptions, mots-clés,
+ * JSON-LD, hero, badges. Changer une seule brique se répercute sur tout le site :
+ *   - rôle    : `roleShort` / `seniority` (ex. "IA Engineer")
+ *   - statut  : `employment.{label,adjective,seeking}` (ex. "Freelance" → "CDI")
+ * Note : le hero anime exactement 3 mots (voir `pages/index-motion.scss`) ; un
+ * rôle à un autre nombre de mots dégrade le stagger sans casser la mise en page.
+ *
  * NB : deux descriptions distinctes coexistent volontairement —
  * `descriptionMeta` (longue, meta/site globaux) et `descriptionCard` (courte,
  * cartes sociales + page). Elles diffèrent dans le contenu actuel du site.
  */
 
 const siteUrl = "https://vincentbattez.dev";
-
-// Nom / marque de base, réutilisé pour le titre et le template de titre.
-const name = "Vincent Battez - Développeur Full-Stack Senior Freelance";
 
 const location = {
   city: "Lille",
@@ -34,6 +40,30 @@ const author = {
   url: siteUrl,
 } as const;
 
+// ── Briques atomiques du positionnement (SSOT) ──
+// `roleShort` : intitulé sans séniorité (hero kicker, mots-clés).
+const roleShort = "Développeur Full-Stack";
+const seniority = "Senior";
+// `role` : intitulé complet (jobTitle, titres, descriptions, hero <h1>).
+const role = `${roleShort} ${seniority}`;
+// Variante minuscule pour apposition en milieu de phrase ("Photo de …, développeur").
+const roleLower = role.charAt(0).toLowerCase() + role.slice(1);
+
+const employment = {
+  // Nom du statut : titres, og, JSON-LD worksFor — ex. "Freelance" / "CDI".
+  label: "Freelance",
+  // Forme en apposition après le rôle — ex. "freelance" / "en CDI".
+  adjective: "freelance",
+  // Ce que je cherche (badge dispo) — ex. "mission freelance" / "un CDI".
+  seeking: "mission freelance",
+} as const;
+
+// Accroche réutilisée dans descriptions/alt — "… freelance à Lille".
+const tagline = `${role} ${employment.adjective} à ${location.city}`;
+
+// Nom / marque de base, réutilisé pour le titre et le template de titre.
+const name = `${author.name} - ${role} ${employment.label}`;
+
 export const seo = {
   siteUrl,
   // og:url conserve son slash final (comportement d'origine, à préserver).
@@ -46,16 +76,20 @@ export const seo = {
   titleTemplate: `%s | ${name}`,
 
   // Description longue : meta/site globaux (nuxt.config head + site + runtime).
-  descriptionMeta:
-    "Développeur Full-Stack Senior freelance à Lille. J'accompagne entreprises et CTOs pour créer et architecturer vos applications web robustes (Node.js, React, Vue.js, TypeScript).",
+  descriptionMeta: `${tagline}. J'accompagne entreprises et CTOs pour créer et architecturer vos applications web robustes (Node.js, React, Vue.js, TypeScript).`,
   // Description courte : cartes sociales (og/twitter/PWA) + page index.
-  descriptionCard:
-    "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture vos applications web robustes : Node.js, React, Vue.js, TypeScript.",
+  descriptionCard: `${tagline}. Je crée et j'architecture vos applications web robustes : Node.js, React, Vue.js, TypeScript.`,
 
-  keywords:
-    "Développeur Full-Stack, Développeur Senior, Freelance Lille, Node.js, React, Vue.js, TypeScript, Architecture logicielle, Développeur web freelance",
+  keywords: `${roleShort}, Développeur ${seniority}, ${employment.label} ${location.city}, Node.js, React, Vue.js, TypeScript, Architecture logicielle, Développeur web ${employment.adjective}`,
 
-  jobTitle: "Développeur Full-Stack Senior",
+  jobTitle: role,
+
+  // Briques de positionnement exposées aux composants (hero, badges, JSON-LD).
+  roleShort,
+  seniority,
+  role,
+  tagline,
+  employment,
 
   // Langues maîtrisées (schema.org Person.knowsLanguage).
   knowsLanguage: ["fr", "en"],
@@ -85,7 +119,7 @@ export const seo = {
   // Image Open Graph statique (URL absolue construite dans app.vue).
   ogImage: {
     path: "/og/default.png",
-    alt: "Vincent Battez, Développeur Full-Stack Senior freelance à Lille",
+    alt: `${author.name}, ${tagline}`,
     width: 1200,
     height: 630,
     type: "image/png",
@@ -93,21 +127,23 @@ export const seo = {
 
   // Portrait (LCP + schema.org Person.image).
   portrait: "/images/vincentbattez.webp",
+  // Alt du portrait dans le hero (apposition minuscule en milieu de phrase).
+  portraitAlt: `Photo de ${author.name}, ${roleLower} ${employment.adjective}`,
 
   // PWA.
   pwa: {
-    name: "Vincent Battez - Développeur Full-Stack Senior Freelance",
-    shortName: "Vincent Battez",
+    name,
+    shortName: author.name,
   },
 
   // Descriptions spécifiques aux entités JSON-LD (app.vue) — libellés distincts
   // des descriptions meta, conservés tels quels.
   schema: {
-    personDescription:
-      "Développeur Full-Stack Senior freelance à Lille. Je crée et j'architecture vos applications web robustes (Node.js, React, Vue.js, TypeScript).",
-    serviceDescription:
-      "Développeur Full-Stack Senior freelance : création et architecture d'applications web robustes (Node.js, React, Vue.js, TypeScript).",
-    serviceName: "Vincent Battez - Développement Full-Stack Freelance",
+    personDescription: `${tagline}. Je crée et j'architecture vos applications web robustes (Node.js, React, Vue.js, TypeScript).`,
+    serviceDescription: `${role} ${employment.adjective} : création et architecture d'applications web robustes (Node.js, React, Vue.js, TypeScript).`,
+    // "Développement Full-Stack" (nom de service) volontairement littéral : le
+    // statut suit `employment.label`, l'intitulé de service reste stable.
+    serviceName: `${author.name} - Développement Full-Stack ${employment.label}`,
     personKnowsAbout: [
       "Artificial Intelligence",
       "RAG (Retrieval-Augmented Generation)",

@@ -5,20 +5,8 @@ Vincent Battez's personal portfolio website - a freelance AI Engineer and Full S
 ## Content Guidelines
 - **Language**: French content for local market targeting
 - **Tone**: Professional, confident, showcasing senior expertise
-- **Focus**: AI engineering specialization and full stack architecture capabilities
+- **Focus**: AI engineering specialization, full stack architecture capabilities, code quality and transmission
 - **Call-to-actions**: Direct scheduling and CV viewing links
-
-## Brand Identity
-- **Name prefix**: All components use `Vb` (Vincent Battez) prefix
-- **Color scheme**: Primary orange, secondary blue (defined in Tailwind config)
-- **Typography**: Nunito font family for professional appearance
-- **Design approach**: Clean, modern, minimal with custom design system
-
-## Content Structure
-- Personal introduction and branding
-- Skills and experience showcase
-- Contact information and social links (LinkedIn, GitHub)
-- Professional call-to-action buttons
 
 ## Target Audience
 - Companies needing freelance full stack development expertise

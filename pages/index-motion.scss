@@ -90,6 +90,15 @@
       forwards var(--vb-at-medallion);
   }
 
+  // Sceau d'ancienneté : révélation en fondu. On emploie `vb-frame-in` (qui
+  // anime le longhand `translate`, PAS `transform`) pour ne pas écraser le
+  // `transform: translate(-50%,50%)` qui centre/chevauche le badge.
+  .vb-xp {
+    opacity: 0;
+    animation: vb-frame-in var(--vb-dur-word) var(--vb-ease-reveal) forwards
+      var(--vb-at-xp);
+  }
+
   // Flottement porté par le wrapper (pas le médaillon) → aucun conflit de
   // transform avec la révélation, et aucun opacity sur un ancêtre du portrait.
   .vb-hero--portrait {
