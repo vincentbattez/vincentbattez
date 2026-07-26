@@ -40,13 +40,13 @@ export const llmsOptions = {
         "- **Backend** : Node.js, Fastify (Zod), Express, NestJS, PostgreSQL (Prisma), APIs critiques haute volumétrie.",
         "- **Frontend** : TypeScript, React (Remix), Vue.js (Nuxt, Pinia), Design System, accessibilité (A11Y), UX/UI.",
         "- **Craftsmanship** : DDD, Clean Code, Hexagonale/MVC, tests (Vitest, Playwright, k6), documentation & transmission.",
-        "- **Plateforme & Observabilité** : Docker, Kubernetes, CI/CD (GitLab, GitHub), OpenTelemetry, Datadog.",
+        "- **Plateforme & Observabilité** : Docker, Azure, CI/CD (GitLab, GitHub Actions), OpenTelemetry (OTEL-LGTM), Datadog (Kubernetes : notions).",
       ].join("\n"),
     },
     {
       title: "Expériences clés",
       description: [
-        "- **Norauto** (2022–2026, freelance, Lille, équipe de 11) — API Fastify critique *from scratch*, refonte d'un référentiel PostgreSQL haute volumétrie (>200 req/s), refonte front Vue.js 3/Pinia, standards d'équipe et observabilité.",
+        "- **Norauto** (2022–2026, freelance, Lille, équipe de 11) — API de devis critique *from scratch* (Fastify, ~2M req/an), DDD + hexagonal en prod, observabilité Datadog (astreintes, DryRun), dev assisté par IA (code review, PR), refonte front Vue.js 3/Pinia.",
         "- **Québecor** (2021–2022, Montréal) — Architecte Front-End : refonte architecturale, Design patterns, Storybook, observabilité GTM/GA.",
         "- **Decathlon** (2018–2020, Lille) — Co-conception du Design System (Springboard), bonnes pratiques A11Y.",
       ].join("\n"),
@@ -55,8 +55,9 @@ export const llmsOptions = {
       title: "Projets personnels — IA générative",
       description: [
         "- **Second brain** — Système de contexte pour agents IA : base de connaissances structurée, modèle de données, règles et skills garantissant fiabilité et maintenance automatique.",
-        "- **Raredrop Studio** — Générateur de goodies gaming : API Fastify multi-modèles (OpenRouter), batch parallèle, workflow modulaire (Remix) et prompt engineering composable.",
-        "- **Somnia** — Générateur de méditations personnalisées : architecture multi-agents, contexte injecté dynamiquement, pipeline IoT → haut-parleur.",
+        "- **Raredrop Studio** — Studio de collectibles gaming : API Fastify (endpoint batch, OpenRouter, résilience `Promise.allSettled`), frontend React Router 7 (SSR, graceful degradation).",
+        "- **Somnia** — Méditations générées par IA : pipeline multi-agents (Storyteller + Writer, Claude Opus/OpenRouter) → TTS → Sonos, ~2-3 min de bout en bout.",
+        "- **Homelab** — Infra DevOps R&D, 100 % IaC : structure et contexte conçus pour qu'un LLM administre entièrement le serveur ; GitOps 6 couches (Ansible, Dokploy, SOPS, CI/CD, OTEL-LGTM, backup 3-2-1).",
       ].join("\n"),
     },
     {
@@ -134,6 +135,7 @@ export const llmsFullContent = `# Vincent Battez — Développeur Full-Stack Sen
 - Claude Code (Spec-Driven Development + TDD)
 - Gestion de contexte LLM : structuration de l'information, specs, boucle de validation, orchestration multi-agents
 - Conception de skills, prompt engineering, context engineering
+- Appliqué en contexte professionnel (code review, descriptions de PR, dev assisté) comme en R&D personnelle (systèmes multi-agents)
 
 ### Software Craftsmanship
 
@@ -151,23 +153,30 @@ Cette exigence s'accompagne d'une démarche qualité forte — Spec-Driven Devel
 - PostgreSQL (Prisma)
 
 ### Plateforme & Observabilité
-- Observabilité : OpenTelemetry, Datadog
-- Docker, Kubernetes
-- CI/CD : GitLab, GitHub
+- Observabilité : OpenTelemetry (stack OTEL-LGTM), Datadog (monitors, alertes, astreintes)
+- Cloud & CI/CD : GitLab CI (autoscaling, pipelines MEP), GitHub Actions
+- Docker (production et homelab GitOps)
+- Kubernetes : notions (exposition en contexte OPS)
 
 ## Expériences professionnelles (8 ans)
 
 ### Développeur Full-Stack — Norauto (freelance)
 *2022 – 2026 (51 mois) · Lille, France · équipe de 11*
-- Développement *from scratch* d'une API Fastify critique avec contraintes de charge.
-- Refonte d'un référentiel (API + base PostgreSQL) à haute volumétrie (> 200 req/s).
-- Gestion d'incidents et fiabilisation de la production.
-- Rédaction de documentation et partage de veille continue.
-- Évaluation de l'intégration du développement assisté par IA dans l'équipe.
-- Amélioration de l'observabilité technique et fonctionnelle.
-- Refonte de l'architecture front avec Vue.js 3 et Pinia.
-- Amélioration des rituels et process de l'équipe.
-- Mise en place des standards d'équipe et de la qualité (conventions, DX, architecture).
+
+Mission longue durée, du front vers le back, sur des systèmes critiques.
+
+**Quote Engine — API de devis critique (from scratch, Fastify / TypeScript)**
+- ~2 millions de requêtes/an, tenue des pics de charge saisonniers, exigence « ne doit jamais tomber » : gestion d'erreur robuste et DTO modulables pour absorber les changements métier.
+- Intégration de 15 API internes, communication inter-équipes.
+- Observabilité de production : Datadog (monitors, alertes, astreintes), logs traçables, mécanisme de *DryRun* pour tester en conditions réelles.
+
+**Architecture & qualité**
+- DDD + architecture hexagonale en production : event storming, ubiquitous language, couche métier isolée et testée.
+- Refonte d'un référentiel PostgreSQL à haute volumétrie (> 200 req/s) et d'une base de +10 ans sans régression ; modernisation du socle (CJS → ESM, Node 20 → 24, nettoyage des dépendances, pipelines GitLab CI).
+- Refonte du front (mandat initial) en Vue.js 3 / Pinia (GraphQL/Apollo), mise en place des conventions et de l'outillage.
+
+**Transmission**
+- Documentation d'équipe centralisée (Docusaurus) et diffusion des standards
 
 ### Architecte Front-End — Québecor (mission Atecna)
 *2021 – 2022 (10 mois) · Montréal, Canada*
@@ -194,14 +203,21 @@ Système de contexte pour agents IA.
 - Conception du modèle de données, des règles d'écriture et des skills garantissant fiabilité et maintenance automatique.
 
 ### Raredrop Studio (2026 – aujourd'hui)
-Générateur de goodies et collectibles gaming.
-- API Fastify de génération d'images et de texte multi-modèles (OpenRouter), traitement par batch parallèle.
-- Workflow modulaire en Remix avec un système composable de prompt engineering (styles/effets/skins) garantissant une signature visuelle unique et cohérente.
+Studio de production de collectibles gaming (API + frontend).
+- API Fastify : OpenRouter comme couche d'abstraction (bascule de modèle sans toucher au code).
+- Traçabilité : métadonnées de génération (prompt, modèle, date) embarquées dans chaque image pour reproduire un résultat des mois plus tard.
+- Frontend React Router 7 (SSR) : streaming + graceful degradation (jamais de rendu bloqué par un service externe), integration contracts typés, Prisma/PostgreSQL.
 
 ### Somnia (2025 – aujourd'hui)
-Générateur de méditations à thème personnalisé.
-- Architecture multi-agents spécialisés, gestion du contexte injecté dynamiquement.
-- Pipeline de bout en bout : trigger IoT → diffusion sur haut-parleur.
+Génération quotidienne de méditations guidées par IA.
+- Pipeline multi-agents : Storyteller (récit en 5 scènes) puis Meditation Writer (mise en méditation guidée), Claude Opus via OpenRouter, TTS puis diffusion Sonos — déclenché par un bouton physique (Home Assistant).
+- Sélection pondérée des thèmes/ambiances, contexte injecté dynamiquement.
+
+### Homelab — infrastructure & DevOps (R&D personnelle)
+Infrastructure serveur reproductible, **100 % Infrastructure as Code**.
+- **Contexte et structure pensés pour qu'un LLM comprenne et administre entièrement le serveur** (l'objectif directeur du projet) : documentation, conventions et modèle de données conçus pour un agent IA.
+- Chaîne GitOps 6 couches : provisioning Ansible, déploiement Dokploy/Traefik, secrets chiffrés dans Git (SOPS/age), CI/CD GitHub Actions, observabilité (OTEL-LGTM, Uptime Kuma), backup 3-2-1 (Restic/rclone).
+- Réseau segmenté (UniFi, WireGuard, VLAN, DNS Cloudflare), héberge un agent IA autonome (Hermes).
 
 ## Prix et distinctions
 
