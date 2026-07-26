@@ -94,15 +94,15 @@ onMounted(() => {
             Développeur Full-Stack Freelance à Lille
           </p>
           <h1 class="vb-hero--title">
-            <span class="vb-word"
-              ><span class="vb-word--i">Développeur</span></span
-            >
-            <span class="vb-word"
-              ><span class="vb-word--i">Full-Stack</span></span
-            >
-            <span class="vb-word"
-              ><span class="vb-word--i vb-hero--accent">Senior</span></span
-            >
+            <span class="vb-word">
+              <span class="vb-word--i">Développeur </span>
+            </span>
+            <span class="vb-word">
+              <span class="vb-word--i">Full-Stack </span>
+            </span>
+            <span class="vb-word">
+              <span class="vb-word--i vb-hero--accent">Senior</span>
+            </span>
           </h1>
           <p class="vb-hero--lead">
             Disponible dès maintenant pour
