@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { getRedirectLabel, lookupTable, notifyCall } from "~/utils/redirect";
+import {
+  getRedirectLabel,
+  getRedirectMeta,
+  lookupTable,
+  notifyCall,
+} from "~/utils/redirect";
+import { seo } from "~/config/seo";
 import GoRedirectLoader from "~/components/GoRedirectLoader.vue";
 
 const route = useRoute();
@@ -19,7 +25,16 @@ useHead({
 });
 
 const ogImageUrl = `${siteConfig.url}/og/go-${redirectId}.png`;
+const meta = getRedirectMeta(redirectId);
+const title = meta?.title ?? seo.title;
+const description = meta?.description ?? seo.descriptionCard;
 useSeoMeta({
+  title,
+  ogTitle: title,
+  twitterTitle: title,
+  description,
+  ogDescription: description,
+  twitterDescription: description,
   ogImage: ogImageUrl,
   twitterImage: ogImageUrl,
 });

@@ -15,14 +15,14 @@ import { seo } from "./seo";
 
 export const llmsOptions = {
   domain: seo.siteUrl,
-  title: "Vincent Battez — Développeur Full-Stack Senior Freelance",
-  description: `Développeur Full-Stack Senior freelance basé à ${seo.location.city} (${seo.location.region}, ${seo.location.country}), 8 ans d'expérience. Node.js/Fastify, React, Vue.js, TypeScript, architecture logicielle (DDD, hexagonale) et développement assisté par IA (agents LLM, context engineering). Disponible pour des contrats freelance.`,
+  title: seo.name,
+  description: `${seo.jobTitle} freelance basé à ${seo.location.city} (${seo.location.region}, ${seo.location.country}), 8 ans d'expérience. Node.js/Fastify, React, Vue.js, TypeScript, architecture logicielle (DDD, hexagonale) et développement assisté par IA (agents LLM, context engineering). Disponible pour des contrats freelance.`,
 
   sections: [
     {
       title: "Profil",
       description: [
-        "**Vincent Battez** — Développeur Full-Stack Senior, freelance à Lille (Hauts-de-France, France).",
+        `**${seo.author.name}** — ${seo.jobTitle}, freelance à ${seo.location.city} (${seo.location.region}, ${seo.location.country}).`,
         "",
         "Profil rare combinant une **architecture backend robuste** (DDD, hexagonale, APIs critiques haute volumétrie) et une **maîtrise avancée du développement assisté par IA** (agents LLM, context engineering).",
         "",
@@ -98,15 +98,15 @@ export const llmsOptions = {
 
   // Active la route /llms-full.txt (le contenu est injecté par le hook serveur).
   full: {
-    title: "Vincent Battez — CV détaillé",
+    title: `${seo.author.name} — CV détaillé`,
     description:
       "CV complet dérivé du portfolio : profil, expériences, compétences, projets IA, distinctions et formation.",
   },
 };
 
-export const llmsFullContent = `# Vincent Battez — Développeur Full-Stack Senior Freelance
+export const llmsFullContent = `# ${seo.name}
 
-> Développeur Full-Stack Senior freelance basé à ${seo.location.city} (${seo.location.region}, ${seo.location.country}), 8 ans d'expérience. Node.js/Fastify, React, Vue.js, TypeScript.
+> ${seo.jobTitle} freelance basé à ${seo.location.city} (${seo.location.region}, ${seo.location.country}), 8 ans d'expérience. Node.js/Fastify, React, Vue.js, TypeScript.
 > Architecture logicielle (DDD, hexagonale) et développement assisté par IA (agents LLM, context engineering).
 > Disponible pour des contrats freelance.
 

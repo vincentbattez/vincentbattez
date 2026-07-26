@@ -1,3 +1,5 @@
+import { seo } from "../config/seo";
+
 export const lookupTable = {
   source: {
     sem: "signature_email",
@@ -40,6 +42,52 @@ export function getRedirectLabel(redirectId: string): string {
     redirectLabel[redirectId as keyof typeof redirectLabel] ??
     defaultRedirectLabel
   );
+}
+
+// Méta Open Graph par redirection : titre + description spécifiques à la
+// destination (l'image, elle, suit `go-<redirectId>.png`). Sert l'aperçu social
+// affiché quand un lien /go/<id> est partagé.
+const who = `${seo.author.name}, ${seo.jobTitle} freelance`;
+
+const redirectMeta = {
+  recommandation: {
+    title: `Recommander ${seo.author.name} sur LinkedIn`,
+    description: `Rédigez une recommandation LinkedIn pour ${who}.`,
+  },
+  entretien: {
+    title: `Planifier un entretien avec ${seo.author.name}`,
+    description: `Réservez un créneau d'entretien avec ${who}.`,
+  },
+  call: {
+    title: `Réserver un appel visio avec ${seo.author.name}`,
+    description: `Planifiez un appel visio avec ${who}.`,
+  },
+  envoyer_message: {
+    title: `Envoyer un message à ${seo.author.name}`,
+    description: `Contactez ${seo.author.name} sur LinkedIn, ${seo.jobTitle} freelance.`,
+  },
+  linkedin: {
+    title: `${seo.author.name} sur LinkedIn`,
+    description: `Le parcours professionnel de ${who}.`,
+  },
+  github: {
+    title: `${seo.author.name} sur GitHub`,
+    description: `Le code et les projets open source de ${who}.`,
+  },
+  cv: {
+    title: `CV de ${seo.author.name}`,
+    description: `Le CV de ${who}.`,
+  },
+  mail: {
+    title: `Écrire à ${seo.author.name}`,
+    description: `Envoyez un email à ${who}.`,
+  },
+} as const;
+
+export type RedirectMeta = { title: string; description: string };
+
+export function getRedirectMeta(redirectId: string): RedirectMeta | undefined {
+  return redirectMeta[redirectId as keyof typeof redirectMeta];
 }
 
 // Déclenche la notif Pushover côté client (site statique, pas de serveur runtime).
