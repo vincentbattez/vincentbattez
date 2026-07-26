@@ -113,7 +113,7 @@ onMounted(() => {
               <span class="vb-word--i">Full-Stack</span>
             </span>
             <span class="vb-word">
-              <span class="vb-word--i vb-hero--accent">Sénior</span>
+              <span class="vb-word--i vb-hero--accent">Senior</span>
             </span>
           </p>
           <div class="vb-hero--lead">
@@ -138,7 +138,7 @@ onMounted(() => {
               ni
               <VbTooltip
                 align="start"
-                term="Compréhension solides"
+                term="Compréhension profonde"
                 :content="[
                   'L\'IA ne produit de façon fiable que si on connaît ses angles morts. Et cela ne concerne pas que le dev :',
                   'Du besoin à la rédaction du ticket, jusqu\'à la mise en prod et à la documentation, toute la chaîne est en jeu. Sans ce recul, on empile ce qu\'on ne maîtrise plus.',
@@ -151,13 +151,14 @@ onMounted(() => {
                 ]"
                 >compréhension</VbTooltip
               >
-              solides, elle accélère aussi
+              profonde, elle accélère surtout
               <VbTooltip
-                align="end"
+                align="start"
                 term="Dette technique"
                 :content="[
-                  'L\'IA amplifie le meilleur comme le pire : elle s\'appuie sur ton code existant. Une base saine la tire vers le haut ; truffée de mauvaises pratiques, elle les reproduit et les répand à pleine vitesse.',
-                  'Sans le contexte ni le recul pour trancher, la dette s\'accumule aussi vite que le reste.',
+                  'L\'IA amplifie le meilleur comme le pire : elle se nourrit directement de ton code existant. Sur une base saine, elle ne dérive pas trop, lorsqu\'elle est truffée de mauvaises pratiques, elle les reproduit et les répand à pleine vitesse.',
+                  'Tout comme un dev inexpérimenté, une IA ne dit rarement non : elle exécute, même une mauvaise idée. Dire non au bon moment, ça ne s\'automatise pas.',
+                  'Sans le contexte ni le recul nécessaire pour trancher, la dette technique s\'accumule désormais aussi vite que le code généré.',
                 ]"
                 :keywords="[
                   'God object',
@@ -169,7 +170,23 @@ onMounted(() => {
                 >la dette</VbTooltip
               >. <br />
               C'est précisément là que j'interviens&nbsp;: profiter de la
-              vitesse sans jamais en payer la dette.
+              vitesse sans la facture de la
+              <VbTooltip
+                align="start"
+                term="Refonte"
+                :content="[
+                  'Un code produit vite mais qu\'on ne comprend plus, c\'est une refonte en sursis : votre équipe finit par le réécrire dès qu\'elle doit le reprendre.',
+                  'Mon approche est à l\'opposé : livrer un code structuré et explicite que le prochain développeur (ou LLM) pourra faire évoluer sans mon aide en toute autonomie, sans archéologie et sans ajouter de sa couche au plat de spaguettis',
+                ]"
+                :keywords="[
+                  'Repris sans moi',
+                  'Pas \'le problème du prochain dev\'',
+                  'Zéro archéologie',
+                  'Lisible par l\'équipe',
+                ]"
+                >refonte</VbTooltip
+              >
+              dans 6 mois.
             </p>
           </div>
 
@@ -210,7 +227,7 @@ onMounted(() => {
 
             <span class="vb-xp">
               <span class="vb-xp--num">+8</span>
-              <span class="vb-xp--label">ans<br />d'expériences</span>
+              <span class="vb-xp--label">ans<br />d'expérience</span>
             </span>
           </div>
 

@@ -120,6 +120,16 @@ export const llmsFullContent = `# ${seo.name}
 - Statut : freelance, **disponible pour de nouveaux contrats** (100 % remote ou hybride, missions de longue durée privilégiées)
 - Langues : français (langue maternelle), anglais professionnel (compréhension B2)
 
+## Positionnement — la vitesse de l'IA sans la dette
+
+J'intègre l'IA au cœur de mon workflow quotidien. Elle démultiplie la vitesse, mais **sans architecture ni compréhension solides, elle accélère surtout la dette technique**. C'est précisément là que j'interviens : profiter de la vitesse sans jamais en payer le prix.
+
+Produire du code n'est plus le goulot d'étranglement — la **compréhension profonde d'un système** l'est devenue. Les principes d'architecture d'il y a 20 ans n'ont jamais été aussi décisifs, et l'IA ne produit de façon fiable que si on connaît ses angles morts. Ce que je surveille et corrige à chaque étape (du besoin au ticket, de la mise en prod à la documentation) :
+
+- **Architecture** — poser des frontières qui tiennent dans la durée pour éviter couplage fort, big ball of mud, dépendances circulaires et abstractions fuyantes.
+- **Compréhension & angles morts de l'IA** — garder le recul sur toute la chaîne pour ne pas empiler ce qu'on ne maîtrise plus : hallucinations, contexte manquant, dérive silencieuse, sur-confiance.
+- **Dette technique** — l'IA amplifie le meilleur comme le pire : elle s'appuie sur le code existant. Une base saine la tire vers le haut ; une base dégradée voit ses mauvaises pratiques reproduites et répandues à pleine vitesse (god object, flaky tests, code mort, duplication, rustines empilées).
+
 ## Ce que je recherche
 
 - **Type** : missions freelance de longue durée.
