@@ -28,6 +28,8 @@ const location = {
 
 const author = {
   name: "Vincent Battez",
+  givenName: "Vincent",
+  familyName: "Battez",
   email: "contact@vincentbattez.dev",
   url: siteUrl,
 } as const;
@@ -54,6 +56,9 @@ export const seo = {
     "Développeur Full-Stack, Développeur Senior, Freelance Lille, Node.js, React, Vue.js, TypeScript, Architecture logicielle, Développeur web freelance",
 
   jobTitle: "Développeur Full-Stack Senior",
+
+  // Langues maîtrisées (schema.org Person.knowsLanguage).
+  knowsLanguage: ["fr", "en"],
 
   // Locales / langue.
   language: "fr-FR",

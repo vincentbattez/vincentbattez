@@ -15,19 +15,29 @@ useSeoMeta({
 
 // JSON-LD injecté à la main : sous-module schema-org désactivé (incompatible unhead 3).
 const siteUrl = seo.siteUrl;
+const personId = `${siteUrl}/#person`;
+const websiteId = `${siteUrl}/#website`;
+const webpageId = `${siteUrl}/#webpage`;
+const serviceId = `${siteUrl}/#service`;
+const portraitId = `${siteUrl}/#portrait`;
+
 const schemaOrgGraph = {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "Person",
-      "@id": `${siteUrl}/#person`,
+      "@id": personId,
       name: seo.author.name,
+      givenName: seo.author.givenName,
+      familyName: seo.author.familyName,
       url: siteUrl,
-      image: `${siteUrl}${seo.portrait}`,
+      image: { "@id": portraitId },
       description: seo.schema.personDescription,
       jobTitle: seo.jobTitle,
       email: seo.author.email,
+      knowsLanguage: seo.knowsLanguage,
       sameAs: [seo.social.linkedin, seo.social.github],
+      mainEntityOfPage: { "@id": webpageId },
       worksFor: { "@type": "Organization", name: "Freelance" },
       address: {
         "@type": "PostalAddress",
@@ -47,27 +57,54 @@ const schemaOrgGraph = {
       },
     },
     {
+      "@type": "ImageObject",
+      "@id": portraitId,
+      url: `${siteUrl}${seo.portrait}`,
+      contentUrl: `${siteUrl}${seo.portrait}`,
+      caption: seo.author.name,
+    },
+    {
       "@type": "ProfessionalService",
-      "@id": `${siteUrl}/#service`,
+      "@id": serviceId,
       name: seo.schema.serviceName,
       url: siteUrl,
       description: seo.schema.serviceDescription,
-      founder: { "@id": `${siteUrl}/#person` },
+      founder: { "@id": personId },
+      provider: { "@id": personId },
       areaServed: { "@type": "Country", name: seo.location.country },
       knowsAbout: seo.schema.serviceKnowsAbout,
       address: {
         "@type": "PostalAddress",
         addressLocality: seo.location.city,
+        addressRegion: seo.location.region,
         addressCountry: seo.location.countryCode,
+      },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: seo.location.latitude,
+        longitude: seo.location.longitude,
       },
     },
     {
       "@type": "WebSite",
-      "@id": `${siteUrl}/#website`,
+      "@id": websiteId,
       url: siteUrl,
       name: seo.name,
+      description: seo.descriptionMeta,
       inLanguage: seo.language,
-      publisher: { "@id": `${siteUrl}/#person` },
+      publisher: { "@id": personId },
+    },
+    {
+      "@type": "WebPage",
+      "@id": webpageId,
+      url: seo.siteUrlWithSlash,
+      name: seo.title,
+      description: seo.descriptionMeta,
+      isPartOf: { "@id": websiteId },
+      about: { "@id": personId },
+      mainEntity: { "@id": personId },
+      primaryImageOfPage: { "@id": portraitId },
+      inLanguage: seo.language,
     },
   ],
 };
@@ -95,7 +132,6 @@ useHead({
       <div class="page-decor--lines"></div>
       <span class="page-decor--mark">V</span>
     </div>
-
     <NuxtPage />
   </main>
 </template>
