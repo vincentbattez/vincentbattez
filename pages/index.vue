@@ -113,7 +113,7 @@ onMounted(() => {
               <span class="vb-word--i">Full-Stack</span>
             </span>
             <span class="vb-word">
-              <span class="vb-word--i vb-hero--accent">Senior</span>
+              <span class="vb-word--i vb-hero--accent">Architecture & IA</span>
             </span>
           </p>
           <div class="vb-hero--lead">
@@ -124,14 +124,15 @@ onMounted(() => {
                 align="start"
                 term="Architecture"
                 :content="[
-                  'Produire du code n\'est plus le bottleneck : c\'est la compréhension profonde d\'un système qui l\'est devenue. Les principes d\'architecture d\'il y a +20 ans n\'ont jamais été aussi décisifs.',
-                  'Poser des frontières qui tiennent dans la durée, ça ne s\'improvise pas.',
+                  'Le code se régénère à la demande ; le découpage d\'un système, non. C\'est le seul endroit où une erreur se paie en mois, voire en années.',
+                  'Les principes d\'architecture d\'il y a +40 ans n\'ont jamais été aussi décisifs.',
+                  'Déterminer une bonne frontière qui ne casse pas le reste lorsqu\'on la déplace. Ça, ça ne s\'improvise pas.',
                 ]"
                 :keywords="[
-                  'Couplage fort',
+                  'Bounded contexts',
+                  'Couplage / cohésion',
+                  'Shotgun Surgery',
                   'Big ball of mud',
-                  'Dépendances circulaires',
-                  'Abstractions fuyantes',
                 ]"
                 >architecture</VbTooltip
               >
@@ -145,7 +146,7 @@ onMounted(() => {
                 ]"
                 :keywords="[
                   'Hallucinations',
-                  'Contexte manquant',
+                  'Manque de contexte',
                   'Dérive silencieuse',
                   'Sur-confiance',
                 ]"
@@ -156,14 +157,15 @@ onMounted(() => {
                 align="start"
                 term="Dette technique"
                 :content="[
-                  'L\'IA amplifie le meilleur comme le pire : elle se nourrit directement de ton code existant. Sur une base saine, elle ne dérive pas trop, lorsqu\'elle est truffée de mauvaises pratiques, elle les reproduit et les répand à pleine vitesse.',
-                  'Tout comme un dev inexpérimenté, une IA ne dit rarement non : elle exécute, même une mauvaise idée. Dire non au bon moment, ça ne s\'automatise pas.',
-                  'Sans le contexte ni le recul nécessaire pour trancher, la dette technique s\'accumule désormais aussi vite que le code généré.',
+                  'L\'IA amplifie le meilleur comme le pire : elle se nourrit directement de ton code existant. Sur une base saine, la dérive est limitée, lorsqu\'elle est truffée de mauvaises pratiques, elle les reproduit et les répand à pleine vitesse.',
+                  'Tout comme un dev inexpérimenté, une IA ne dit jamais non : elle exécute les bonnes idées comme les mauvaises. Dire non au bon moment, ça s\'apprend avec l\'expérience.',
+                  'Sans le contexte ni le recul nécessaire pour trancher, la dette technique s\'accumule désormais aussi vite que le code est généré.',
                 ]"
                 :keywords="[
                   'God object',
                   'Flaky tests',
                   'Code mort',
+                  'Code smell',
                   'Duplication',
                   'Rustines empilées',
                 ]"
@@ -175,14 +177,14 @@ onMounted(() => {
                 align="start"
                 term="Refonte"
                 :content="[
-                  'Un code produit vite mais qu\'on ne comprend plus, c\'est une refonte en sursis : votre équipe finit par le réécrire dès qu\'elle doit le reprendre.',
-                  'Mon approche est à l\'opposé : livrer un code structuré et explicite que le prochain développeur (ou LLM) pourra faire évoluer sans mon aide en toute autonomie, sans archéologie et sans ajouter de sa couche au plat de spaguettis',
+                  'Un code produit vite mais qu\'on ne comprend plus, c\'est une refonte en sursis et c\'est d\'autant plus vrai aujourd\'hui avec la génération de code.',
+                  'Mon objectif : Encadrer l\'équipe pour livrer un code structuré et explicite que le prochain développeur (ou LLM) pourra faire évoluer sans mon aide.',
                 ]"
                 :keywords="[
-                  'Repris sans moi',
-                  'Pas \'le problème du prochain dev\'',
-                  'Zéro archéologie',
+                  'Aucune dépendance humaine',
+                  'Évolutivité',
                   'Lisible par l\'équipe',
+                  'Onboarding rapide',
                 ]"
                 >refonte</VbTooltip
               >
