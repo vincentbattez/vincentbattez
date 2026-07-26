@@ -242,10 +242,20 @@ const id = useId();
     max-width: min(22rem, 78vw);
     padding: 0.75rem 0.9rem;
     border-radius: 14px;
-    background: linear-gradient(152deg, #2c1c08 0%, #241605 100%);
+    // Bloom orange centré en haut, posé en couche de fond (toujours derrière le
+    // texte) + liseré lumineux sur l'arête haute via box-shadow inset.
+    background:
+      radial-gradient(
+        72% 34px at 50% 0%,
+        rgba(240, 145, 15, 0.42) 0%,
+        rgba(240, 145, 15, 0.11) 46%,
+        transparent 72%
+      ),
+      linear-gradient(152deg, #2c1c08 0%, #241605 100%);
     box-shadow:
       0 22px 44px -20px rgba(36, 22, 5, 0.75),
-      0 0 0 1px rgba(240, 145, 15, 0.18);
+      0 0 0 1px rgba(240, 145, 15, 0.18),
+      inset 0 1px 0 0 rgba(240, 145, 15, 0.28);
     text-align: left;
     pointer-events: none;
     opacity: 0;
@@ -254,6 +264,26 @@ const id = useId();
       opacity 190ms ease,
       transform 190ms cubic-bezier(0.22, 1, 0.36, 1),
       visibility 190ms;
+
+    // Glow externe : source lumineuse orange qui déborde au-dessus du bord haut
+    // centré. Léger pulse (respiration) désactivé en reduced-motion plus bas.
+    &::before {
+      content: "";
+      position: absolute;
+      top: -7px;
+      left: 50%;
+      width: 62%;
+      height: 24px;
+      transform: translateX(-50%);
+      background: radial-gradient(
+        58% 100% at 50% 0%,
+        rgba(240, 145, 15, 0.6) 0%,
+        rgba(240, 145, 15, 0) 74%
+      );
+      filter: blur(7px);
+      pointer-events: none;
+      animation: vb-tt-glow 3.6s ease-in-out infinite;
+    }
 
     // Caret : petit losange qui prolonge la fiche vers le mot.
     &::after {
@@ -386,9 +416,22 @@ const id = useId();
   }
 }
 
+@keyframes vb-tt-glow {
+  0%,
+  100% {
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .vb-tt--bubble {
     transition-property: opacity, visibility;
+  }
+  .vb-tt--bubble::before {
+    animation: none;
   }
   .vb-tt--bubble--center {
     transform: translate(-50%, -100%);

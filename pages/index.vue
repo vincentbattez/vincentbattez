@@ -119,7 +119,7 @@ onMounted(() => {
           <div class="vb-hero--lead">
             <p class="vb-hero--tension">
               J'intègre l'IA au cœur de mon workflow quotidien. Elle démultiplie
-              la vitesse mais sans
+              la vitesse, mais, sans
               <VbTooltip
                 align="start"
                 term="Architecture"
@@ -417,7 +417,7 @@ onMounted(() => {
     font-size: clamp(17px, 0.6vw + 15px, 19px);
     font-weight: 600;
     line-height: 1.65;
-    max-width: 35rem;
+    max-width: 37rem;
 
     p + p {
       margin-top: 1rem;
