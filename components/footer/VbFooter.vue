@@ -1,15 +1,17 @@
 <template>
-  <a
-    v-if="route.path === '/'"
-    class="page-llms"
-    href="/llms-full.txt"
-    title="Version llms.txt — pour les agents IA"
-  >
-    llms.txt
-  </a>
-  <div class="vb-skill">
-    <VbSkillList :skill-list="skillList" />
-  </div>
+  <footer class="vb-footer">
+    <a
+      v-if="route.path === '/'"
+      class="page-llms"
+      href="/llms-full.txt"
+      title="Version llms.txt — pour les agents IA"
+    >
+      llms.txt
+    </a>
+    <div class="vb-skill">
+      <VbSkillList :skill-list="skillList" />
+    </div>
+  </footer>
 </template>
 
 <script lang="ts" setup>
