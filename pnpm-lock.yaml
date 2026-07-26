@@ -8,6 +8,9 @@ dependencies:
   '@posthog/nuxt':
     specifier: ^1.7.80
     version: 1.7.80
+  nuxt-llms:
+    specifier: ^0.2.0
+    version: 0.2.0
   posthog-node:
     specifier: ^5.46.0
     version: 5.46.0
@@ -11798,6 +11801,18 @@ packages:
       - vue
       - zod
     dev: true
+
+  /nuxt-llms@0.2.0:
+    resolution: {integrity: sha512-GoEW00x8zaZ1wS0R0aOYptt3b54JEaRwlyVtuAiQoH51BwYdjN5/3+00/+4wi39M5cT4j5XcnGwOxJ7v4WVb9A==}
+    dependencies:
+      '@nuxt/kit': 4.5.0(magic-string@1.0.0)(magicast@0.5.3)(rolldown@1.2.0)(unplugin@3.3.0)
+    transitivePeerDependencies:
+      - magic-string
+      - magicast
+      - oxc-parser
+      - rolldown
+      - unplugin
+    dev: false
 
   /nuxt-og-image@6.7.2(@nuxt/schema@4.5.0)(@resvg/resvg-js@2.6.2)(@unhead/vue@3.1.8)(nuxt@4.5.0)(satori@0.28.0)(tailwindcss@3.4.19)(unstorage@1.17.5)(vite@8.1.5)(vue@3.5.40):
     resolution: {integrity: sha512-+TdTqdimQvMrTxWrvci3hHLxsgP/RhkQQ+4XawLgis9tWpGCxmbdSfrelBr9C0LeQ/vhc7ztSIOzsewcGbLpXw==}

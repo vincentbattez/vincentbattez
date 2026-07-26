@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@posthog/nuxt": "^1.7.80",
+    "nuxt-llms": "^0.2.0",
     "posthog-node": "^5.46.0"
   }
 }

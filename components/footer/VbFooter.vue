@@ -1,4 +1,12 @@
 <template>
+  <a
+    v-if="route.path === '/'"
+    class="page-llms"
+    href="/llms-full.txt"
+    title="Version llms.txt — pour les agents IA"
+  >
+    llms.txt
+  </a>
   <div class="vb-skill">
     <VbSkillList :skill-list="skillList" />
   </div>
@@ -7,6 +15,7 @@
 <script lang="ts" setup>
 import type { IVbSkill } from "~/components/footer/vbSkill.type";
 import VbSkillList from "~/components/footer/VbSkillList.vue";
+const route = useRoute();
 
 // Reflet du profil (cf. CV). Cœurs sur les compétences signature (colorées).
 const skillList: IVbSkill[] = [
@@ -57,5 +66,21 @@ const skillList: IVbSkill[] = [
   @apply py-md;
   border-top: 1px solid rgba(240, 145, 15, 0.18);
   background: white;
+}
+
+// Lien discret /llms.txt : centré sous la carte. Faible contraste volontaire
+// (décoratif/technique), renforcé au survol/focus.
+.page-llms {
+  @apply mb-sm block w-fit mx-auto font-heading font-semibold text-orange-700/35 no-underline text-body-sm;
+  letter-spacing: 0.12em;
+  transition:
+    color 150ms ease,
+    opacity 150ms ease;
+}
+
+.page-llms:hover,
+.page-llms:focus-visible {
+  @apply text-orange-700/95 underline;
+  text-underline-offset: 3px;
 }
 </style>

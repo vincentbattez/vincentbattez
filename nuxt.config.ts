@@ -1,5 +1,6 @@
 import { lookupTable } from "./utils/redirect";
 import { seo } from "./config/seo";
+import { llmsOptions } from "./config/llms";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -19,7 +20,10 @@ export default defineNuxtConfig({
     "@nuxt/fonts",
     "@posthog/nuxt",
     "@vite-pwa/nuxt",
+    "nuxt-llms",
   ],
+
+  llms: llmsOptions,
 
   // PWA : service worker + manifest gérés par le plugin (Workbox).
   // registerType "autoUpdate" : le nouveau SW prend le contrôle à la visite
