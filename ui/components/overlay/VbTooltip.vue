@@ -1,7 +1,7 @@
 <template>
   <span
+    ref="rootEl"
     class="vb-tt"
-    :class="[`vb-tt--${align}`, { 'vb-tt--open': open }]"
     @mouseenter="hovered = true"
     @mouseleave="hovered = false"
     @focusin="onFocusin"
@@ -18,23 +18,42 @@
       <slot />
     </button>
 
-    <span :id="id" role="tooltip" class="vb-tt--bubble">
-      <button
-        type="button"
-        class="vb-tt--close"
-        aria-label="Fermer"
-        @click="dismiss"
+    <!-- Bulle sortie du flux (Teleport → body) pour échapper au clipping de
+         `.vb-frame` (overflow:hidden + transform). Rendue inline tant que le
+         composant n'est pas monté → pas de mismatch d'hydratation SSR. -->
+    <Teleport to="body" :disabled="!mounted">
+      <span
+        :id="id"
+        ref="bubbleEl"
+        role="tooltip"
+        class="vb-tt--bubble"
+        :class="[`vb-tt--bubble--${align}`, { 'vb-tt--bubble--open': open }]"
+        :style="bubbleStyle"
+        @mouseenter="hovered = true"
+        @mouseleave="hovered = false"
+        @focusin="onFocusin"
+        @focusout="onFocusout"
+        @keydown.escape="dismiss"
       >
-        <span aria-hidden="true">×</span>
-      </button>
-      <span v-if="term" class="vb-tt--term">{{ term }}</span>
-      <span v-for="(para, i) in paragraphs" :key="i" class="vb-tt--def">{{
-        para
-      }}</span>
-      <span v-if="keywords?.length" class="vb-tt--tags">
-        <span v-for="kw in keywords" :key="kw" class="vb-tt--tag">{{ kw }}</span>
+        <button
+          type="button"
+          class="vb-tt--close"
+          aria-label="Fermer"
+          @click="dismiss"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+        <span v-if="term" class="vb-tt--term">{{ term }}</span>
+        <span v-for="(para, i) in paragraphs" :key="i" class="vb-tt--def">{{
+          para
+        }}</span>
+        <span v-if="keywords?.length" class="vb-tt--tags">
+          <span v-for="kw in keywords" :key="kw" class="vb-tt--tag">{{
+            kw
+          }}</span>
+        </span>
       </span>
-    </span>
+    </Teleport>
   </span>
 </template>
 
@@ -47,7 +66,7 @@ const props = withDefaults(
     term?: string;
     // Preuves d'autorité en pied de fiche (chips), ex. failure-modes maîtrisés.
     keywords?: string[];
-    // Ancrage horizontal : évite le clipping aux bords de la carte.
+    // Ancrage horizontal de la bulle par rapport au mot (évite le débordement viewport).
     align?: "start" | "center" | "end";
   }>(),
   { align: "center", term: undefined, keywords: undefined },
@@ -58,15 +77,87 @@ const paragraphs = computed(() =>
   Array.isArray(props.content) ? props.content : [props.content],
 );
 
-// Ouverture pilotée en JS : `open = survol/focus OU épinglé`. Le clic sur le mot
-// épingle la fiche (affichage permanent, indépendant du hover) ; la croix, Échap
-// ou la perte de focus la referment. Deux états séparés car sinon le mouseleave
-// refermerait aussitôt une fiche ouverte au clic.
+// Ouverture pilotée en JS : `open = survol OU focus OU épinglé`. Le clic sur le
+// mot épingle la fiche (affichage permanent) ; la croix, Échap ou la perte de
+// focus la referment. États séparés car sinon le mouseleave refermerait aussitôt
+// une fiche ouverte au clic.
 const hovered = ref(false);
+const focused = ref(false);
 const pinned = ref(false);
-const open = computed(() => hovered.value || pinned.value);
+const open = computed(() => hovered.value || focused.value || pinned.value);
 
+const rootEl = ref<HTMLElement | null>(null);
+const bubbleEl = ref<HTMLElement | null>(null);
 const triggerEl = ref<HTMLButtonElement | null>(null);
+const mounted = ref(false);
+const isMobile = ref(false);
+
+// La bulle vit sous <body> : elle n'est plus descendante de `.vb-frame`. On
+// calcule top/left depuis le rect du mot ; la lévitation verticale (-100%) et
+// l'ancrage horizontal (translateX selon `align`) sont en CSS pour garder la
+// transition d'entrée.
+// - Desktop : `fixed` (la page ne scrolle pas), coords viewport directes.
+// - Mobile : `absolute` (suit le scroll, jamais `fixed`), coords + scroll.
+const bubbleStyle = ref<Record<string, string>>({});
+function reposition() {
+  const t = triggerEl.value;
+  if (!t) return;
+  const r = t.getBoundingClientRect();
+  const mobile = isMobile.value;
+  const sx = mobile ? window.scrollX : 0;
+  const sy = mobile ? window.scrollY : 0;
+  const style: Record<string, string> = {
+    position: mobile ? "absolute" : "fixed",
+    top: `${r.top + sy - 12}px`,
+  };
+  if (mobile) {
+    // Ancrée au-dessus du mot (top) mais centrée dans le viewport → jamais de
+    // débordement horizontal. Le caret est masqué en CSS.
+    style.left = `${sx + window.innerWidth / 2}px`;
+  } else if (props.align === "start") style.left = `${r.left}px`;
+  else if (props.align === "end") style.left = `${r.right}px`;
+  else style.left = `${r.left + r.width / 2}px`;
+  bubbleStyle.value = style;
+}
+
+// `flush: 'pre'` (défaut) → recalcul avant l'application de la classe `--open`,
+// donc pas de flash à l'ancienne position.
+watch(open, (v) => {
+  if (v) reposition();
+});
+
+// Clic (ou tap) hors du mot ET de la bulle → fermeture. Sur `pointerdown` pour
+// réagir avant tout changement de focus.
+function onDocPointerDown(e: PointerEvent) {
+  if (!open.value) return;
+  const target = e.target as Node | null;
+  if (rootEl.value?.contains(target) || bubbleEl.value?.contains(target))
+    return;
+  hovered.value = false;
+  focused.value = false;
+  pinned.value = false;
+}
+
+onMounted(() => {
+  mounted.value = true;
+  const mq = matchMedia("(max-width: 820px)");
+  isMobile.value = mq.matches;
+  const onReflow = () => open.value && reposition();
+  const onMq = () => {
+    isMobile.value = mq.matches;
+    onReflow();
+  };
+  mq.addEventListener("change", onMq);
+  window.addEventListener("resize", onReflow, { passive: true });
+  window.addEventListener("scroll", onReflow, { passive: true, capture: true });
+  document.addEventListener("pointerdown", onDocPointerDown, true);
+  onBeforeUnmount(() => {
+    mq.removeEventListener("change", onMq);
+    window.removeEventListener("resize", onReflow);
+    window.removeEventListener("scroll", onReflow, { capture: true });
+    document.removeEventListener("pointerdown", onDocPointerDown, true);
+  });
+});
 
 // Le refocus de `dismiss` redéclenche un focusin : ce drapeau l'ignore une fois
 // pour ne pas rouvrir la fiche qu'on vient de fermer.
@@ -76,21 +167,24 @@ function onFocusin() {
     suppressFocusin = false;
     return;
   }
-  hovered.value = true;
+  focused.value = true;
+}
+
+// Le mot (`rootEl`) et la bulle (`bubbleEl`) sont désormais séparés dans le DOM :
+// on garde la fiche ouverte tant que le focus reste dans l'un OU l'autre.
+function onFocusout(e: FocusEvent) {
+  const to = e.relatedTarget as Node | null;
+  if (rootEl.value?.contains(to) || bubbleEl.value?.contains(to)) return;
+  focused.value = false;
+  pinned.value = false;
 }
 
 function dismiss() {
   hovered.value = false;
+  focused.value = false;
   pinned.value = false;
   suppressFocusin = true;
   triggerEl.value?.focus();
-}
-function onFocusout(e: FocusEvent) {
-  const root = e.currentTarget as HTMLElement;
-  if (!root.contains(e.relatedTarget as Node | null)) {
-    hovered.value = false;
-    pinned.value = false;
-  }
 }
 
 // Lie le déclencheur à la fiche pour les lecteurs d'écran (aria-describedby).
@@ -138,12 +232,12 @@ const id = useId();
     }
   }
 
-  // Fiche de définition. Masquée en opacity/visibility (jamais display:none) →
+  // Fiche de définition, téléportée sous <body> → `position: fixed`, top/left
+  // calculés en JS. Masquée en opacity/visibility (jamais display:none) →
   // aria-describedby reste fiable pour les lecteurs d'écran.
   &--bubble {
-    position: absolute;
-    bottom: calc(100% + 12px);
-    z-index: 40;
+    position: fixed;
+    z-index: 1000;
     width: max-content;
     max-width: min(22rem, 78vw);
     padding: 0.75rem 0.9rem;
@@ -171,6 +265,45 @@ const id = useId();
       margin-top: -6px;
       background: #241605;
       transform: rotate(45deg);
+    }
+
+    // --- Ancrage horizontal + lévitation au-dessus du mot ---
+    // La bulle est ancrée par son bord bas 12px au-dessus du mot (top JS) puis
+    // remontée de -100%. L'entrée part 6px plus bas et glisse vers 0.
+    &--center {
+      transform: translate(-50%, calc(-100% + 6px));
+      &::after {
+        left: 50%;
+        margin-left: -6px;
+      }
+    }
+    &--start {
+      transform: translate(0, calc(-100% + 6px));
+      &::after {
+        left: 1.25rem;
+      }
+    }
+    &--end {
+      transform: translate(-100%, calc(-100% + 6px));
+      &::after {
+        right: 1.25rem;
+      }
+    }
+
+    // Révélation (hover/focus/épinglage l'activent en JS).
+    &--open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    &--center.vb-tt--bubble--open {
+      transform: translate(-50%, -100%);
+    }
+    &--start.vb-tt--bubble--open {
+      transform: translate(0, -100%);
+    }
+    &--end.vb-tt--bubble--open {
+      transform: translate(-100%, -100%);
     }
   }
 
@@ -251,100 +384,44 @@ const id = useId();
     border: 1px solid rgba(240, 145, 15, 0.22);
     white-space: nowrap;
   }
-
-  // Révélation pilotée par l'état `open` (hover/focus l'activent en JS).
-  &--open .vb-tt--bubble {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-  }
-
-  // --- Ancrage : center (défaut), start (bord gauche), end (bord droit) ---
-  &--center {
-    .vb-tt--bubble {
-      left: 50%;
-      transform: translateX(-50%) translateY(6px);
-      &::after {
-        left: 50%;
-        margin-left: -6px;
-      }
-    }
-    &.vb-tt--open .vb-tt--bubble {
-      transform: translateX(-50%) translateY(0);
-    }
-  }
-
-  &--start {
-    .vb-tt--bubble {
-      left: 0;
-      transform: translateY(6px);
-      &::after {
-        left: 1.25rem;
-      }
-    }
-    &.vb-tt--open .vb-tt--bubble {
-      transform: translateY(0);
-    }
-  }
-
-  &--end {
-    .vb-tt--bubble {
-      right: 0;
-      transform: translateY(6px);
-      &::after {
-        right: 1.25rem;
-      }
-    }
-    &.vb-tt--open .vb-tt--bubble {
-      transform: translateY(0);
-    }
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .vb-tt--bubble {
     transition-property: opacity, visibility;
   }
-  .vb-tt--center .vb-tt--bubble {
-    transform: translateX(-50%);
+  .vb-tt--bubble--center {
+    transform: translate(-50%, -100%);
   }
-  .vb-tt--start .vb-tt--bubble,
-  .vb-tt--end .vb-tt--bubble {
-    transform: none;
+  .vb-tt--bubble--start {
+    transform: translate(0, -100%);
   }
-  .vb-tt--trigger::after {
-    transition: none;
+  .vb-tt--bubble--end {
+    transform: translate(-100%, -100%);
   }
 }
 
-// Mobile : la bulle ne tient plus ancrée au mot (débordait hors de la frame
-// rognée). On la détache (trigger `static` → l'ancêtre positionné devient
-// `.vb-frame--content`) et on la centre dans la carte, largeur bornée au
-// viewport. Le caret perd son sens, on le masque.
+// Mobile : bulle ancrée juste au-dessus du mot (top `absolute` posé en JS,
+// jamais `fixed`) pour laisser voir la phrase, mais centrée dans le viewport
+// (left JS = centre écran + translateX -50%) → aucun débordement horizontal.
+// Le caret ne pointe plus le mot → masqué.
 @media (max-width: 820px) {
-  .vb-tt {
-    position: static;
-  }
-  .vb-tt--center,
-  .vb-tt--start,
-  .vb-tt--end {
-    .vb-tt--bubble {
-      position: absolute;
-      left: 50%;
-      right: auto;
-      top: 50%;
-      bottom: auto;
-      width: min(20rem, calc(100vw - 3rem));
-      max-width: none;
-      transform: translate(-50%, -50%);
+  .vb-tt--bubble {
+    max-width: calc(100vw - 1.5rem);
 
-      &::after {
-        display: none;
-      }
+    &::after {
+      display: none;
     }
-    &.vb-tt--open .vb-tt--bubble {
-      transform: translate(-50%, -50%);
-    }
+  }
+  .vb-tt--bubble--center,
+  .vb-tt--bubble--start,
+  .vb-tt--bubble--end {
+    transform: translate(-50%, calc(-100% + 6px));
+  }
+  .vb-tt--bubble--center.vb-tt--bubble--open,
+  .vb-tt--bubble--start.vb-tt--bubble--open,
+  .vb-tt--bubble--end.vb-tt--bubble--open {
+    transform: translate(-50%, -100%);
   }
 }
 </style>
