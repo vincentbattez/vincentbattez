@@ -110,7 +110,7 @@ onMounted(() => {
               <span class="vb-word--i">Développeur </span>
             </span>
             <span class="vb-word">
-              <span class="vb-word--i">Full-Stack</span>
+              <span class="vb-word--i">Full-Stack </span>
             </span>
             <span class="vb-word">
               <span class="vb-word--i vb-hero--accent">Architecture & IA</span>
@@ -124,8 +124,8 @@ onMounted(() => {
                 align="start"
                 term="Architecture"
                 :content="[
-                  'Le code se régénère à la demande ; le découpage d\'un système, non. C\'est le seul endroit où une erreur se paie en mois, voire en années.',
-                  'Les principes d\'architecture d\'il y a +40 ans n\'ont jamais été aussi décisifs.',
+                  'À l\'ère de la génération de code, la vraie valeur réside dans la conception. Si l\'implémentation est devenue fluide et rapide, le découpage d\'un système demeure critique, une erreur à ce niveau se paie en mois, voire en années.',
+                  'À   cette vitesse, les principes d\'architecture établis il y a plus de 40 ans n\'ont jamais été aussi essentiels.',
                   'Déterminer une bonne frontière qui ne casse pas le reste lorsqu\'on la déplace. Ça, ça ne s\'improvise pas.',
                 ]"
                 :keywords="[
@@ -150,9 +150,9 @@ onMounted(() => {
                   'Dérive silencieuse',
                   'Sur-confiance',
                 ]"
-                >compréhension</VbTooltip
+                >compréhension profonde</VbTooltip
               >
-              profonde, elle accélère surtout
+              , elle accélère surtout
               <VbTooltip
                 align="start"
                 term="Dette technique"
@@ -177,7 +177,7 @@ onMounted(() => {
                 align="start"
                 term="Refonte"
                 :content="[
-                  'Un code produit vite mais qu\'on ne comprend plus, c\'est une refonte en sursis et c\'est d\'autant plus vrai aujourd\'hui avec la génération de code.',
+                  'Un code mal conçu finit toujours par coûter plus cher qu\'il ne rapporte. Alors que l\'IA permet de générer du code en masse, la maintenabilité doit plus que jamais rester une priorité.',
                   'Mon objectif : Encadrer l\'équipe pour livrer un code structuré et explicite que le prochain développeur (ou LLM) pourra faire évoluer sans mon aide.',
                 ]"
                 :keywords="[

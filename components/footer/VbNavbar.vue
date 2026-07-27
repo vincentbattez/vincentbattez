@@ -55,7 +55,8 @@ const formattedStatusUpdatedAt = computed(() => {
   }
 
   &--status-date {
-    @apply text-grey-500;
+    @apply text-grey-500 relative;
+    top: -4px;
     font-size: 0.7rem;
     font-style: italic;
   }

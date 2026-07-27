@@ -377,6 +377,18 @@ const id = useId();
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: theme("colors.orange.400");
+
+    // Petit losange orange en tête de titre (accent « spec technique »).
+    &::before {
+      content: "";
+      display: inline-block;
+      width: 0.42em;
+      height: 0.42em;
+      margin-right: 0.55em;
+      vertical-align: 0.06em;
+      background: theme("colors.primary");
+      transform: rotate(45deg);
+    }
   }
 
   &--def {

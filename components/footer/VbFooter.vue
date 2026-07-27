@@ -32,10 +32,10 @@ const skillList: IVbSkill[] = [
   { name: "SDD", love: false },
   { name: "Gestion de contexte LLM", love: false },
   // Software Craftsmanship
-  { name: "TDD", love: true },
+  { name: "TDD", love: false },
   { name: "Clean Code", love: true },
-  { name: "Hexagonale", love: true },
-  { name: "MVC", love: true },
+  { name: "Hexagonale", love: false },
+  { name: "MVC", love: false },
   { name: "DDD", love: true },
   { name: "Code review", love: false },
   { name: "Documentation et transmission", love: true },

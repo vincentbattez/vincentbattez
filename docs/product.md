@@ -10,6 +10,7 @@ Vincent Battez's personal portfolio website - a freelance AI Engineer and Full S
 
 ## Target Audience
 - Companies needing freelance full stack development expertise
+  - Tech leads or CTOs seeking senior-level developer expertise (with AI integration)
 - Businesses looking for AI integration and automation solutions
 - Professional network connections in French market
 
