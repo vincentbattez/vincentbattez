@@ -172,7 +172,7 @@ onMounted(() => {
                 >la dette</VbTooltip
               >. <br />
               C'est précisément là que j'interviens&nbsp;: profiter de la
-              vitesse sans la facture de la
+              vitesse sans la coût de la
               <VbTooltip
                 align="start"
                 term="Refonte"
