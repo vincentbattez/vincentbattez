@@ -124,9 +124,9 @@ onMounted(() => {
                 align="start"
                 term="Architecture"
                 :content="[
-                  'À l\'ère de la génération de code, la vraie valeur réside dans la conception. Si l\'implémentation est devenue fluide et rapide, le découpage d\'un système demeure critique. À cette vitesse, une erreur à ce niveau se paie en mois, voire en années.',
-                  'C\'est pourquoi les principes d\'architecture établis il y a plus de 40 ans n\'ont jamais été aussi essentiels.',
-                  'Déterminer une bonne frontière qui ne casse pas le reste lorsqu\'on la déplace. Ça, ça ne s\'improvise pas.',
+                  'À l\'ère de la génération de code, la valeur du développeur s\'est davantage déplacée vers la conception. Si l\'implémentation est devenue fluide et rapide, le découpage d\'un système n\'est que plus critique. À cette vitesse, une erreur à ce niveau se paie en mois, voire en années.',
+                  'C\'est pourquoi les principes d\'architecture établis il y a plus de 40 ans n\'ont jamais été aussi actuels.',
+                  'Tracer une frontière qu\'on peut déplacer sans casser le reste, ça ne s\'improvise pas.',
                 ]"
                 :keywords="[
                   'Bounded contexts',
@@ -141,14 +141,15 @@ onMounted(() => {
                 align="start"
                 term="Compréhension profonde"
                 :content="[
-                  'L\'IA ne produit de façon fiable que si on connaît ses angles morts. Et cela ne concerne pas que le dev :',
-                  'Du besoin à la rédaction du ticket, jusqu\'à la mise en prod et à la documentation, toute la chaîne est en jeu. Sans ce recul, on empile et empoissonne chaque nouvelle livraison',
+                  'Un modèle de langage n\'est fiable que si on connaît ses angles morts. Et cela ne concerne pas que le dev :',
+                  'Du besoin à la rédaction du ticket, jusqu\'à la mise en prod et à la documentation, toute la chaîne est en jeu. Sans ce recul, on empile et empoisonne chaque nouvelle livraison.',
                 ]"
                 :keywords="[
                   'Hallucinations',
                   'Manque de contexte',
                   'Dérive silencieuse',
                   'Sur-confiance',
+                  'Garbage in, garbage out',
                 ]"
                 >compréhension profonde</VbTooltip
               >
@@ -157,9 +158,9 @@ onMounted(() => {
                 align="start"
                 term="Dette technique"
                 :content="[
-                  'L\'IA amplifie le meilleur comme le pire : elle se nourrit directement de ton code existant. Sur une base saine, la dérive est limitée, lorsqu\'elle est truffée de mauvaises pratiques, elle les reproduit et les répand à pleine vitesse.',
-                  'Tout comme un dev inexpérimenté, une IA ne dit jamais non : elle exécute les bonnes idées comme les mauvaises. Dire non au bon moment, ça s\'apprend avec l\'expérience.',
-                  'Sans le contexte ni le recul nécessaire pour trancher, la dette technique s\'accumule désormais aussi vite que le code est généré.',
+                  'Tout comme un dev inexpérimenté, une IA ne dit jamais non. Elle exécute les bonnes idées comme les mauvaises.',
+                  'Elle se nourrit du code existant, sur une base saine, la dérive est contenue, sur une base truffée de raccourcis, elle les reproduit et les répand partout.',
+                  'Dire non au bon moment, arbitrer entre livrer et refactorer, ça ne se génère pas, ça s\'apprend. Sans ce recul, la dette s\'accumule désormais aussi vite que le code.',
                 ]"
                 :keywords="[
                   'God object',
@@ -177,8 +178,9 @@ onMounted(() => {
                 align="start"
                 term="Refonte"
                 :content="[
-                  'Un code mal conçu finit toujours par coûter plus cher qu\'il ne rapporte. Alors que l\'IA permet de générer du code en masse, la maintenabilité doit plus que jamais rester une priorité.',
-                  'Mon objectif : Encadrer l\'équipe pour livrer un code structuré et explicite que le prochain développeur (ou LLM) pourra faire évoluer sans mon aide.',
+                  'Une refonte est le prix d\'une décision prise 6 mois plus tôt. Plus le code se génère vite, plus cette décision arrive tôt.',
+                  'Mon objectif est l\'inverse : encadrer l\'équipe pour livrer un code structuré et explicite, que le prochain développeur (ou le prochain LLM) fera évoluer sans moi.',
+                  'Une mission réussie, c\'est une équipe qui n\'a plus besoin de m\'appeler.',
                 ]"
                 :keywords="[
                   'Aucune dépendance humaine',
