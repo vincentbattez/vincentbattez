@@ -124,8 +124,8 @@ onMounted(() => {
                 align="start"
                 term="Architecture"
                 :content="[
-                  'À l\'ère de la génération de code, la vraie valeur réside dans la conception. Si l\'implémentation est devenue fluide et rapide, le découpage d\'un système demeure critique, une erreur à ce niveau se paie en mois, voire en années.',
-                  'À   cette vitesse, les principes d\'architecture établis il y a plus de 40 ans n\'ont jamais été aussi essentiels.',
+                  'À l\'ère de la génération de code, la vraie valeur réside dans la conception. Si l\'implémentation est devenue fluide et rapide, le découpage d\'un système demeure critique. À cette vitesse, une erreur à ce niveau se paie en mois, voire en années.',
+                  'C\'est pourquoi les principes d\'architecture établis il y a plus de 40 ans n\'ont jamais été aussi essentiels.',
                   'Déterminer une bonne frontière qui ne casse pas le reste lorsqu\'on la déplace. Ça, ça ne s\'improvise pas.',
                 ]"
                 :keywords="[
@@ -142,7 +142,7 @@ onMounted(() => {
                 term="Compréhension profonde"
                 :content="[
                   'L\'IA ne produit de façon fiable que si on connaît ses angles morts. Et cela ne concerne pas que le dev :',
-                  'Du besoin à la rédaction du ticket, jusqu\'à la mise en prod et à la documentation, toute la chaîne est en jeu. Sans ce recul, on empile ce qu\'on ne maîtrise plus.',
+                  'Du besoin à la rédaction du ticket, jusqu\'à la mise en prod et à la documentation, toute la chaîne est en jeu. Sans ce recul, on empile et empoissonne chaque nouvelle livraison',
                 ]"
                 :keywords="[
                   'Hallucinations',
@@ -172,7 +172,7 @@ onMounted(() => {
                 >la dette</VbTooltip
               >. <br />
               C'est précisément là que j'interviens&nbsp;: profiter de la
-              vitesse sans la coût de la
+              vitesse sans le coût de la
               <VbTooltip
                 align="start"
                 term="Refonte"

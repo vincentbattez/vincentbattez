@@ -49,6 +49,9 @@
   --vb-at-underline: calc(var(--vb-at-word-3) + var(--vb-dur-word) - 0.2s);
   // Le sceau d'ancienneté se pose après le médaillon, une fois le texte lancé.
   --vb-at-xp: calc(var(--vb-at-actions) + var(--vb-stagger) * 2);
+  // Le prochain créneau se pose sous les CTA, entre le sceau et le marquee.
+  // Relatif à son *insertion* (arrivée async après fetch), pas au chargement.
+  --vb-at-next-slot: calc(var(--vb-at-actions) + var(--vb-stagger) * 3);
   // La liste des skills ferme la séquence, bien après les CTA.
   --vb-at-marquee: calc(var(--vb-at-actions) + var(--vb-stagger) * 4);
   // Le flottement du portrait démarre APRÈS le marquee, puis boucle.
