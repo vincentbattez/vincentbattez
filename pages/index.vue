@@ -13,9 +13,9 @@ import { seo } from "~/config/seo";
 
 const { outboundHref, trackOutbound } = useOutbound();
 
-// Hero dérivé du positionnement (SSOT config/seo). Le <h1> anime chaque mot du
-// rôle (dernier accentué) ; voir index-motion.scss (stagger calibré sur 3 mots).
-const heroWords = seo.role.split(" ");
+// Le <h1> (kicker) reste dérivé du positionnement SSOT. Le <h2> visuel, lui,
+// est codé en dur dans le template : son libellé ne suit plus `seo.role`.
+// Le stagger de index-motion.scss reste calibré sur 3 mots (.vb-word).
 const kicker = `${seo.role} ${seo.employment.label} à ${seo.location.city}`;
 
 useSeoMeta({
@@ -98,14 +98,7 @@ onMounted(() => {
       <div class="vb-hero">
         <div class="vb-hero--text">
           <h1 class="vb-hero--kicker">{{ kicker }}</h1>
-          <p class="vb-hero--title">
-            <!--            <span v-for="(word, i) in heroWords" :key="i" class="vb-word">-->
-            <!--              <span-->
-            <!--                class="vb-word--i"-->
-            <!--                :class="{ 'vb-hero--accent': i === heroWords.length - 1 }"-->
-            <!--                >{{ word }}</span-->
-            <!--              >-->
-            <!--            </span>-->
+          <h2 class="vb-hero--title">
             <span class="vb-word">
               <span class="vb-word--i">Développeur </span>
             </span>
@@ -115,7 +108,7 @@ onMounted(() => {
             <span class="vb-word">
               <span class="vb-word--i vb-hero--accent">Architecture & IA</span>
             </span>
-          </p>
+          </h2>
           <div class="vb-hero--lead">
             <p class="vb-hero--tension">
               J'intègre l'IA au cœur de mon workflow quotidien. Elle démultiplie

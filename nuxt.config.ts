@@ -111,7 +111,7 @@ export default defineNuxtConfig({
     pageTransition: { name: "page", mode: "out-in" },
     head: {
       htmlAttrs: {
-        lang: seo.htmlLang,
+        lang: seo.defaultLocale,
       },
       titleTemplate: seo.titleTemplate,
       link: [

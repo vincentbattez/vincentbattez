@@ -71,6 +71,10 @@ export const seo = {
 
   name,
   // Titre complet (avec localisation) — page, og:title, twitter:title.
+  // 64 caractères : au-delà du repère des ~60, donc potentiellement tronqué en
+  // SERP. Assumé — la séniorité est un pilier du positionnement, et le seuil
+  // réel est en pixels (~580px), pas en caractères. Ne pas raccourcir en
+  // sacrifiant `seniority` ni `employment.label` (mot-clé de recherche).
   title: `${name} à ${location.city}`,
   // Template appliqué aux titres de sous-pages.
   titleTemplate: `%s | ${name}`,
@@ -80,7 +84,7 @@ export const seo = {
   // Description courte : cartes sociales (og/twitter/PWA) + page index.
   descriptionCard: `${tagline}. Je crée et j'architecture vos applications web robustes : Node.js, React, Vue.js, TypeScript.`,
 
-  keywords: `${roleShort}, Développeur ${seniority}, ${employment.label} ${location.city}, Node.js, React, Vue.js, TypeScript, Architecture logicielle, Développeur web ${employment.adjective}`,
+  keywords: `${roleShort}, Développeur ${seniority}, ${employment.label} ${location.city}, Node.js, React, Vue.js, TypeScript, Architecture logicielle, Développement assisté par IA, Développeur web ${employment.adjective}`,
 
   jobTitle: role,
 
@@ -94,11 +98,12 @@ export const seo = {
   // Langues maîtrisées (schema.org Person.knowsLanguage).
   knowsLanguage: ["fr", "en"],
 
-  // Locales / langue.
+  // Locales / langue. `defaultLocale` est la seule source du `<html lang>` :
+  // @nuxtjs/seo l'impose et écrasait l'ancien `htmlLang: "fr-FR"` (supprimé,
+  // il servait le contraire de ce que le HTML annonçait).
   language: "fr-FR",
   locale: "fr_FR",
   defaultLocale: "fr",
-  htmlLang: "fr-FR",
 
   // Couleurs de marque (theme-color meta + manifest PWA). Valeurs de marque
   // intentionnelles : centralisées, pas à retoucher.
@@ -139,35 +144,43 @@ export const seo = {
   // Descriptions spécifiques aux entités JSON-LD (app.vue) — libellés distincts
   // des descriptions meta, conservés tels quels.
   schema: {
-    personDescription: `${tagline}. Je crée et j'architecture vos applications web robustes (Node.js, React, Vue.js, TypeScript).`,
-    serviceDescription: `${role} ${employment.adjective} : création et architecture d'applications web robustes (Node.js, React, Vue.js, TypeScript).`,
+    personDescription: `${tagline}. Je code avec l'IA au quotidien et j'architecture les systèmes pour qu'ils tiennent à cette vitesse (Node.js, React, Vue.js, TypeScript).`,
+    serviceDescription: `${role} ${employment.adjective} : architecture et développement d'applications web à l'ère du code généré par IA (Node.js, React, Vue.js, TypeScript).`,
     // "Développement Full-Stack" (nom de service) volontairement littéral : le
     // statut suit `employment.label`, l'intitulé de service reste stable.
     serviceName: `${author.name} - Développement Full-Stack ${employment.label}`,
+    // Ordre significatif : les moteurs pondèrent les premières entrées. Le
+    // métier (architecture, full-stack) passe donc AVANT l'IA, qui est la
+    // manière de travailler et non le service vendu (cf. docs/product.md).
+    // RAG retiré : capacité produit non commercialisée.
     personKnowsAbout: [
-      "Artificial Intelligence",
-      "RAG (Retrieval-Augmented Generation)",
-      "Large Language Models",
+      "Software Architecture",
+      "Full Stack Development",
+      "AI-Assisted Development",
+      "Technical Debt",
       "Context Engineering",
       "Prompt Engineering",
-      "Full Stack Development",
+      "Large Language Models",
       "Node.js",
       "React",
       "Vue.js",
       "TypeScript",
     ],
     occupationSkills: [
-      "Full Stack Development",
       "Software Architecture",
+      "Full Stack Development",
+      "AI-Assisted Development",
       "Node.js",
       "React",
       "Vue.js",
       "TypeScript",
     ],
     serviceKnowsAbout: [
-      "Développement Full Stack",
-      "Développement Web",
       "Architecture Logicielle",
+      "Développement Full Stack",
+      "Développement assisté par IA",
+      "Dette technique",
+      "Développement Web",
       "Développement Node.js",
       "Développement Front-end",
     ],
