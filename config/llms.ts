@@ -1,15 +1,5 @@
-/**
- * Source de vérité pour `/llms.txt` et `/llms-full.txt` (module nuxt-llms).
- *
- * - `llmsOptions` : consommé par `nuxt.config.ts` (clé `llms`). Génère le
- *   `llms.txt` concis (titre + blockquote + sections), conforme à llmstxt.org.
- * - `llmsFullContent` : markdown détaillé injecté dans `/llms-full.txt` via le
- *   hook `llms:generate:full` (server/plugins/llms.ts). La route full ne rend
- *   QUE ce que le hook pousse — d'où le document markdown complet ci-dessous.
- *
- * Contenu dérivé du CV (source unique). Coordonnées volontairement limitées à
- * l'email pro + réseaux : pas de téléphone/email perso dans un fichier public.
- */
+// Source de vérité pour `/llms.txt` et `/llms-full.txt`. La route full ne rend
+// QUE ce que pousse le hook `llms:generate:full` (server/plugins/llms.ts).
 
 import { seo } from "./seo";
 
@@ -96,7 +86,6 @@ export const llmsOptions = {
     `Contact : ${seo.author.email}`,
   ],
 
-  // Active la route /llms-full.txt (le contenu est injecté par le hook serveur).
   full: {
     title: `${seo.author.name} — CV détaillé`,
     description:

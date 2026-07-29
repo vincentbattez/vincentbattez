@@ -18,9 +18,8 @@
       <slot />
     </button>
 
-    <!-- Bulle sortie du flux (Teleport → body) pour échapper au clipping de
-         `.vb-frame` (overflow:hidden + transform). Rendue inline tant que le
-         composant n'est pas monté → pas de mismatch d'hydratation SSR. -->
+    <!-- Téléportée pour échapper au clipping de `.vb-frame` (overflow:hidden +
+         transform). Inline avant le mount → pas de mismatch d'hydratation. -->
     <Teleport to="body" :disabled="!mounted">
       <span
         :id="id"
@@ -60,27 +59,19 @@
 <script lang="ts" setup>
 const props = withDefaults(
   defineProps<{
-    // Définition affichée dans la fiche : string, ou tableau = un paragraphe par entrée.
     content: string | string[];
-    // Terme technique mis en avant (capitales), ex. "ARCHITECTURE".
     term?: string;
-    // Preuves d'autorité en pied de fiche (chips), ex. failure-modes maîtrisés.
     keywords?: string[];
-    // Ancrage horizontal de la bulle par rapport au mot (évite le débordement viewport).
     align?: "start" | "center" | "end";
   }>(),
   { align: "center", term: undefined, keywords: undefined },
 );
 
-// Normalise en paragraphes (un <span> block par entrée).
 const paragraphs = computed(() =>
   Array.isArray(props.content) ? props.content : [props.content],
 );
 
-// Ouverture pilotée en JS : `open = survol OU focus OU épinglé`. Le clic sur le
-// mot épingle la fiche (affichage permanent) ; la croix, Échap ou la perte de
-// focus la referment. États séparés car sinon le mouseleave refermerait aussitôt
-// une fiche ouverte au clic.
+// États séparés : sinon le mouseleave refermerait une fiche ouverte au clic.
 const hovered = ref(false);
 const focused = ref(false);
 const pinned = ref(false);
@@ -92,12 +83,6 @@ const triggerEl = ref<HTMLButtonElement | null>(null);
 const mounted = ref(false);
 const isMobile = ref(false);
 
-// La bulle vit sous <body> : elle n'est plus descendante de `.vb-frame`. On
-// calcule top/left depuis le rect du mot ; la lévitation verticale (-100%) et
-// l'ancrage horizontal (translateX selon `align`) sont en CSS pour garder la
-// transition d'entrée.
-// - Desktop : `fixed` (la page ne scrolle pas), coords viewport directes.
-// - Mobile : `absolute` (suit le scroll, jamais `fixed`), coords + scroll.
 const bubbleStyle = ref<Record<string, string>>({});
 function reposition() {
   const t = triggerEl.value;
@@ -111,8 +96,7 @@ function reposition() {
     top: `${r.top + sy - 12}px`,
   };
   if (mobile) {
-    // Ancrée au-dessus du mot (top) mais centrée dans le viewport → jamais de
-    // débordement horizontal. Le caret est masqué en CSS.
+    // Centrée dans le viewport : jamais de débordement horizontal.
     style.left = `${sx + window.innerWidth / 2}px`;
   } else if (props.align === "start") style.left = `${r.left}px`;
   else if (props.align === "end") style.left = `${r.right}px`;
@@ -120,14 +104,12 @@ function reposition() {
   bubbleStyle.value = style;
 }
 
-// `flush: 'pre'` (défaut) → recalcul avant l'application de la classe `--open`,
-// donc pas de flash à l'ancienne position.
+// `flush: 'pre'` : recalcul avant la classe `--open`, pas de flash de position.
 watch(open, (v) => {
   if (v) reposition();
 });
 
-// Clic (ou tap) hors du mot ET de la bulle → fermeture. Sur `pointerdown` pour
-// réagir avant tout changement de focus.
+// Sur `pointerdown` pour réagir avant tout changement de focus.
 function onDocPointerDown(e: PointerEvent) {
   if (!open.value) return;
   const target = e.target as Node | null;
@@ -159,8 +141,8 @@ onMounted(() => {
   });
 });
 
-// Le refocus de `dismiss` redéclenche un focusin : ce drapeau l'ignore une fois
-// pour ne pas rouvrir la fiche qu'on vient de fermer.
+// Le refocus de `dismiss` redéclenche un focusin : ignoré une fois pour ne pas
+// rouvrir la fiche qu'on vient de fermer.
 let suppressFocusin = false;
 function onFocusin() {
   if (suppressFocusin) {
@@ -170,8 +152,7 @@ function onFocusin() {
   focused.value = true;
 }
 
-// Le mot (`rootEl`) et la bulle (`bubbleEl`) sont désormais séparés dans le DOM :
-// on garde la fiche ouverte tant que le focus reste dans l'un OU l'autre.
+// Mot et bulle sont séparés dans le DOM : ouverte tant que le focus est dans l'un.
 function onFocusout(e: FocusEvent) {
   const to = e.relatedTarget as Node | null;
   if (rootEl.value?.contains(to) || bubbleEl.value?.contains(to)) return;
@@ -187,7 +168,6 @@ function dismiss() {
   triggerEl.value?.focus();
 }
 
-// Lie le déclencheur à la fiche pour les lecteurs d'écran (aria-describedby).
 const id = useId();
 </script>
 
@@ -197,7 +177,6 @@ const id = useId();
   display: inline-block;
 
   &--trigger {
-    // Mot annoté : souligné pointillé orange + marqueur exposant.
     font: inherit;
     font-weight: 800;
     color: inherit;
@@ -232,9 +211,8 @@ const id = useId();
     }
   }
 
-  // Fiche de définition, téléportée sous <body> → `position: fixed`, top/left
-  // calculés en JS. Masquée en opacity/visibility (jamais display:none) →
-  // aria-describedby reste fiable pour les lecteurs d'écran.
+  // Masquée en opacity/visibility (jamais display:none) : aria-describedby
+  // reste fiable pour les lecteurs d'écran.
   &--bubble {
     position: fixed;
     z-index: 1000;
@@ -242,8 +220,6 @@ const id = useId();
     max-width: min(22rem, 78vw);
     padding: 0.75rem 0.9rem;
     border-radius: 14px;
-    // Bloom orange centré en haut, posé en couche de fond (toujours derrière le
-    // texte) + liseré lumineux sur l'arête haute via box-shadow inset.
     background:
       radial-gradient(
         72% 34px at 50% 0%,
@@ -265,8 +241,6 @@ const id = useId();
       transform 190ms cubic-bezier(0.22, 1, 0.36, 1),
       visibility 190ms;
 
-    // Glow externe : source lumineuse orange qui déborde au-dessus du bord haut
-    // centré. Léger pulse (respiration) désactivé en reduced-motion plus bas.
     &::before {
       content: "";
       position: absolute;
@@ -285,7 +259,6 @@ const id = useId();
       animation: vb-tt-glow 3.6s ease-in-out infinite;
     }
 
-    // Caret : petit losange qui prolonge la fiche vers le mot.
     &::after {
       content: "";
       position: absolute;
@@ -297,9 +270,6 @@ const id = useId();
       transform: rotate(45deg);
     }
 
-    // --- Ancrage horizontal + lévitation au-dessus du mot ---
-    // La bulle est ancrée par son bord bas 12px au-dessus du mot (top JS) puis
-    // remontée de -100%. L'entrée part 6px plus bas et glisse vers 0.
     &--center {
       transform: translate(-50%, calc(-100% + 6px));
       &::after {
@@ -320,7 +290,6 @@ const id = useId();
       }
     }
 
-    // Révélation (hover/focus/épinglage l'activent en JS).
     &--open {
       opacity: 1;
       visibility: visible;
@@ -337,7 +306,6 @@ const id = useId();
     }
   }
 
-  // Croix de fermeture (coin haut-droit). Surtout utile au tap mobile.
   &--close {
     position: absolute;
     top: 6px;
@@ -372,13 +340,12 @@ const id = useId();
     margin-bottom: 0.15rem;
     padding-right: 1.25rem;
     font-family: theme("fontFamily.heading");
-    font-size: theme("fontSize.body-sm");
+    font-size: theme("fontSize.body-md");
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: theme("colors.orange.400");
 
-    // Petit losange orange en tête de titre (accent « spec technique »).
     &::before {
       content: "";
       display: inline-block;
@@ -394,7 +361,7 @@ const id = useId();
   &--def {
     display: block;
     font-family: theme("fontFamily.body");
-    font-size: theme("fontSize.body-sm");
+    font-size: theme("fontSize.body-md");
     line-height: 150%;
     color: theme("colors.page");
 
@@ -403,7 +370,6 @@ const id = useId();
     }
   }
 
-  // Footer « preuves d'autorité » : failure-modes maîtrisés en pastilles.
   &--tags {
     display: flex;
     flex-wrap: wrap;
@@ -456,10 +422,8 @@ const id = useId();
   }
 }
 
-// Mobile : bulle ancrée juste au-dessus du mot (top `absolute` posé en JS,
-// jamais `fixed`) pour laisser voir la phrase, mais centrée dans le viewport
-// (left JS = centre écran + translateX -50%) → aucun débordement horizontal.
-// Le caret ne pointe plus le mot → masqué.
+// Mobile : bulle centrée dans le viewport (aucun débordement horizontal), donc
+// le caret ne pointe plus le mot → masqué.
 @media (max-width: 820px) {
   .vb-tt--bubble {
     max-width: calc(100vw - 1.5rem);

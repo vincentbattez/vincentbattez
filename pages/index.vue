@@ -13,9 +13,8 @@ import { seo } from "~/config/seo";
 
 const { outboundHref, trackOutbound } = useOutbound();
 
-// Le <h1> (kicker) reste dérivé du positionnement SSOT. Le <h2> visuel, lui,
-// est codé en dur dans le template : son libellé ne suit plus `seo.role`.
-// Le stagger de index-motion.scss reste calibré sur 3 mots (.vb-word).
+// Le <h2> est codé en dur dans le template (indépendant de `seo.role`) ;
+// le stagger de index-motion.scss reste calibré sur 3 mots (.vb-word).
 const kicker = `${seo.role} ${seo.employment.label} à ${seo.location.city}`;
 
 useSeoMeta({
@@ -30,7 +29,7 @@ useSeoMeta({
 useHead({
   titleTemplate: null,
   link: [
-    // Portrait = élément LCP : préchargé pour un rendu plus rapide.
+    // Portrait = élément LCP.
     {
       rel: "preload",
       as: "image",
@@ -40,10 +39,8 @@ useHead({
   ],
 });
 
-// Parallaxe 3D du pointeur (très subtil). Piloté par la propriété `transform`
-// (l'entrée utilise le longhand `translate` → aucun conflit). Compositor-only,
-// throttlé en rAF, suivi instantané. Ignoré si reduced-motion ou pointeur
-// grossier (tactile).
+// Parallaxe pointeur pilotée par `transform` : l'entrée utilise le longhand
+// `translate`, donc aucun conflit entre les deux.
 const frameEl = ref<HTMLElement | null>(null);
 
 onMounted(() => {
@@ -51,8 +48,8 @@ onMounted(() => {
   const reduce = matchMedia("(prefers-reduced-motion: reduce)");
   if (!fine.matches || reduce.matches) return;
 
-  const MAX_SHIFT = 1; // translation max en px
-  const MAX_TILT = 1; // inclinaison max en deg
+  const MAX_SHIFT = 1;
+  const MAX_TILT = 1;
   let tx = 0;
   let ty = 0;
   let rx = 0;
@@ -69,12 +66,12 @@ onMounted(() => {
   };
 
   const onMove = (e: MouseEvent) => {
-    const nx = (e.clientX / window.innerWidth - 0.5) * 2; // -1..1
-    const ny = (e.clientY / window.innerHeight - 0.5) * 2; // -1..1
+    const nx = (e.clientX / window.innerWidth - 0.5) * 2;
+    const ny = (e.clientY / window.innerHeight - 0.5) * 2;
     tx = nx * MAX_SHIFT;
     ty = ny * MAX_SHIFT;
-    ry = nx * MAX_TILT; // souris à droite → bord droit s'éloigne
-    rx = -ny * MAX_TILT; // souris en bas → bord bas se rapproche
+    ry = nx * MAX_TILT;
+    rx = -ny * MAX_TILT;
     if (!raf) raf = requestAnimationFrame(apply);
   };
 
@@ -239,9 +236,6 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .vb-frame {
-  // Gouttière garantie autour de la carte : le fond de page reste visible sur
-  // tous les côtés, même quand le viewport est plus petit que la frame — la
-  // carte flotte toujours (coins arrondis + ombre jamais collés au bord).
   --vb-gap: clamp(1rem, 2.5vw, 2rem);
   position: relative;
   margin: auto;
@@ -250,13 +244,10 @@ onMounted(() => {
   overflow: hidden;
   border-radius: 28px;
   box-shadow: 0 40px 80px -30px rgb(225 159 80 / 55%);
-  // Dégradé lissé (2 stops) : évite le palier plat #fff→#fff qui créait une
-  // bande verticale perçue (Mach band) au milieu de la carte.
+  // 2 stops : le palier plat #fff→#fff créait une bande verticale (Mach band).
   background: linear-gradient(115deg, #ffffff 0%, #fffaf1 100%);
   display: flex;
   flex-direction: column;
-  // Parallaxe 3D du pointeur piloté par `transform` en JS (suivi instantané).
-  // L'entrée utilise le longhand `translate` → aucun conflit.
   transform-style: preserve-3d;
   will-change: transform;
 
@@ -266,7 +257,6 @@ onMounted(() => {
     pointer-events: none;
     z-index: 0;
 
-    // Chute d'opacité progressive : pas de bord/anneau visible en atteignant transparent.
     &::before {
       content: "";
       position: absolute;
@@ -282,9 +272,6 @@ onMounted(() => {
       );
     }
 
-    // Matrice de points : le dégradé blanc→orange n'est révélé qu'à travers la
-    // trame de points, puis estompé en diagonale (composite intersect) pour se
-    // fondre progressivement vers l'intérieur de la carte.
     &::after {
       content: "";
       position: absolute;
@@ -312,8 +299,6 @@ onMounted(() => {
     }
   }
 
-  // Matrice de points blancs en haut à droite, estompée en diagonale vers
-  // l'intérieur de la carte (même trame que la décoration bas-gauche).
   &--dots {
     position: absolute;
     top: 0;
@@ -381,15 +366,14 @@ onMounted(() => {
     position: relative;
   }
 
-  // Typo cinétique : chaque mot glisse depuis un masque (overflow caché).
-  // padding/margin compensés pour ne pas rogner les jambages (« pp »).
+  // padding/margin compensés : sans ça le masque rogne les jambages (« pp »).
   .vb-word {
     display: block;
     overflow: hidden;
     vertical-align: top;
     padding-bottom: 0.14em;
     margin-bottom: -0.14em;
-    // Vue condense le whitespace entre les masques : espacement porté en CSS.
+    // Vue condense le whitespace entre les masques.
     margin-right: 0.22em;
 
     @media (max-width: 820px) {
@@ -405,8 +389,6 @@ onMounted(() => {
     }
   }
 
-  // Direction B — raffinement typographique pur (même Nunito, même gris).
-  // Taille fluide, interligne aéré, rythme entre les deux phrases.
   &--lead {
     @apply font-body text-grey-700;
     font-size: clamp(17px, 0.6vw + 15px, 19px);
@@ -418,7 +400,6 @@ onMounted(() => {
       margin-top: 1rem;
     }
 
-    // Antithèse dramatisée : « vitesse » ↔ « prix » en accent orange.
     em {
       @apply text-primary;
       font-style: normal;
@@ -435,7 +416,6 @@ onMounted(() => {
     justify-content: center;
   }
 
-  // Socials sous la photo : uniquement en mobile (voir media query).
   &--socials {
     display: none;
   }
@@ -463,8 +443,6 @@ onMounted(() => {
   }
 }
 
-// Sceau « ancienneté » qui chevauche le bas du médaillon (overlap = repère
-// visuel fort). Carte blanche + ombre ambrée pour rester dans la charte.
 .vb-xp {
   position: absolute;
   left: 50%;
@@ -509,16 +487,9 @@ onMounted(() => {
   }
 }
 
-// La timeline d'entrée (orchestration CSS) vit dans ./index-motion.scss,
-// chargée via le second bloc `<style scoped src>` ci-dessous.
-
-// Responsive : un seul breakpoint à 820px (aligné sur le prototype).
 @media (max-width: 820px) {
   .vb-frame {
-    // La carte reste flottante (coins arrondis + ombre conservés) avec sa
-    // gouttière tout autour. height:auto laisse le cadre grandir selon le
-    // contenu (aucun rognage vertical, CTA toujours atteignables, la page
-    // défile si besoin) ; margin fixe = gouttière constante en haut/bas.
+    // height:auto : le cadre grandit avec le contenu, aucun rognage vertical.
     height: auto;
     min-height: calc(100vh - var(--vb-gap) * 2);
     margin: var(--vb-gap) auto;
@@ -527,8 +498,6 @@ onMounted(() => {
       @apply px-md;
     }
 
-    // En mobile, on masque le décor (glow + trame bas-gauche) et on recolore
-    // la trame haut-droite en orange, comme celle en bas à gauche.
     &--decor {
       display: none;
     }
@@ -542,9 +511,8 @@ onMounted(() => {
 
   .vb-hero {
     @apply px-md py-xl;
-    // Colonne unique : les items s'étirent à la largeur de la colonne (pas de
-    // justify-items:center qui les dimensionnerait à leur max-content et ferait
-    // déborder le lead max-width:29rem). Le centrage se fait via text-align.
+    // Pas de justify-items:center : dimensionnerait les items à max-content
+    // et ferait déborder le lead.
     grid-template-columns: minmax(0, 1fr);
     text-align: center;
     gap: var(--vb-hero-gap, 2rem);
@@ -569,5 +537,4 @@ onMounted(() => {
 }
 </style>
 
-<!-- Logique d'animation isolée (même scope-id que ce composant). -->
 <style scoped lang="scss" src="./index-motion.scss"></style>

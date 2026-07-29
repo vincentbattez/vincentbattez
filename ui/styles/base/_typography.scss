@@ -1,9 +1,5 @@
-// Polices auto-hébergées par @nuxt/fonts : plus de @import distant vers Google
-// Fonts (fini la cascade HTML→CSS→feuille distante→fichiers de police) et
-// métriques de secours générées automatiquement (size-adjust) → plus de FOUT
-// ni de saut de mise en page au chargement. Nunito est détecté via la config
-// Tailwind (font-body/font-heading). Inter n'était plus utilisé nulle part.
-// Les icônes sont des SVG inline (VbIcon.vue) : plus de police d'icônes.
+// Polices auto-hébergées par @nuxt/fonts (aucun @import distant) : métriques de
+// secours auto-générées, donc ni FOUT ni saut de mise en page.
 
 body {
   @apply font-body text-black;

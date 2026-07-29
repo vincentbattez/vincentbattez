@@ -19,9 +19,8 @@ const props = defineProps<{
   size: vbButtonSizeEnum;
 }>();
 
-// SVG inline plutôt que police d'icônes : supprime le @font-face base64
-// (ttf+woff+woff2) du CSS et le flash d'icônes invisibles au chargement.
-// Chemins extraits de assets/icons/*.svg (grille 24×24).
+// SVG inline plutôt que police d'icônes : pas de @font-face base64 ni de flash
+// d'icônes invisibles. Chemins extraits de assets/icons/*.svg (grille 24×24).
 const iconPaths: Record<VbIconEnum, string> = {
   [VbIconEnum.VbCalendar]:
     "M22.5 6a3 3 0 0 0-3-3h-.75v-.729c0-.404-.31-.75-.714-.77a.75.75 0 0 0-.786.749V3H6.75v-.729c0-.404-.31-.75-.714-.77a.75.75 0 0 0-.786.749V3H4.5a3 3 0 0 0-3 3v.563a.187.187 0 0 0 .188.187h20.625a.188.188 0 0 0 .187-.188V6Zm-21 13.5a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.39a.14.14 0 0 0-.14-.14H1.64a.14.14 0 0 0-.14.14V19.5Zm16.125-9.75a1.125 1.125 0 1 1 0 2.25 1.125 1.125 0 0 1 0-2.25Zm0 3.75a1.125 1.125 0 1 1 0 2.25 1.125 1.125 0 0 1 0-2.25Zm-3.75-3.75a1.125 1.125 0 1 1 0 2.25 1.125 1.125 0 0 1 0-2.25Zm0 3.75a1.125 1.125 0 1 1 0 2.25 1.125 1.125 0 0 1 0-2.25Zm0 3.75a1.125 1.125 0 1 1 0 2.25 1.125 1.125 0 0 1 0-2.25Zm-3.75-3.75a1.125 1.125 0 1 1 0 2.25 1.125 1.125 0 0 1 0-2.25Zm0 3.75a1.125 1.125 0 1 1 0 2.25 1.125 1.125 0 0 1 0-2.25Zm-3.75-3.75a1.125 1.125 0 1 1 0 2.25 1.125 1.125 0 0 1 0-2.25Zm0 3.75a1.125 1.125 0 1 1 0 2.25 1.125 1.125 0 0 1 0-2.25Z",

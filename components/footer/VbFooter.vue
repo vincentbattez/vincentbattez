@@ -19,7 +19,6 @@ import type { IVbSkill } from "~/components/footer/vbSkill.type";
 import VbSkillList from "~/components/footer/VbSkillList.vue";
 const route = useRoute();
 
-// Reflet du profil (cf. CV). Cœurs sur les compétences signature (colorées).
 const skillList: IVbSkill[] = [
   // Tests & Observabilité
   { name: "Vitest", love: false },
@@ -70,8 +69,7 @@ const skillList: IVbSkill[] = [
   background: white;
 }
 
-// Lien discret /llms.txt : centré sous la carte. Faible contraste volontaire
-// (décoratif/technique), renforcé au survol/focus.
+// Faible contraste volontaire (lien technique), renforcé au survol/focus.
 .page-llms {
   @apply mb-sm block w-fit mx-auto font-heading font-semibold text-orange-700/35 no-underline text-body-sm;
   letter-spacing: 0.12em;

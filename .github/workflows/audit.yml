@@ -29,7 +29,6 @@ jobs:
       - name: Build (SSG)
         run: pnpm generate
 
-      # Lighthouse : perf / a11y / SEO / best-practices contre le dist statique.
-      # Ne valide PAS HSTS/CSP (localhost HTTP) — c'est le rôle du plugin Netlify.
+      # Ne valide pas HSTS/CSP (localhost HTTP) : rôle du plugin Netlify.
       - name: Lighthouse
         run: pnpm audit:lighthouse

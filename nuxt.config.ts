@@ -2,7 +2,12 @@ import { lookupTable } from "./utils/redirect";
 import { seo } from "./config/seo";
 import { llmsOptions } from "./config/llms";
 
-// https://nuxt.com/docs/api/configuration/nuxt-config
+// PostHog uniquement en prod : le dev polluait le projet analytics de prod.
+// Fail-closed (défaut = désactivé) ; forçable via NUXT_PUBLIC_POSTHOG_ENABLED=true.
+const posthogEnabled =
+  process.env.NUXT_PUBLIC_POSTHOG_ENABLED === "true" ||
+  process.env.NODE_ENV === "production";
+
 export default defineNuxtConfig({
   compatibilityDate: "2026-07-19",
 
@@ -25,9 +30,8 @@ export default defineNuxtConfig({
 
   llms: llmsOptions,
 
-  // PWA : service worker + manifest gérés par le plugin (Workbox).
-  // registerType "autoUpdate" : le nouveau SW prend le contrôle à la visite
-  // suivante, évite de servir un HTML précaché périmé après un déploiement.
+  // "autoUpdate" : le nouveau SW prend le contrôle à la visite suivante, évite
+  // de servir un HTML précaché périmé après un déploiement.
   pwa: {
     registerType: "autoUpdate",
     manifest: {
@@ -53,7 +57,6 @@ export default defineNuxtConfig({
     workbox: {
       globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff2}"],
     },
-    // Pas de bouton d'installation custom : le site n'est pas une app installable.
     client: {
       installPrompt: false,
     },
@@ -64,8 +67,7 @@ export default defineNuxtConfig({
       { name: "Nunito", weights: [400, 600, 700, 800] },
       { name: "Zilla Slab", weights: [600, 700] },
     ],
-    // Site 100% français, aucun italique utilisé : évite de générer les
-    // subsets cyrillique/grec/vietnamien et les variantes italic (~15 fichiers).
+    // Site 100% français, aucun italique : évite ~15 fichiers de police inutiles.
     defaults: {
       styles: ["normal"],
       subsets: ["latin", "latin-ext"],
@@ -73,7 +75,7 @@ export default defineNuxtConfig({
   },
 
   features: {
-    // Sans ça, tout entry.css est inliné dans le HTML EN PLUS du <link> : payé 2×.
+    // Sinon entry.css est inliné dans le HTML EN PLUS du <link> : payé 2×.
     inlineStyles: false,
   },
 
@@ -84,8 +86,8 @@ export default defineNuxtConfig({
 
   nitro: {
     prerender: {
-      // Le crawler ignore les liens avec query (?s=pf) : sans cette liste, les
-      // pages /go n'ont pas de HTML statique et l'accès direct renvoie 404.
+      // Le crawler ignore les liens avec query (?s=pf) : sans cette liste, /go
+      // n'a pas de HTML statique et l'accès direct renvoie 404.
       routes: Object.keys(lookupTable.redirectId).map((id) => `/go/${id}`),
     },
   },
@@ -183,20 +185,25 @@ export default defineNuxtConfig({
     exclude: ["/go/**"],
   },
 
-  // Schema.org désactivé (nuxt-schema-org 6 incompatible unhead 3) : JSON-LD injecté à la main dans app.vue.
+  // nuxt-schema-org 6 incompatible unhead 3 : JSON-LD écrit à la main (app.vue).
   schemaOrg: false,
 
   posthogConfig: {
     publicKey: process.env.NUXT_PUBLIC_POSTHOG_PROJECT_TOKEN,
     host: process.env.NUXT_PUBLIC_POSTHOG_HOST,
     clientConfig: {
-      capture_exceptions: true,
+      capture_exceptions: posthogEnabled,
+      autocapture: posthogEnabled,
+      capture_pageview: posthogEnabled,
+      // Coupe tout envoi (capture manuelle incluse) hors prod.
+      opt_out_capturing_by_default: !posthogEnabled,
       __add_tracing_headers: ["localhost", "vincentbattez.dev"],
-      // Pas de session replay : évite le chargement du recorder (~30-50 KB) au runtime.
+      // Évite le chargement du recorder (~30-50 KB) au runtime.
       disable_session_recording: true,
     },
     serverConfig: {
-      enableExceptionAutocapture: true,
+      enableExceptionAutocapture: posthogEnabled,
+      disabled: !posthogEnabled,
     },
   },
 

@@ -24,7 +24,6 @@ const props = defineProps<{
   shape?: vbButtonShapeEnum;
 }>();
 
-// Liens internes (/) → NuxtLink (navigation SPA) ; externes → <a> ; sinon <button>.
 const NuxtLink = resolveComponent("NuxtLink");
 const isInternal = computed(() => props.href?.startsWith("/") ?? false);
 
@@ -92,7 +91,6 @@ const linkAttrs = computed(() => {
     }
   }
 
-  // Boutons sociaux : carré blanc, fine bordure grise.
   &--soft {
     @apply bg-white text-grey-600 border border-grey-200;
 

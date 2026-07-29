@@ -1,18 +1,5 @@
-// Timeline d'entrée de la landing — logique d'animation isolée du markup
-// (séparation des préoccupations). Chargée via un second bloc `<style scoped
-// src>` d'index.vue : même scope-id que le composant, donc les sélecteurs
-// `.vb-*` restent encapsulés (aucune fuite globale).
-//
-// Vocabulaire (keyframes + tokens de rythme `--vb-*`) : ui/styles/base/_motion.scss.
-// Les réfs `animation: vb-*` ne sont PAS réécrites par Vue ici (la keyframe
-// n'est pas définie dans ce bloc scoped) → elles matchent les noms globaux, que
-// la timeline soit colocée ou dans ce fichier. C'est ce qui rend l'extraction
-// sûre ; le seul enjeu était l'encapsulation, préservée par le `scoped`.
-//
-// Orchestration CSS-only (pas de flash d'hydratation, SSG-safe). Tout l'état
-// caché est gated derrière `no-preference` : la règle reduced-motion globale ne
-// neutralise PAS `animation-delay`, donc masquer par défaut laisserait le contenu
-// invisible pendant le stagger. Ici, au repos = état final visible.
+// Tout l'état caché est gated derrière `no-preference` : la règle
+// reduced-motion globale ne neutralise pas `animation-delay`.
 @media (prefers-reduced-motion: no-preference) {
   .vb-frame {
     opacity: 0;
@@ -20,10 +7,8 @@
       var(--vb-at-frame);
   }
 
-  // Sortie de page (mode out-in) : sans ça, le fill `forwards` de vb-frame-in
-  // fige opacity:1 (le fondu ne joue pas) ET Vue lit 0.7s (delay+durée) comme
-  // durée de sortie → gel de ~700 ms avant que /go monte. On remplace donc
-  // l'animation pendant `page-leave-active` : fondu de 200 ms lisible par Vue.
+  // Sans override, le fill `forwards` de vb-frame-in fige opacity:1 et Vue lit
+  // 0.7s comme durée de sortie (gel avant que /go monte).
   .vb-frame.page-leave-active {
     animation: vb-frame-out 200ms var(--vb-ease-fade) forwards;
   }
@@ -57,7 +42,6 @@
     animation-delay: var(--vb-at-word-3);
   }
 
-  // L'accent cumule la révélation ET le tracé du soulignement (2 animations).
   // Sélecteur renforcé (0,3,0) pour battre la règle générale `.vb-word--i`.
   .vb-hero .vb-word--i.vb-hero--accent {
     background-image: linear-gradient(currentColor, currentColor);
@@ -90,17 +74,15 @@
       forwards var(--vb-at-medallion);
   }
 
-  // Sceau d'ancienneté : révélation en fondu. On emploie `vb-frame-in` (qui
-  // anime le longhand `translate`, PAS `transform`) pour ne pas écraser le
-  // `transform: translate(-50%,50%)` qui centre/chevauche le badge.
+  // `vb-frame-in` anime le longhand `translate` : n'écrase pas le
+  // `transform: translate(-50%,50%)` qui centre le badge.
   .vb-xp {
     opacity: 0;
     animation: vb-frame-in var(--vb-dur-word) var(--vb-ease-reveal) forwards
       var(--vb-at-xp);
   }
 
-  // Flottement porté par le wrapper (pas le médaillon) → aucun conflit de
-  // transform avec la révélation, et aucun opacity sur un ancêtre du portrait.
+  // Flottement sur le wrapper, pas le médaillon : aucun conflit de transform.
   .vb-hero--portrait {
     animation: vb-portrait-float var(--vb-dur-float) var(--vb-ease-float)
       var(--vb-at-float) infinite;
@@ -112,8 +94,6 @@
       var(--vb-at-marquee);
   }
 
-  // Les deux trames de points respirent en opacity, désynchronisées (délais
-  // opposés) pour éviter un clignotement jumeau.
   .vb-frame--dots {
     animation: vb-soft-breathe var(--vb-dur-breathe) var(--vb-ease-float)
       infinite;

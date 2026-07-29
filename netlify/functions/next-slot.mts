@@ -1,16 +1,11 @@
-// Prochain créneau réservable, exposé sous le bouton "Consulter mes disponibilités".
-// Proxy server-to-server vers l'API privée d'Openings (Fantastical) : le fetch
-// navigateur direct est bloqué (CORS limité à fantastical.app). cf. ADR 0001.
-//
-// Best-effort et dégrade vers rien : toute erreur / absence de créneau => 204.
-// Le client n'affiche la ligne que s'il reçoit un `start`. On ne montre jamais
-// de créneau faux.
+// Proxy server-to-server vers l'API Openings : le fetch navigateur direct est
+// bloqué (CORS). Dégrade vers 204 pour ne jamais afficher un créneau faux.
 
 const API_BASE = "https://api.flexibits.com/v1";
 const SLUG = "vincentbattez/entretien";
-const DURATION = "P0DT00H30M00S"; // 30 min — durée réaliste d'un premier échange.
-const BOOKAHEAD_DAYS = 15; // Fenêtre réservable côté Openings.
-const CACHE_TTL_MS = 5 * 60 * 1000; // 5 min : protège l'amont sans afficher un créneau périmé.
+const DURATION = "P0DT00H30M00S";
+const BOOKAHEAD_DAYS = 15;
+const CACHE_TTL_MS = 5 * 60 * 1000;
 const UPSTREAM_TIMEOUT_MS = 4000;
 
 type CacheEntry = { start: string | null; expiresAt: number };
@@ -25,8 +20,7 @@ async function fetchJson(url: string): Promise<unknown> {
   return response.json();
 }
 
-// Résout l'uuid de l'engagement depuis le slug : auto-adaptatif si l'engagement
-// est recréé (l'uuid change, pas le slug).
+// Résolu depuis le slug : l'uuid change si l'engagement est recréé, pas le slug.
 async function resolveUuid(): Promise<string> {
   const data = await fetchJson(`${API_BASE}/openings/engagement/slug/${SLUG}`);
   const uuid = (data as { uuid?: unknown }).uuid;
@@ -66,7 +60,7 @@ export default async (): Promise<Response> => {
     cache = { start, expiresAt: Date.now() + CACHE_TTL_MS };
     return respond(start);
   } catch {
-    // Dégrade vers rien : on ne cache pas l'échec pour retenter au prochain hit.
+    // On ne cache pas l'échec pour retenter au prochain hit.
     return new Response(null, { status: 204 });
   }
 };

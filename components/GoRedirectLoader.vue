@@ -2,7 +2,8 @@
 defineProps<{
   label: string;
   url: string;
-  // Piloté par la page : passe à true à 1200 ms pour jouer le fade-out (300 ms) avant le replace() à 1500 ms — la redirection part juste après la sortie.
+  // Passé à true par la page à 1200 ms : le fade-out (300 ms) précède le
+  // replace() à 1500 ms.
   exiting?: boolean;
 }>();
 </script>
@@ -51,9 +52,8 @@ defineProps<{
 
   &__card {
     @apply flex flex-col items-center text-center px-md;
-    // Jamais plus large que le viewport : contenu centré, aucun débordement H.
     max-width: 100vw;
-    // 700 ms : la carte se pose bien avant le fondu de sortie, l'entrée n'est plus coupée par la redirection.
+    // 700 ms : la carte se pose avant le fondu de sortie, entrée jamais coupée.
     animation: go-loader-enter 700ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
   }
 
@@ -96,7 +96,6 @@ defineProps<{
     );
     opacity: 0;
     pointer-events: none;
-    // Se déclenche à la fin de l'arc (1200 ms).
     animation: go-loader-flash 520ms ease-out 1200ms both;
   }
 
@@ -141,7 +140,6 @@ defineProps<{
     text-decoration: none;
     letter-spacing: 0.01em;
     transition: color 160ms ease;
-    // URL longue et insécable : force la coupure pour rester dans le viewport.
     max-width: 100%;
     overflow-wrap: anywhere;
 

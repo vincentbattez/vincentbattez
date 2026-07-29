@@ -44,9 +44,6 @@ export function getRedirectLabel(redirectId: string): string {
   );
 }
 
-// Méta Open Graph par redirection : titre + description spécifiques à la
-// destination (l'image, elle, suit `go-<redirectId>.png`). Sert l'aperçu social
-// affiché quand un lien /go/<id> est partagé.
 const who = `${seo.author.name}, ${seo.jobTitle} freelance`;
 
 const redirectMeta = {
@@ -90,8 +87,7 @@ export function getRedirectMeta(redirectId: string): RedirectMeta | undefined {
   return redirectMeta[redirectId as keyof typeof redirectMeta];
 }
 
-// Déclenche la notif Pushover côté client (site statique, pas de serveur runtime).
-// keepalive : la requête survit au window.location.replace qui suit.
+// Côté client (site statique). keepalive : la requête survit au replace() suivant.
 export function notifyCall(redirectId: string): void {
   if (redirectId !== "call" || !import.meta.client) {
     return;

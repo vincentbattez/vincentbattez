@@ -1,8 +1,5 @@
-// Carrousel horizontal à défilement infini.
-// Auto-défilement + manuel (molette, glisser tactile/souris) pilotés par
-// translate3d (composité GPU) : pas de scroll natif, donc ni saccade, ni saut
-// de boucle, ni layout shift. Le contenu doit être dupliqué (>= 2 copies) pour
-// que le wrap par modulo reste invisible.
+// Défilement piloté en translate3d, pas en scroll natif (ni saccade ni saut de
+// boucle). Le contenu doit être dupliqué (>= 2 copies) pour masquer le wrap.
 
 import {
   onBeforeUnmount,
@@ -14,16 +11,13 @@ import {
 } from "vue";
 
 interface UseInfiniteMarqueeOptions {
-  // Nombre d'éléments composant une copie (la période à répéter).
   itemsPerPeriod: MaybeRefOrGetter<number>;
-  // Durée pour parcourir une copie, en secondes.
   secondsPerPeriod?: number;
 }
 
 interface UseInfiniteMarqueeReturn {
   containerRef: Ref<HTMLElement | null>;
   listRef: Ref<HTMLElement | null>;
-  // À binder sur le conteneur via `v-on`.
   events: Record<string, (e: PointerEvent & WheelEvent) => void>;
 }
 
@@ -35,16 +29,14 @@ export function useInfiniteMarquee(
   const containerRef = ref<HTMLElement | null>(null);
   const listRef = ref<HTMLElement | null>(null);
 
-  let offset = 0; // px ; le contenu est translaté de -offset
-  let period = 0; // largeur d'une copie + son gap
+  let offset = 0;
+  let period = 0;
   let rafId = 0;
   let lastTime = 0;
-  // L'auto-défilement est en pause tant que la souris survole OU qu'on glisse.
   let hovering = false;
   let dragging = false;
 
-  // Période réelle mesurée via offsetLeft (intègre largeurs ET gaps flex, à la
-  // différence de scrollWidth/n qui laisserait un micro-saut de gap au wrap).
+  // offsetLeft intègre largeurs ET gaps flex, contrairement à scrollWidth/n.
   function measurePeriod() {
     const list = listRef.value;
     if (!list) return;
@@ -63,14 +55,13 @@ export function useInfiniteMarquee(
   function tick(time: number) {
     if (!hovering && !dragging && period > 0) {
       const dt = lastTime ? (time - lastTime) / 1000 : 0;
-      offset += (period / secondsPerPeriod) * dt; // sens droite→gauche
+      offset += (period / secondsPerPeriod) * dt;
       apply();
     }
     lastTime = time;
     rafId = requestAnimationFrame(tick);
   }
 
-  // Molette verticale → défilement horizontal (boucle infinie : toujours du rab).
   function onWheel(e: WheelEvent) {
     const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
     if (delta === 0) return;
@@ -79,7 +70,6 @@ export function useInfiniteMarquee(
     apply();
   }
 
-  // Glisser (tactile / souris).
   let lastX = 0;
   function onPointerDown(e: PointerEvent) {
     dragging = true;
@@ -111,7 +101,7 @@ export function useInfiniteMarquee(
     measurePeriod();
     apply();
     rafId = requestAnimationFrame(tick);
-    // Les polices (@nuxt/fonts) chargent après le mount et changent les largeurs.
+    // Les polices chargent après le mount et changent les largeurs.
     document.fonts?.ready.then(remeasure);
     window.addEventListener("resize", remeasure);
   });

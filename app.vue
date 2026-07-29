@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { seo } from "~/config/seo";
 
-// OG image par défaut (statique) : URL absolue requise par les crawlers sociaux.
 const ogImageUrl = `${seo.siteUrl}${seo.ogImage.path}`;
 useSeoMeta({
   ogImage: ogImageUrl,
@@ -13,7 +12,7 @@ useSeoMeta({
   twitterImageAlt: seo.ogImage.alt,
 });
 
-// JSON-LD injecté à la main : sous-module schema-org désactivé (incompatible unhead 3).
+// JSON-LD à la main : sous-module schema-org désactivé (incompatible unhead 3).
 const siteUrl = seo.siteUrl;
 const personId = `${siteUrl}/#person`;
 const websiteId = `${siteUrl}/#website`;
@@ -124,9 +123,6 @@ useHead({
     <NuxtPwaManifest />
     <NuxtLoadingIndicator />
 
-    <!-- Décor de fond hors carte : motifs géométriques dans les colonnes pêche
-         (points à gauche, marque fantôme + hairlines à droite). Progressive
-         enhancement ≥1440px, purement décoratif, masqué par la carte opaque. -->
     <div class="page-decor" aria-hidden="true">
       <div class="page-decor--dots"></div>
       <div class="page-decor--lines"></div>
@@ -147,10 +143,7 @@ body {
   @apply min-h-screen;
 }
 
-// Décor de fond hors carte. Fixé au viewport, derrière la carte (ordre DOM :
-// la carte transformée peint au-dessus). Colonnes latérales exploitables
-// seulement sur grand écran → activé ≥1440px. Chaque motif s'estompe pour
-// laisser respirer les bords de la carte.
+// Colonnes latérales exploitables seulement sur grand écran.
 .page-decor {
   position: fixed;
   inset: 0;
@@ -166,8 +159,6 @@ body {
   }
 }
 
-// Trame de points (gauche) : même grille 16px que dans la carte, en orange
-// translucide sur le fond pêche. Dense près de la carte, estompée vers le bord.
 .page-decor--dots {
   position: absolute;
   inset-block: 0;
@@ -188,8 +179,6 @@ body {
   mask-composite: intersect;
 }
 
-// Hairlines diagonales « blueprint » (droite), très discrètes, plus marquées
-// vers le bord du viewport.
 .page-decor--lines {
   position: absolute;
   inset-block: 0;
@@ -204,9 +193,6 @@ body {
   mask-image: linear-gradient(to right, transparent 12%, #000 100%);
 }
 
-// Marque fantôme « Vb » (slab serif) coupée par le bord droit : signature
-// éditoriale en très bas contraste. Le centre est masqué par la carte opaque,
-// seul le fragment de la colonne pêche droite reste visible.
 .page-decor--mark {
   position: absolute;
   top: 50%;
@@ -221,7 +207,6 @@ body {
   user-select: none;
 }
 
-// Transition de page globale (fondu séquentiel out-in, ~200 ms).
 .page-enter-active,
 .page-leave-active {
   transition: opacity 200ms ease;
@@ -232,7 +217,6 @@ body {
   opacity: 0;
 }
 
-// Respecte la préférence système « réduire les animations » (WCAG 2.3.3).
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

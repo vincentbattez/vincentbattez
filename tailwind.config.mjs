@@ -5,8 +5,8 @@ export default {
   content: [],
   theme: {
     colors: {
-      primary: "#F0910F", // orange-500
-      secondary: "#23a5f7ff", // blue-500
+      primary: "#F0910F",
+      secondary: "#23a5f7ff",
       black: "#241605",
       white: "#FFFFFF",
       page: "#feecd1",

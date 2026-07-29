@@ -7,14 +7,11 @@ directory = "netlify/functions"
 
 [build.environment]
 NODE_VERSION = "22"
-# Épingle le runtime des Netlify Functions sur Node 22 (aligné sur le build).
-# Sans ça, le runtime peut rester sur nodejs16.x (déprécié).
+# Sans ça, le runtime des Functions peut rester sur nodejs16.x (déprécié).
 AWS_LAMBDA_JS_RUNTIME = "nodejs22.x"
 
-# Lighthouse à chaque déploiement, contre l'URL HTTPS réelle : seul point qui
-# valide HSTS/CSP (invisibles sur localhost). Non bloquant volontairement — les
-# échecs de contraste sur les couleurs de marque sont assumés (cf. a11y). Pour
-# rendre bloquant : décommenter [plugins.inputs.thresholds].
+# Seul point qui valide HSTS/CSP (invisibles sur localhost). Non bloquant : les
+# échecs de contraste sur les couleurs de marque sont assumés.
 [[plugins]]
 package = "@netlify/plugin-lighthouse"
 
@@ -30,7 +27,6 @@ package = "@netlify/plugin-lighthouse"
   # best-practices = 0.95
   # accessibility = 0.9
 
-# En-têtes de sécurité appliqués à toutes les réponses.
 [[headers]]
 for = "/*"
 
@@ -40,12 +36,10 @@ X-Frame-Options = "DENY"
 Referrer-Policy = "strict-origin-when-cross-origin"
 Permissions-Policy = "camera=(), microphone=(), geolocation=()"
 Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
-# CSP de base : durcit sans script-src/style-src (nonces impraticables en SSG
-# statique + importmap Nuxt inline). Bloque injection de <base>, plugins, et
-# détournement de formulaire/framing. Le volet anti-XSS strict reste à faire.
+# Sans script-src/style-src : nonces impraticables en SSG + importmap inline.
+# Le volet anti-XSS strict reste à faire.
 Content-Security-Policy = "base-uri 'self'; object-src 'none'; form-action 'self'; frame-ancestors 'none'"
 
-# Assets fingerprintés (hash dans le nom) : cache immutable 1 an.
 [[headers]]
 for = "/_nuxt/*"
 
@@ -58,7 +52,7 @@ for = "/_fonts/*"
 [headers.values]
 Cache-Control = "public, max-age=31536000, immutable"
 
-# Non fingerprintés (renommer le fichier pour invalider) : cache 1 semaine.
+# Non fingerprintés : renommer le fichier pour invalider.
 [[headers]]
 for = "/images/*"
 
@@ -83,7 +77,7 @@ for = "/manifest.webmanifest"
 [headers.values]
 Content-Type = "application/manifest+json"
 
-# Fichiers llms (nuxt-llms) : charset explicite, accents français lourds.
+# Charset explicite : accents français lourds.
 [[headers]]
 for = "/llms.txt"
 

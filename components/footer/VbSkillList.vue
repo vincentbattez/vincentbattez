@@ -45,9 +45,8 @@ const props = defineProps<{
 
 const COPIES = 2;
 
-// COPIES copies pour une boucle sans couture. Seul le 1er jeu est annoncé :
-// les copies (i > 0) sont aria-hidden pour ne pas lire 3× la liste. Un marqueur
-// ∞ ferme chaque cycle pour signaler le défilement infini.
+// Boucle sans couture : seul le 1er jeu est annoncé, les copies sont
+// aria-hidden pour ne pas lire 3× la liste.
 type SkillEntry = Partial<IVbSkill> & {
   index: string;
   ariaHidden: boolean;
@@ -82,7 +81,7 @@ const { containerRef, listRef, events } = useInfiniteMarquee({
 .vb-skill {
   &--container {
     @apply w-full overflow-hidden;
-    touch-action: pan-y; // gestes horizontaux gérés par nous, vertical → page
+    touch-action: pan-y; // gestes horizontaux gérés en JS
     cursor: grab;
     mask-image: linear-gradient(
       to right,
