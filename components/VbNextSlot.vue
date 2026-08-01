@@ -1,6 +1,6 @@
 <template>
   <Transition name="vb-next-slot" appear>
-    <p class="vb-next-slot">
+    <p v-if="label" class="vb-next-slot">
       <span class="vb-next-slot--dot" aria-hidden="true"></span>
       Prochain créneau : <strong>{{ label }}</strong>
     </p>

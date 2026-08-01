@@ -16,7 +16,7 @@
         <span class="vb-navbar--badge-text">Indisponible pour le moment</span>
       </span>
       <span class="vb-navbar--status-date"
-        >Mise à jour: {{ formattedStatusUpdatedAt }}</span
+        >Statut mise à jour : {{ formattedStatusUpdatedAt }}</span
       >
     </div>
 

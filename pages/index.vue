@@ -114,8 +114,8 @@ onMounted(() => {
                 align="start"
                 term="Architecture"
                 :content="[
-                  'À l\'ère de la génération de code, la valeur du développeur s\'est davantage déplacée vers la conception. Si l\'implémentation est devenue fluide et rapide, le découpage d\'un système n\'est que plus critique. À cette vitesse, une erreur à ce niveau se paie en mois, voire en années.',
-                  'C\'est pourquoi les principes d\'architecture établis il y a plus de 40 ans n\'ont jamais été aussi actuels.',
+                  'À l\'ère de la génération de code, la valeur du développeur réside plus que jamais dans la conception.',
+                  'Si l\'implémentation est devenue fluide et rapide, la maîtrise des bonnes pratiques d\'architecture est indispensable. À cette vitesse, une erreur à ce niveau se paie en mois, voire en années.',
                   'Tracer une frontière qu\'on peut déplacer sans casser le reste, ça ne s\'improvise pas.',
                 ]"
                 :keywords="[
@@ -132,7 +132,7 @@ onMounted(() => {
                 term="Compréhension profonde"
                 :content="[
                   'Un modèle de langage n\'est fiable que si on connaît ses angles morts. Et cela ne concerne pas que le dev :',
-                  'Du besoin à la rédaction du ticket, jusqu\'à la mise en prod et à la documentation, toute la chaîne est en jeu. Sans ce recul, on empile et empoisonne chaque nouvelle livraison.',
+                  'Du besoin à la rédaction du ticket, jusqu\'à la mise en prod et à la documentation, toute la chaîne est en jeu. Sans ce recul, on empile et on empoisonne chaque nouvelle livraison.',
                 ]"
                 :keywords="[
                   'Hallucinations',
@@ -142,14 +142,13 @@ onMounted(() => {
                   'Garbage in, garbage out',
                 ]"
                 >compréhension profonde</VbTooltip
-              >
-              , elle accélère surtout
+              >, elle accélère surtout
               <VbTooltip
                 align="start"
                 term="Dette technique"
                 :content="[
                   'Tout comme un dev inexpérimenté, une IA ne dit jamais non. Elle exécute les bonnes idées comme les mauvaises.',
-                  'Elle se nourrit du code existant, sur une base saine, la dérive est contenue, sur une base truffée de raccourcis, elle les reproduit et les répand partout.',
+                  'Elle se nourrit du code existant : sur une base saine, la dérive est contenue, sur une base truffée de raccourcis, elle les reproduit et les répand partout.',
                   'Dire non au bon moment, arbitrer entre livrer et refactorer, ça ne se génère pas, ça s\'apprend. Sans ce recul, la dette s\'accumule désormais aussi vite que le code.',
                 ]"
                 :keywords="[
@@ -170,7 +169,7 @@ onMounted(() => {
                 :content="[
                   'Une refonte est le prix d\'une décision prise 6 mois plus tôt. Plus le code se génère vite, plus cette décision arrive tôt.',
                   'Mon objectif est l\'inverse : encadrer l\'équipe pour livrer un code structuré et explicite, que le prochain développeur (ou le prochain LLM) fera évoluer sans moi.',
-                  'Une mission réussie, c\'est une équipe qui n\'a plus besoin de m\'appeler.',
+                  'Une mission réussie, c\'est une équipe qui n\'a plus besoin de moi.',
                 ]"
                 :keywords="[
                   'Aucune dépendance humaine',
