@@ -69,6 +69,26 @@ const formattedStatusUpdatedAt = computed(() => {
       outline: 2px solid #3b82f6;
     }
 
+    &:hover:not(.is-unavailable),
+    &:focus-visible:not(.is-unavailable) {
+      .vb-navbar--badge-text {
+        &::after {
+          transform: scaleX(1);
+          transform-origin: left;
+        }
+      }
+
+      .vb-navbar--indicator {
+        transform: scale(1);
+        box-shadow: 0 0 10px 3px #3b82f6;
+
+        &::after {
+          animation-play-state: paused;
+          opacity: 0;
+        }
+      }
+    }
+
     &.is-unavailable {
       cursor: default;
       opacity: 0.55;
@@ -80,23 +100,68 @@ const formattedStatusUpdatedAt = computed(() => {
       .vb-navbar--indicator {
         @apply bg-grey-400;
         box-shadow: none;
-        animation: none;
+
+        &::after {
+          animation: none;
+          opacity: 0;
+        }
       }
     }
   }
 
   &--badge-text {
-    @apply text-body-sm sm:text-body-md text-blue-500;
+    @apply text-body-sm sm:text-body-md text-blue-500 relative;
     font-weight: 800;
+
+    // Soulignement animé : révélé de gauche à droite, replié vers la droite.
+    &::after {
+      @apply absolute w-full;
+      content: "";
+      left: 0;
+      bottom: 2px;
+      height: 2px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #3b82f6, #23a5f7);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
   }
 
   &--indicator {
-    @apply flex-shrink-0 bg-blue-500;
+    @apply flex-shrink-0 bg-blue-500 relative;
     width: 11px;
     height: 11px;
     border-radius: 11px;
     box-shadow: 0 0 4px 0 #3b82f6;
-    animation: live-pulse 2s ease-in-out infinite;
+    transition:
+      transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 420ms cubic-bezier(0.22, 1, 0.36, 1);
+
+    // Le pulse vit sur le pseudo pour laisser transform/box-shadow libres de transitionner.
+    &::after {
+      @apply absolute bg-blue-500;
+      content: "";
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      border-radius: inherit;
+      animation: live-pulse 2s ease-in-out infinite;
+      transition: opacity 420ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vb-navbar--indicator,
+  .vb-navbar--indicator::after {
+    animation: none;
+    transition: none;
+  }
+
+  .vb-navbar--badge-text::after {
+    transition: none;
   }
 }
 
