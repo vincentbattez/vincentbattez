@@ -56,8 +56,10 @@ export default defineNuxtConfig({
     },
     workbox: {
       globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff2}"],
-      // Sans ça, le SW sert la home précachée pour toute navigation, y compris
-      // /llms-full.txt & co (ce sont des requêtes de navigation).
+      // Le fallback de navigation ne doit servir la home précachée QUE pour la
+      // home : sinon /go/* reçoit le HTML de "/", et Nuxt réaligne l'URL sur
+      // payload.path → /?s=lk au lieu de la redirection.
+      navigateFallbackAllowlist: [/^\/$/],
       navigateFallbackDenylist: [/\.(?:txt|xml|json|webmanifest|png|ico|svg)(?:\?|$)/],
     },
     client: {
