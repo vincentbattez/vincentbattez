@@ -56,6 +56,9 @@ export default defineNuxtConfig({
     },
     workbox: {
       globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff2}"],
+      // Sans ça, le SW sert la home précachée pour toute navigation, y compris
+      // /llms-full.txt & co (ce sont des requêtes de navigation).
+      navigateFallbackDenylist: [/\.(?:txt|xml|json|webmanifest|png|ico|svg)(?:\?|$)/],
     },
     client: {
       installPrompt: false,
