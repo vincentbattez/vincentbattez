@@ -56,11 +56,15 @@ export default defineNuxtConfig({
     },
     workbox: {
       globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff2}"],
+      // Page non listée : ni son HTML ni son CSS ne pèsent sur le précache.
+      globIgnores: ["**/recommendation/**", "**/recommendation.*"],
       // Le fallback de navigation ne doit servir la home précachée QUE pour la
       // home : sinon /go/* reçoit le HTML de "/", et Nuxt réaligne l'URL sur
       // payload.path → /?s=lk au lieu de la redirection.
       navigateFallbackAllowlist: [/^\/$/],
-      navigateFallbackDenylist: [/\.(?:txt|xml|json|webmanifest|png|ico|svg)(?:\?|$)/],
+      navigateFallbackDenylist: [
+        /\.(?:txt|xml|json|webmanifest|png|ico|svg)(?:\?|$)/,
+      ],
     },
     client: {
       installPrompt: false,
@@ -176,6 +180,9 @@ export default defineNuxtConfig({
     redirectToCanonicalSiteUrl: true,
   },
 
+  // Pas de `disallow` pour /recommendation : ça publierait l'URL dans
+  // robots.txt. L'exclusion des moteurs passe par le `noindex` de la page et
+  // l'en-tête X-Robots-Tag (netlify.toml).
   robots: {
     allow: ["/"],
   },
@@ -187,7 +194,7 @@ export default defineNuxtConfig({
       priority: 0.8,
     },
     urls: [{ loc: "/", changefreq: "yearly", priority: 1.0 }],
-    exclude: ["/go/**"],
+    exclude: ["/go/**", "/recommendation"],
   },
 
   // nuxt-schema-org 6 incompatible unhead 3 : JSON-LD écrit à la main (app.vue).

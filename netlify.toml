@@ -27,6 +27,12 @@ package = "@netlify/plugin-lighthouse"
   # best-practices = 0.95
   # accessibility = 0.9
 
+# L'Entretien de recommandation : chemin /api stable côté client, function derrière.
+[[redirects]]
+from = "/api/recommendation"
+to = "/.netlify/functions/recommendation-chat"
+status = 200
+
 [[headers]]
 for = "/*"
 
@@ -39,6 +45,13 @@ Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
 # Sans script-src/style-src : nonces impraticables en SSG + importmap inline.
 # Le volet anti-XSS strict reste à faire.
 Content-Security-Policy = "base-uri 'self'; object-src 'none'; form-action 'self'; frame-ancestors 'none'"
+
+# Page non listée : ceinture et bretelles avec le `noindex` de la page.
+[[headers]]
+for = "/recommendation*"
+
+[headers.values]
+X-Robots-Tag = "noindex, nofollow"
 
 [[headers]]
 for = "/_nuxt/*"

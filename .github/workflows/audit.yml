@@ -26,6 +26,9 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
+      - name: Tests
+        run: pnpm test
+
       - name: Build (SSG)
         run: pnpm generate
 

@@ -3,6 +3,12 @@
 
 type AnalyticsEvents = {
   outbound_link_opened: { destination: string; source: string };
+  // Entretien de recommandation : anonymes, sans aucun propos du Collègue.
+  recommendation_started: Record<string, never>;
+  recommendation_step: { step: number };
+  recommendation_completed: Record<string, never>;
+  recommendation_refined: Record<string, never>;
+  recommendation_copied: Record<string, never>;
 };
 
 export function useAnalytics() {

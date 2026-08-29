@@ -13,7 +13,8 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "audit:lighthouse": "lhci autorun",
-    "audit:quality": "pnpm lint && pnpm typecheck && pnpm generate && pnpm audit:lighthouse"
+    "audit:quality": "pnpm lint && pnpm typecheck && pnpm test && pnpm generate && pnpm audit:lighthouse",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@lhci/cli": "^0.15.1",
@@ -32,13 +33,19 @@
     "sass": "^1.101.0",
     "satori": "^0.28.0",
     "typescript": "^6.0.3",
+    "vitest": "^4",
     "vue": "^3.5.40",
     "vue-router": "^5.2.0",
     "vue-tsc": "^3.3.7"
   },
   "dependencies": {
+    "@ai-sdk/vue": "^4",
+    "@comark/vue": "^0.6",
+    "@openrouter/ai-sdk-provider": "^3",
     "@posthog/nuxt": "^1.7.80",
+    "ai": "^7",
     "nuxt-llms": "^0.2.0",
-    "posthog-node": "^5.46.0"
+    "posthog-node": "^5.46.0",
+    "zod": "^4"
   }
 }

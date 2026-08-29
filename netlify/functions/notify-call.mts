@@ -1,32 +1,21 @@
 import { trackServerEvent } from "../lib/analytics";
+import { sendPushover } from "../lib/pushover";
 
 // Isolée en Netlify Function : le site est statique, les secrets restent serveur.
 const CALL_URL = "https://meet.google.com/zri-nmgp-tqc";
 
 export default async (request: Request): Promise<Response> => {
-  const token = process.env.PUSHOVER_APP_TOKEN;
-  const user = process.env.PUSHOVER_USER_KEY;
-
-  if (!token || !user) {
-    return new Response("Pushover config manquante", { status: 500 });
-  }
-
-  const body = new URLSearchParams({
-    token,
-    user,
+  const result = await sendPushover({
     title: "Quelqu'un essaye de me joindre",
     message: 'Quelqu\'un est passé par le lien "vincentbattez.dev/go/call"',
     url: CALL_URL,
-    url_title: "Rejoindre l'appel",
+    urlTitle: "Rejoindre l'appel",
   });
 
-  const response = await fetch("https://api.pushover.net/1/messages.json", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body,
-  });
-
-  if (!response.ok) {
+  if (result === "not-configured") {
+    return new Response("Pushover config manquante", { status: 500 });
+  }
+  if (result === "failed") {
     return new Response("Pushover request failed", { status: 502 });
   }
 
