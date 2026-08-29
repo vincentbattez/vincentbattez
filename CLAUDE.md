@@ -18,3 +18,10 @@ Single-context: `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/do
 ### Déploiement
 
 La prod est un **site statique généré par Nuxt (SSG)** : `nuxt generate` → `dist`, déployé sur Netlify. **Pas de serveur au runtime.**
+
+### Dev local
+
+`pnpm dev` (port 3000) ne sert **ni les Netlify Functions ni les redirects de
+`netlify.toml`** : `/api/recommendation` et `/.netlify/functions/*` répondent
+404. Pour ces routes, lancer `pnpm dev:netlify` (port 8888) — en ayant arrêté
+`pnpm dev` avant, sinon le lock du dev server Nuxt fait échouer le démarrage.
