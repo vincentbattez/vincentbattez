@@ -19,8 +19,8 @@ export function useOutbound() {
   function outboundHref(redirectId: RedirectId, source: string): string {
     return isMobile.value
       ? lookupTable.redirectId[redirectId]
-      // Slash final : sans lui, Netlify renvoie un 301 avant la redirection.
-      : `/go/${redirectId}/?s=${source}`;
+      : // Slash final : sans lui, Netlify renvoie un 301 avant la redirection.
+        `/go/${redirectId}/?s=${source}`;
   }
 
   function trackOutbound(redirectId: RedirectId, source: string): void {
