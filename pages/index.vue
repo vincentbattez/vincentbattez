@@ -148,6 +148,7 @@ onMounted(() => {
                 term="Dette technique"
                 :content="[
                   'Tout comme un dev inexpérimenté, une IA ne dit jamais non. Elle exécute les bonnes idées comme les mauvaises.',
+                  'Pire encore, là où un humain peut râler et s\'agacer devant du code bâclé, l\'IA n\'aura aucune réticence à la relire et à en reproduire',
                   'Elle se nourrit du code existant : sur une base saine, la dérive est contenue, sur une base truffée de raccourcis, elle les reproduit et les répand partout.',
                   'Dire non au bon moment, arbitrer entre livrer et refactorer, ça ne se génère pas, ça s\'apprend. Sans ce recul, la dette s\'accumule désormais aussi vite que le code.',
                 ]"
@@ -185,7 +186,7 @@ onMounted(() => {
 
           <div class="vb-hero--actions">
             <VbButton
-              href="/go/entretien?s=pf"
+              href="/go/entretien/?s=pf"
               :type="vbButtonTypeEnum.primary"
             >
               <VbIcon

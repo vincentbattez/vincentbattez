@@ -4,7 +4,7 @@
       <NuxtLink
         v-if="isAvailableForFreelance"
         class="vb-navbar--badge"
-        to="/go/entretien?s=pf"
+        to="/go/entretien/?s=pf"
       >
         <span class="vb-navbar--indicator"></span>
         <span class="vb-navbar--badge-text"
