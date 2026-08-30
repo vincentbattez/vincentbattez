@@ -9,6 +9,7 @@ type AnalyticsEvents = {
   recommendation_completed: Record<string, never>;
   recommendation_refined: Record<string, never>;
   recommendation_copied: Record<string, never>;
+  recommendation_reset: { step: number };
 };
 
 export function useAnalytics() {

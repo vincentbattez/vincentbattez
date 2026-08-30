@@ -35,9 +35,22 @@
     />
 
     <footer class="vb-reco--actions">
-      <VbButton :type="vbButtonTypeEnum.primary" @click="emit('copy')">
-        {{ copied ? "Copié !" : "Copier la recommandation" }}
-      </VbButton>
+      <div class="vb-reco--main">
+        <VbButton :type="vbButtonTypeEnum.primary" @click="emit('copy')">
+          {{ copied ? "Copié !" : "Copier la recommandation" }}
+        </VbButton>
+        <VbButton
+          class="vb-reco--linkedin"
+          :type="vbButtonTypeEnum.outline"
+          :href="outboundHref('recommandation', 'pf')"
+          target="_blank"
+          rel="noopener"
+          @click="trackOutbound('recommandation', 'pf')"
+        >
+          <VbIcon :size="vbButtonSizeEnum.md" :name="VbIconEnum.VbLinkedin" />
+          Coller sur LinkedIn
+        </VbButton>
+      </div>
       <button type="button" class="vb-reco--secondary" @click="emit('copy-md')">
         {{
           copiedMarkdown ? "Entretien copié !" : "Copier l'entretien (Markdown)"
@@ -46,17 +59,18 @@
     </footer>
 
     <p v-if="copied" class="vb-reco--thanks">
-      Merci beaucoup. Il ne reste plus qu'à la coller sur
-      <a :href="linkedin" target="_blank" rel="noopener">le profil de Vincent</a
-      >.
+      Merci beaucoup. Le bouton LinkedIn ouvre le formulaire de recommandation
+      du profil de Vincent&nbsp;: il ne reste plus qu'à coller.
     </p>
   </section>
 </template>
 
 <script setup lang="ts">
 import VbButton from "~/ui/components/forms/VbButton.vue";
+import VbIcon from "~/ui/components/icon/VbIcon.vue";
 import { vbButtonTypeEnum } from "~/ui/components/forms/VbButton.type";
-import { seo } from "~/config/seo";
+import { vbButtonSizeEnum } from "~/ui/components/icon/VbIcon.type";
+import { VbIconEnum } from "~/types/vb-icon";
 
 defineProps<{
   text: string;
@@ -75,7 +89,7 @@ const emit = defineEmits<{
   close: [];
 }>();
 
-const linkedin = seo.social.linkedin;
+const { outboundHref, trackOutbound } = useOutbound();
 </script>
 
 <style lang="scss" scoped>
@@ -119,6 +133,14 @@ const linkedin = seo.social.linkedin;
     @apply flex flex-col gap-sm;
   }
 
+  &--main {
+    @apply flex flex-wrap gap-sm;
+  }
+
+  &--linkedin {
+    @apply gap-sm;
+  }
+
   &--secondary {
     @apply text-body-sm text-grey-600 underline text-left;
 
@@ -129,10 +151,6 @@ const linkedin = seo.social.linkedin;
 
   &--thanks {
     @apply text-body-sm text-grey-700;
-
-    a {
-      @apply text-secondary underline;
-    }
   }
 }
 

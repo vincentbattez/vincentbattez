@@ -8,6 +8,7 @@ import VbButton from "~/ui/components/forms/VbButton.vue";
 import { vbButtonTypeEnum } from "~/ui/components/forms/VbButton.type";
 import VbRecommendationPanel from "~/components/recommendation/VbRecommendationPanel.vue";
 import VbRecommendationSteps from "~/components/recommendation/VbRecommendationSteps.vue";
+import VbRecommendationChapter from "~/components/recommendation/VbRecommendationChapter.vue";
 import {
   RECOMMENDATION_DELIVERY,
   RECOMMENDATION_STEPS,
@@ -24,23 +25,21 @@ const STORAGE_KEY = "vb-entretien-recommandation";
 const TOOL_PART_TYPE = "tool-submit_recommendation";
 
 // Texte invariant : injecté en dur, aucun appel au modèle pour l'accueil.
+const WELCOME_ID = "ruby-welcome";
+const WELCOME_TEXT = [
+  "Salut, moi c'est **Ruby**. Merci de prendre cinq minutes pour Vincent.",
+  "",
+  "Je te pose **5 questions courtes**, tu réponds avec ce qui te vient — des bouts de phrases suffisent, je me charge d'écrire. À la fin, tu récupères un texte prêt à coller.",
+  "",
+  "**Question 1/5** — Où et quand avez-vous travaillé ensemble, et toi, tu faisais quoi dans l'équipe ?",
+  "",
+  "_Par exemple : « Norauto, 2023, j'étais PO sur l'API de devis »._",
+].join("\n");
+
 const WELCOME: UIMessage = {
-  id: "ruby-welcome",
+  id: WELCOME_ID,
   role: "assistant",
-  parts: [
-    {
-      type: "text",
-      text: [
-        "Salut, moi c'est **Ruby**. Merci de prendre cinq minutes pour Vincent.",
-        "",
-        "Je te pose **5 questions courtes**, tu réponds avec ce qui te vient — des bouts de phrases suffisent, je me charge d'écrire. À la fin, tu récupères un texte prêt à coller.",
-        "",
-        "**Question 1/5** — Où et quand avez-vous travaillé ensemble, et toi, tu faisais quoi dans l'équipe ?",
-        "",
-        "_Par exemple : « Norauto, 2023, j'étais PO sur l'API de devis »._",
-      ].join("\n"),
-    },
-  ],
+  parts: [{ type: "text", text: WELCOME_TEXT }],
 };
 
 const { track } = useAnalytics();
@@ -50,6 +49,10 @@ const { messages, sendMessage, status, error, stop, clearError } = useChat({
 });
 
 const started = ref(false);
+// Sortie de l'intro puis entrée de l'entretien : 2s de bout en bout.
+const leaving = ref(false);
+const INTRO_EXIT_MS = 600;
+const WRITE_DELAY_MS = 2900;
 const input = ref("");
 const restored = ref(false);
 
@@ -74,19 +77,69 @@ const step = computed(() =>
     ? RECOMMENDATION_STEPS.length + 1
     : questionStep.value,
 );
-const heading = computed(
-  () =>
-    RECOMMENDATION_STEPS[step.value - 1] ??
-    (hasRecommendation.value
-      ? RECOMMENDATION_DELIVERY
-      : RECOMMENDATION_STEPS[0]!),
-);
+function calm(): boolean {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+const fil = ref<HTMLElement | null>(null);
+// Suivre le flux tant que le Collègue est en bas ; s'il remonte lire, on le laisse.
+const stuckToBottom = ref(true);
+
+function onFilScroll(): void {
+  const el = fil.value;
+  if (!el) return;
+  stuckToBottom.value = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+}
+
+function scrollToBottom(force = false): void {
+  const el = fil.value;
+  if (!el || (!stuckToBottom.value && !force)) return;
+  el.scrollTo({
+    top: el.scrollHeight,
+    behavior: calm() ? "auto" : "smooth",
+  });
+}
+
+function follow(force = false): void {
+  nextTick(() => scrollToBottom(force));
+}
+
+// Ouverture : Ruby écrit son accueil sous les yeux du Collègue, comme elle
+// écrira la suite. Le texte reste complet dans `messages` (persistance, regex).
+const typedLength = ref(0);
+const typing = ref(false);
+let typewriter: ReturnType<typeof setInterval> | undefined;
+
+function stopTypewriter(): void {
+  if (typewriter) clearInterval(typewriter);
+  typewriter = undefined;
+  typing.value = false;
+}
+
+function typeWelcome(): void {
+  // L'Entretien a pu être relancé pendant l'attente.
+  if (!typing.value) return;
+  typewriter = setInterval(() => {
+    typedLength.value += 3;
+    follow();
+    if (typedLength.value >= WELCOME_TEXT.length) stopTypewriter();
+  }, 16);
+}
+
+onBeforeUnmount(stopTypewriter);
 
 function textOf(message: UIMessage): string {
   return message.parts
     .filter((part) => part.type === "text")
     .map((part) => (part as { text: string }).text)
     .join("\n");
+}
+
+function displayText(message: UIMessage): string {
+  if (typing.value && message.id === WELCOME_ID) {
+    return WELCOME_TEXT.slice(0, typedLength.value);
+  }
+  return textOf(message);
 }
 
 // Le tool call est le seul canal de la Recommandation : on lit la dernière
@@ -102,6 +155,47 @@ function latestRecommendation(list: UIMessage[]): string {
   }
   return found;
 }
+
+type ThreadItem = {
+  message: UIMessage;
+  chapter?: { index: number; label: string; delivery?: boolean };
+};
+
+function questionIn(message: UIMessage): number | undefined {
+  const match = textOf(message).match(/Question\s+(\d)\s*\/\s*5/i);
+  return match ? Number(match[1]) : undefined;
+}
+
+// Chaque question ouvre un chapitre dans le fil : la coupure d'étape se voit
+// sans relire le message. La livraison en ouvre un dernier.
+const thread = computed<ThreadItem[]>(() => {
+  let opened = 0;
+  return messages.value.map((message) => {
+    if (message.role !== "assistant") return { message };
+
+    const delivered = message.parts.some(
+      (part) => part.type === TOOL_PART_TYPE,
+    );
+    if (delivered && opened <= RECOMMENDATION_STEPS.length) {
+      opened = RECOMMENDATION_STEPS.length + 1;
+      return {
+        message,
+        chapter: {
+          index: opened,
+          label: RECOMMENDATION_DELIVERY.label,
+          delivery: true,
+        },
+      };
+    }
+
+    const question = questionIn(message);
+    const step = RECOMMENDATION_STEPS[(question ?? 0) - 1];
+    if (!question || !step || question <= opened) return { message };
+
+    opened = question;
+    return { message, chapter: { index: question, label: step.label } };
+  });
+});
 
 function applyRecommendation(text: string): void {
   recommendation.value = text;
@@ -140,14 +234,16 @@ let lastStep = 0;
 watch(messages, (list) => {
   const last = list[list.length - 1];
   if (!last || last.role !== "assistant") return;
-  const match = textOf(last).match(/Question\s+(\d)\s*\/\s*5/i);
-  if (!match) return;
-  const current = Number(match[1]);
+  const current = questionIn(last);
+  if (!current) return;
   questionStep.value = current;
   if (current <= lastStep) return;
   lastStep = current;
   track("recommendation_step", { step: current });
 });
+
+watch(messages, () => follow(), { deep: true });
+watch(isThinking, () => follow());
 
 function persist(list: UIMessage[]): void {
   if (!import.meta.client) return;
@@ -182,12 +278,57 @@ onMounted(() => {
     // Sauvegarde illisible : on repart d'un Entretien vierge.
   }
   restored.value = true;
+  follow(true);
 });
 
 function start(): void {
   started.value = true;
   messages.value = [WELCOME];
   track("recommendation_started", {});
+  if (calm()) return;
+  typing.value = true;
+  typedLength.value = 0;
+  // Le rail et le chapitre s'installent d'abord, Ruby écrit ensuite.
+  setTimeout(typeWelcome, WRITE_DELAY_MS);
+}
+
+function begin(): void {
+  if (leaving.value) return;
+  if (calm()) {
+    start();
+    return;
+  }
+  leaving.value = true;
+  setTimeout(() => {
+    leaving.value = false;
+    start();
+  }, INTRO_EXIT_MS);
+}
+
+function reset(): void {
+  stop();
+  stopTypewriter();
+  clearError();
+  track("recommendation_reset", { step: step.value });
+  messages.value = [];
+  started.value = false;
+  input.value = "";
+  recommendation.value = "";
+  recommendationSource.value = "";
+  pendingRecommendation.value = "";
+  edited.value = false;
+  panelOpen.value = false;
+  copied.value = false;
+  copiedMarkdown.value = false;
+  questionStep.value = 1;
+  lastStep = 0;
+  deliveries = 0;
+  stuckToBottom.value = true;
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // Rien à nettoyer si le stockage est indisponible.
+  }
 }
 
 function submit(): void {
@@ -195,7 +336,9 @@ function submit(): void {
   if (!text || isBusy.value) return;
   input.value = "";
   clearError();
+  stuckToBottom.value = true;
   sendMessage({ text });
+  follow(true);
 }
 
 function onEnter(event: KeyboardEvent): void {
@@ -241,10 +384,20 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
     <div class="vb-frame--content">
       <VbNavbar class="vb-frame--nav" />
 
-      <div class="vb-entretien">
-        <VbRecommendationSteps class="vb-entretien--rail" :step="step" />
+      <div class="vb-entretien" :class="{ 'vb-entretien--seul': !started }">
+        <VbRecommendationSteps
+          v-if="started"
+          class="vb-entretien--rail"
+          :step="step"
+          :resettable="started"
+          @reset="reset"
+        />
 
-        <section v-if="!started" class="vb-intro">
+        <section
+          v-if="!started"
+          class="vb-intro"
+          :class="{ 'vb-intro--sort': leaving }"
+        >
           <h1 class="vb-intro--title">
             Vincent aimerait deux mots de ta part.
           </h1>
@@ -257,33 +410,38 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
             À la fin, tu repars avec un texte prêt à coller sur LinkedIn. Tu
             peux le retoucher avant.
           </p>
-          <VbButton :type="vbButtonTypeEnum.primary" @click="start">
+          <VbButton :type="vbButtonTypeEnum.primary" @click="begin">
             Commencer l'entretien
           </VbButton>
         </section>
 
         <section v-else class="vb-talk">
-          <header class="vb-talk--head">
-            <h1 class="vb-talk--title">{{ heading.label }}</h1>
-            <p class="vb-talk--goal">{{ heading.goal }}</p>
-          </header>
-
-          <div class="vb-talk--fil ph-no-capture">
-            <div
-              v-for="message in messages"
-              :key="message.id"
-              class="vb-bulle"
-              :class="`vb-bulle--${message.role}`"
-            >
-              <span v-if="message.role === 'assistant'" class="vb-bulle--who">
-                Ruby
-              </span>
-              <Markdown
-                :value="textOf(message)"
-                :streaming="isStreaming"
-                class="vb-bulle--md"
+          <div
+            ref="fil"
+            class="vb-talk--fil ph-no-capture"
+            @scroll="onFilScroll"
+          >
+            <template v-for="item in thread" :key="item.message.id">
+              <VbRecommendationChapter
+                v-if="item.chapter"
+                :index="item.chapter.index"
+                :label="item.chapter.label"
+                :delivery="item.chapter.delivery"
               />
-            </div>
+              <div class="vb-bulle" :class="`vb-bulle--${item.message.role}`">
+                <span
+                  v-if="item.message.role === 'assistant'"
+                  class="vb-bulle--who"
+                >
+                  Ruby
+                </span>
+                <Markdown
+                  :value="displayText(item.message)"
+                  :streaming="isStreaming || typing"
+                  class="vb-bulle--md"
+                />
+              </div>
+            </template>
 
             <p
               v-if="isThinking"
@@ -385,6 +543,15 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
     gap: 2.5rem;
   }
 
+  // Sans rail, l'intro se pose au centre du cadre.
+  &--seul {
+    @apply items-center justify-center;
+
+    @screen md {
+      display: flex;
+    }
+  }
+
   &--rail {
     @screen md {
       position: sticky;
@@ -397,9 +564,15 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
 .vb-intro {
   @apply flex flex-col items-start gap-md;
   max-width: 34rem;
+  transition:
+    opacity 400ms ease-in,
+    transform 400ms cubic-bezier(0.4, 0, 0.6, 1);
 
-  @screen md {
-    align-self: center;
+  // L'intro s'efface vers le bas, l'entretien remonte ensuite du même côté.
+  &--sort {
+    opacity: 0;
+    transform: translateY(14px);
+    pointer-events: none;
   }
 
   &--title {
@@ -414,22 +587,13 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
 .vb-talk {
   @apply flex flex-col gap-md;
   min-width: 0;
-
-  &--head {
-    @apply pb-sm border-b border-grey-200;
-  }
-
-  &--title {
-    @apply font-heading text-h3 text-black;
-  }
-
-  &--goal {
-    @apply text-body-sm text-grey-700;
-  }
+  // 3. le rail terminé (~1,9s), le fil monte à son tour.
+  animation: vb-talk-in 800ms cubic-bezier(0.22, 1, 0.36, 1) 1900ms both;
 
   &--fil {
     @apply flex flex-col gap-md overflow-y-auto;
     max-height: 48vh;
+    scroll-padding-block-end: 1rem;
   }
 
   &--reco {
@@ -446,6 +610,7 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
 .vb-bulle {
   @apply text-body-md;
   max-width: 42rem;
+  animation: vb-bulle-in 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
 
   &--assistant {
     @apply text-black;
@@ -475,6 +640,31 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
   &--md :deep(em) {
     @apply text-grey-700;
     font-style: italic;
+  }
+}
+
+@keyframes vb-talk-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+}
+
+@keyframes vb-bulle-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vb-bulle,
+  .vb-talk {
+    animation: none;
+  }
+
+  .vb-intro {
+    transition: none;
   }
 }
 
