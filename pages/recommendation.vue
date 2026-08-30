@@ -17,6 +17,8 @@ import {
 } from "~/components/recommendation/steps";
 import { seo } from "~/config/seo";
 
+const { outboundHref, trackOutbound } = useOutbound();
+
 // Page non listée : accessible par lien direct uniquement.
 useSeoMeta({
   title: "Recommandation",
@@ -544,8 +546,11 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
 
             <p v-if="error" class="vb-erreur">
               Ruby ne répond plus. Le plus simple&nbsp;:
-              <a :href="mailto">écris directement à Vincent</a>, deux lignes
-              suffisent.
+              <a
+                :href="outboundHref('recommandation', 'pf')"
+                @click="trackOutbound('recommandation', 'pf')"
+                >écris directement à Vincent</a
+              >, deux lignes suffisent.
             </p>
           </div>
 
