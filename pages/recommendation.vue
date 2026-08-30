@@ -3,7 +3,6 @@ import { Markdown } from "@comark/vue";
 import { useChat } from "@ai-sdk/vue";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import VbNavbar from "~/components/footer/VbNavbar.vue";
-import VbFooter from "~/components/footer/VbFooter.vue";
 import VbButton from "~/ui/components/forms/VbButton.vue";
 import VbIcon from "~/ui/components/icon/VbIcon.vue";
 import { vbButtonTypeEnum } from "~/ui/components/forms/VbButton.type";
@@ -403,7 +402,7 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
 
 <template>
   <div class="vb-frame">
-    <div class="vb-frame--content">
+    <div class="vb-frame--content" :class="{ 'vb-place-saisie': started }">
       <VbNavbar class="vb-frame--nav" />
 
       <div class="vb-entretien" :class="{ 'vb-entretien--seul': !started }">
@@ -550,8 +549,6 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
           </VbButton>
         </section>
       </div>
-
-      <VbFooter class="vb-frame--marquee" />
     </div>
   </div>
 </template>
@@ -826,6 +823,24 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
     width: 0.7rem;
     height: 0.7rem;
     border-radius: 3px;
+  }
+}
+
+@media (max-width: 767px) {
+  // Le champ reste sous le pouce, détaché du flux.
+  .vb-saisie {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: -4.5rem;
+    padding-inline: 0.5rem;
+    z-index: 15;
+    filter: drop-shadow(0 10px 18px rgb(36 22 5 / 18%));
+  }
+
+  // Sa hauteur est rendue au flux : rien ne se cache derrière lui.
+  .vb-place-saisie {
+    padding-bottom: 5.5rem;
   }
 }
 </style>
