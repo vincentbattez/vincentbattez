@@ -5,7 +5,10 @@ import { DefaultChatTransport, type UIMessage } from "ai";
 import VbNavbar from "~/components/footer/VbNavbar.vue";
 import VbFooter from "~/components/footer/VbFooter.vue";
 import VbButton from "~/ui/components/forms/VbButton.vue";
+import VbIcon from "~/ui/components/icon/VbIcon.vue";
 import { vbButtonTypeEnum } from "~/ui/components/forms/VbButton.type";
+import { vbButtonSizeEnum } from "~/ui/components/icon/VbIcon.type";
+import { VbIconEnum } from "~/types/vb-icon";
 import VbRecommendationPanel from "~/components/recommendation/VbRecommendationPanel.vue";
 import VbRecommendationSteps from "~/components/recommendation/VbRecommendationSteps.vue";
 import VbRecommendationChapter from "~/components/recommendation/VbRecommendationChapter.vue";
@@ -35,6 +38,9 @@ const WELCOME_TEXT = [
   "",
   "_Par exemple : « Norauto, 2023, j'étais PO sur l'API de devis »._",
 ].join("\n");
+
+// Découpé en paragraphes : l'accueil se pose bloc par bloc, pas lettre à lettre.
+const WELCOME_PARTS = WELCOME_TEXT.split("\n\n");
 
 const WELCOME: UIMessage = {
   id: WELCOME_ID,
@@ -104,42 +110,54 @@ function follow(force = false): void {
   nextTick(() => scrollToBottom(force));
 }
 
-// Ouverture : Ruby écrit son accueil sous les yeux du Collègue, comme elle
-// écrira la suite. Le texte reste complet dans `messages` (persistance, regex).
-const typedLength = ref(0);
-const typing = ref(false);
-let typewriter: ReturnType<typeof setInterval> | undefined;
+// Ouverture : l'accueil se dévoile un paragraphe par seconde. Le texte reste
+// complet dans `messages` (persistance, regex), seul l'affichage est retenu.
+const REVEAL_INTERVAL_MS = 1000;
+const staged = ref(false);
+const revealed = ref(0);
+let reveal: ReturnType<typeof setInterval> | undefined;
 
-function stopTypewriter(): void {
-  if (typewriter) clearInterval(typewriter);
-  typewriter = undefined;
-  typing.value = false;
+const visibleWelcome = computed(() => WELCOME_PARTS.slice(0, revealed.value));
+
+function stopReveal(): void {
+  if (reveal) clearInterval(reveal);
+  reveal = undefined;
 }
 
-function typeWelcome(): void {
+function revealWelcome(): void {
   // L'Entretien a pu être relancé pendant l'attente.
-  if (!typing.value) return;
-  typewriter = setInterval(() => {
-    typedLength.value += 3;
+  if (!staged.value) return;
+  revealed.value = 1;
+  follow();
+  reveal = setInterval(() => {
+    revealed.value += 1;
     follow();
-    if (typedLength.value >= WELCOME_TEXT.length) stopTypewriter();
-  }, 16);
+    if (revealed.value >= WELCOME_PARTS.length) stopReveal();
+  }, REVEAL_INTERVAL_MS);
 }
 
-onBeforeUnmount(stopTypewriter);
+// La saisie n'arrive qu'une fois Ruby allée au bout de son accueil.
+const composerReady = computed(
+  () => !staged.value || revealed.value >= WELCOME_PARTS.length,
+);
+
+const champ = ref<HTMLTextAreaElement | null>(null);
+const CHAMP_MAX_PX = 160;
+
+function autoGrow(): void {
+  const el = champ.value;
+  if (!el) return;
+  el.style.height = "auto";
+  el.style.height = `${Math.min(el.scrollHeight, CHAMP_MAX_PX)}px`;
+}
+
+onBeforeUnmount(stopReveal);
 
 function textOf(message: UIMessage): string {
   return message.parts
     .filter((part) => part.type === "text")
     .map((part) => (part as { text: string }).text)
     .join("\n");
-}
-
-function displayText(message: UIMessage): string {
-  if (typing.value && message.id === WELCOME_ID) {
-    return WELCOME_TEXT.slice(0, typedLength.value);
-  }
-  return textOf(message);
 }
 
 // Le tool call est le seul canal de la Recommandation : on lit la dernière
@@ -286,10 +304,10 @@ function start(): void {
   messages.value = [WELCOME];
   track("recommendation_started", {});
   if (calm()) return;
-  typing.value = true;
-  typedLength.value = 0;
-  // Le rail et le chapitre s'installent d'abord, Ruby écrit ensuite.
-  setTimeout(typeWelcome, WRITE_DELAY_MS);
+  staged.value = true;
+  revealed.value = 0;
+  // Le rail et le chapitre s'installent d'abord, Ruby parle ensuite.
+  setTimeout(revealWelcome, WRITE_DELAY_MS);
 }
 
 function begin(): void {
@@ -307,7 +325,9 @@ function begin(): void {
 
 function reset(): void {
   stop();
-  stopTypewriter();
+  stopReveal();
+  staged.value = false;
+  revealed.value = 0;
   clearError();
   track("recommendation_reset", { step: step.value });
   messages.value = [];
@@ -324,6 +344,7 @@ function reset(): void {
   lastStep = 0;
   deliveries = 0;
   stuckToBottom.value = true;
+  nextTick(autoGrow);
   try {
     localStorage.removeItem(STORAGE_KEY);
   } catch {
@@ -338,6 +359,7 @@ function submit(): void {
   clearError();
   stuckToBottom.value = true;
   sendMessage({ text });
+  nextTick(autoGrow);
   follow(true);
 }
 
@@ -435,9 +457,18 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
                 >
                   Ruby
                 </span>
+                <template v-if="staged && item.message.id === WELCOME_ID">
+                  <Markdown
+                    v-for="(para, i) in visibleWelcome"
+                    :key="i"
+                    :value="para"
+                    class="vb-bulle--md vb-para"
+                  />
+                </template>
                 <Markdown
-                  :value="displayText(item.message)"
-                  :streaming="isStreaming || typing"
+                  v-else
+                  :value="textOf(item.message)"
+                  :streaming="isStreaming"
                   class="vb-bulle--md"
                 />
               </div>
@@ -457,25 +488,40 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
             </p>
           </div>
 
-          <form class="vb-saisie" @submit.prevent="submit">
-            <textarea
-              v-model="input"
-              class="vb-saisie--champ ph-no-capture"
-              rows="2"
-              placeholder="Réponds en quelques mots…"
-              aria-label="Ta réponse"
-              @keydown.enter="onEnter"
-            />
-            <VbButton
-              v-if="isBusy"
-              :type="vbButtonTypeEnum.soft"
-              @click.prevent="stop"
-            >
-              Arrêter
-            </VbButton>
-            <VbButton v-else :type="vbButtonTypeEnum.primary" @click="submit">
-              Envoyer
-            </VbButton>
+          <form v-if="composerReady" class="vb-saisie" @submit.prevent="submit">
+            <div class="vb-saisie--cadre">
+              <textarea
+                ref="champ"
+                v-model="input"
+                class="vb-saisie--champ ph-no-capture"
+                rows="1"
+                placeholder="Réponds en quelques mots…"
+                aria-label="Ta réponse"
+                @input="autoGrow"
+                @keydown.enter="onEnter"
+              />
+              <button
+                v-if="isBusy"
+                type="button"
+                class="vb-saisie--action vb-saisie--action-stop"
+                aria-label="Arrêter Ruby"
+                @click="stop"
+              >
+                <span class="vb-saisie--carre" />
+              </button>
+              <button
+                v-else
+                type="submit"
+                class="vb-saisie--action"
+                aria-label="Envoyer ma réponse"
+                :disabled="input.trim().length === 0"
+              >
+                <VbIcon
+                  :size="vbButtonSizeEnum.md"
+                  :name="VbIconEnum.VbArrowUp"
+                />
+              </button>
+            </div>
           </form>
 
           <VbRecommendationPanel
@@ -650,6 +696,22 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
   }
 }
 
+// Chaque paragraphe de l'accueil monte à son tour.
+.vb-para {
+  animation: vb-para-in 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  & + & {
+    @apply mt-sm;
+  }
+}
+
+@keyframes vb-para-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
 @keyframes vb-bulle-in {
   from {
     opacity: 0;
@@ -659,6 +721,8 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
 
 @media (prefers-reduced-motion: reduce) {
   .vb-bulle,
+  .vb-para,
+  .vb-saisie,
   .vb-talk {
     animation: none;
   }
@@ -681,19 +745,87 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
 }
 
 .vb-saisie {
-  @apply flex flex-col gap-sm;
+  @apply flex flex-col;
+  animation: vb-para-in 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
 
-  @screen md {
-    @apply flex-row items-end;
+  // Le cadre porte le focus pour toute la saisie, bouton compris.
+  &--cadre {
+    @apply relative flex items-end bg-white border border-grey-200;
+    border-radius: 16px;
+    padding-inline-end: 3.5rem;
+    // Le cadre ne descend jamais sous la taille du bouton qu'il abrite.
+    min-height: 3.25rem;
+    transition:
+      box-shadow 200ms ease,
+      border-color 200ms ease;
+
+    &:focus-within {
+      @apply border-blue-300;
+      box-shadow:
+        0 0 0 4px rgb(35 165 247 / 16%),
+        0 14px 28px -20px rgb(35 165 247 / 90%);
+    }
   }
 
   &--champ {
-    @apply grow p-sm rounded border border-grey-200 bg-white text-body-md text-black;
+    @apply grow text-body-md text-black;
+    // La palette du thème ne définit pas `transparent`.
+    background: transparent;
+    padding: 0.8rem 0 0.8rem 0.9rem;
     resize: none;
+    max-height: 10rem;
+    overflow-y: auto;
+    // L'anneau du cadre remplace l'outline natif du champ.
+    outline: none;
+  }
+
+  &--action {
+    @apply absolute flex items-center justify-center bg-secondary text-white;
+    right: 0.45rem;
+    bottom: 0.45rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 999px;
+    box-shadow: 0 10px 20px -12px rgb(35 165 247 / 90%);
+    transition:
+      background-color 200ms ease,
+      opacity 200ms ease,
+      transform 200ms ease;
+
+    &:hover:not(:disabled) {
+      @apply bg-blue-400;
+      transform: translateY(-1px);
+    }
+
+    &:active:not(:disabled) {
+      transform: scale(0.94);
+    }
 
     &:focus-visible {
       @apply outline outline-2 outline-blue-500;
+      outline-offset: 2px;
     }
+
+    &:disabled {
+      @apply bg-grey-300;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+  }
+
+  &--action-stop {
+    @apply bg-grey-600;
+
+    &:hover {
+      @apply bg-grey-700;
+    }
+  }
+
+  &--carre {
+    @apply block bg-white;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 3px;
   }
 }
 </style>
