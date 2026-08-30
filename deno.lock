@@ -11,14 +11,18 @@
   "workspace": {
     "packageJson": {
       "dependencies": [
+        "npm:@ai-sdk/vue@4",
+        "npm:@comark/vue@0.6",
         "npm:@lhci/cli@~0.15.1",
         "npm:@nuxt/eslint@^1.16.0",
         "npm:@nuxt/fonts@0.14",
         "npm:@nuxtjs/seo@^5.3.2",
         "npm:@nuxtjs/tailwindcss@^6.14.0",
+        "npm:@openrouter/ai-sdk-provider@3",
         "npm:@posthog/nuxt@^1.7.80",
         "npm:@resvg/resvg-js@^2.6.2",
         "npm:@vite-pwa/nuxt@^1.1.1",
+        "npm:ai@7",
         "npm:eslint-config-prettier@^10.1.8",
         "npm:eslint-plugin-prettier@^5.5.6",
         "npm:eslint@^10.7.0",
@@ -30,9 +34,11 @@
         "npm:sass@^1.101.0",
         "npm:satori@0.28",
         "npm:typescript@^6.0.3",
+        "npm:vitest@4",
         "npm:vue-router@^5.2.0",
         "npm:vue-tsc@^3.3.7",
-        "npm:vue@^3.5.40"
+        "npm:vue@^3.5.40",
+        "npm:zod@4"
       ]
     }
   }
