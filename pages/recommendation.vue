@@ -98,24 +98,66 @@ function scroller(): HTMLElement | null {
     : entretien.value;
 }
 
+// Le fil grandit après le flush de Vue (markdown, streaming, polices) : viser le
+// bas une seule fois, c'est viser une hauteur déjà périmée. On recolle donc sur
+// quelques frames, et on rend la main dès qu'on y est.
+const SUIVI_MIN = 20;
+const SUIVI_MAX = 240;
+let suivi = 0;
+
 function onFilScroll(): void {
+  // Nos propres scrolls émettent aussi des évènements : les lire ferait passer
+  // une position intermédiaire pour une remontée volontaire.
+  if (suivi > 0) return;
   const el = scroller();
   if (!el) return;
   stuckToBottom.value = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
 }
 
-function scrollToBottom(force = false): void {
+// Toucher la molette ou l'écran rend la main au Collègue, suivi en cours ou pas.
+function onUserScroll(): void {
+  suivi = 0;
+}
+
+function suivre(): void {
   const el = scroller();
-  if (!el || (!stuckToBottom.value && !force)) return;
-  el.scrollTo({
-    top: el.scrollHeight,
-    behavior: calm() ? "auto" : "smooth",
-  });
+  if (!el || !stuckToBottom.value) {
+    suivi = 0;
+    return;
+  }
+  const bas = el.scrollHeight - el.clientHeight;
+  const colle = bas - el.scrollTop <= 1;
+  if (!colle) el.scrollTo({ top: bas, behavior: calm() ? "auto" : "smooth" });
+  suivi += 1;
+  if (suivi < SUIVI_MAX && (!colle || suivi < SUIVI_MIN)) {
+    requestAnimationFrame(suivre);
+    return;
+  }
+  suivi = 0;
+}
+
+function scrollToBottom(force = false): void {
+  if (!scroller() || (!stuckToBottom.value && !force)) return;
+  if (force) stuckToBottom.value = true;
+  const relance = suivi > 0;
+  suivi = 1;
+  if (!relance) requestAnimationFrame(suivre);
 }
 
 function follow(force = false): void {
   nextTick(() => scrollToBottom(force));
 }
+
+// Le fil grandit après le flush de Vue (markdown, streaming, polices) : viser le
+// bas au `nextTick`, c'est viser une hauteur déjà périmée. On recolle donc à
+// chaque mutation du DOM tant que le Collègue n'est pas remonté lire.
+onMounted(() => {
+  const el = entretien.value;
+  if (!el) return;
+  const observer = new MutationObserver(() => scrollToBottom());
+  observer.observe(el, { childList: true, subtree: true, characterData: true });
+  onBeforeUnmount(() => observer.disconnect());
+});
 
 // Ouverture : l'accueil se dévoile un paragraphe par seconde. Le texte reste
 // complet dans `messages` (persistance, regex), seul l'affichage est retenu.
@@ -154,8 +196,11 @@ const CHAMP_MAX_PX = 160;
 function autoGrow(): void {
   const el = champ.value;
   if (!el) return;
+  const avant = el.style.height;
   el.style.height = "auto";
   el.style.height = `${Math.min(el.scrollHeight, CHAMP_MAX_PX)}px`;
+  // Le champ qui grandit repousse le fil : on rattrape le bas.
+  if (el.style.height !== avant) follow();
 }
 
 onBeforeUnmount(stopReveal);
@@ -418,6 +463,8 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
         class="vb-entretien"
         :class="{ 'vb-entretien--seul': !started }"
         @scroll.passive="onFilScroll"
+        @wheel.passive="onUserScroll"
+        @touchmove.passive="onUserScroll"
       >
         <VbRecommendationSteps
           v-if="started"
@@ -453,7 +500,9 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
           <div
             ref="fil"
             class="vb-talk--fil ph-no-capture"
-            @scroll="onFilScroll"
+            @scroll.passive="onFilScroll"
+            @wheel.passive="onUserScroll"
+            @touchmove.passive="onUserScroll"
           >
             <template v-for="item in thread" :key="item.message.id">
               <VbRecommendationChapter
@@ -858,16 +907,19 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
     position: sticky;
     top: 0;
     z-index: 15;
-    @apply pt-xs pb-sm;
+    @apply shrink-0 pt-xs pb-sm;
     background: var(--vb-voile);
   }
 
+  // Sans `shrink-0`, le conteneur de scroll écraserait la colonne à sa propre
+  // hauteur : le fil déborderait sans que rien ne défile.
   .vb-talk {
-    @apply grow;
+    @apply grow shrink-0;
+    min-height: auto;
   }
 
   .vb-talk--fil {
-    @apply overflow-visible grow-0;
+    @apply overflow-visible grow-0 shrink-0;
     min-height: auto;
   }
 
