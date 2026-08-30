@@ -5,7 +5,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "dev:netlify": "netlify dev",
+    "dev:netlify": "NODE_OPTIONS=\"--require ./scripts/netlify-dev-guard.cjs\" netlify dev",
     "generate": "nuxt generate",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
