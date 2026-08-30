@@ -1,0 +1,4 @@
+# Le preset netlify-static ajoute `/* /404.html 404` à la fin de ce fichier, et
+# les règles de `_redirects` priment sur celles de `netlify.toml` : sans cette
+# ligne ici, /api/recommendation tombe dans le catch-all 404.
+/api/recommendation  /.netlify/functions/recommendation-chat  200

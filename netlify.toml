@@ -27,11 +27,8 @@ package = "@netlify/plugin-lighthouse"
   # best-practices = 0.95
   # accessibility = 0.9
 
-# L'Entretien de recommandation : chemin /api stable côté client, function derrière.
-[[redirects]]
-from = "/api/recommendation"
-to = "/.netlify/functions/recommendation-chat"
-status = 200
+# Les redirects vivent dans `public/_redirects` : ce fichier prime sur
+# netlify.toml, et le preset netlify-static y écrit un catch-all 404.
 
 [[headers]]
 for = "/*"
