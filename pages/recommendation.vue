@@ -87,17 +87,25 @@ function calm(): boolean {
 }
 
 const fil = ref<HTMLElement | null>(null);
+const entretien = ref<HTMLElement | null>(null);
 // Suivre le flux tant que le Collègue est en bas ; s'il remonte lire, on le laisse.
 const stuckToBottom = ref(true);
 
+// Ce qui défile change avec le format : le fil en desktop, toute la colonne en mobile.
+function scroller(): HTMLElement | null {
+  return window.matchMedia("(min-width: 768px)").matches
+    ? fil.value
+    : entretien.value;
+}
+
 function onFilScroll(): void {
-  const el = fil.value;
+  const el = scroller();
   if (!el) return;
   stuckToBottom.value = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
 }
 
 function scrollToBottom(force = false): void {
-  const el = fil.value;
+  const el = scroller();
   if (!el || (!stuckToBottom.value && !force)) return;
   el.scrollTo({
     top: el.scrollHeight,
@@ -402,10 +410,15 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
 
 <template>
   <div class="vb-frame">
-    <div class="vb-frame--content" :class="{ 'vb-place-saisie': started }">
+    <div class="vb-frame--content">
       <VbNavbar class="vb-frame--nav" />
 
-      <div class="vb-entretien" :class="{ 'vb-entretien--seul': !started }">
+      <div
+        ref="entretien"
+        class="vb-entretien"
+        :class="{ 'vb-entretien--seul': !started }"
+        @scroll.passive="onFilScroll"
+      >
         <VbRecommendationSteps
           v-if="started"
           class="vb-entretien--rail"
@@ -556,10 +569,13 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
 <style lang="scss" scoped>
 .vb-frame {
   --vb-gap: clamp(1rem, 2.5vw, 2rem);
+  // Fond opaque des zones collantes, calé sur le dégradé du cadre.
+  --vb-voile: #fffdf8;
   position: relative;
   margin: auto;
   width: min(100% - var(--vb-gap) * 2, 1180px);
-  min-height: min(100vh - var(--vb-gap) * 2, 900px);
+  // Le cadre tient dans le viewport : c'est lui qui scrolle, pas la page.
+  height: min(100dvh - var(--vb-gap) * 2, 900px);
   border-radius: 28px;
   box-shadow: 0 40px 80px -30px rgb(225 159 80 / 55%);
   background: linear-gradient(115deg, #ffffff 0%, #fffaf1 100%);
@@ -570,6 +586,7 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
   &--content {
     @apply flex flex-col grow p-md;
     gap: 1rem;
+    min-height: 0;
 
     @screen md {
       @apply p-xl;
@@ -579,6 +596,7 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
 
 .vb-entretien {
   @apply grow flex flex-col gap-lg;
+  min-height: 0;
 
   @screen md {
     display: grid;
@@ -630,12 +648,14 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
 .vb-talk {
   @apply flex flex-col gap-md;
   min-width: 0;
+  min-height: 0;
   // 3. le rail terminé (~1,9s), le fil monte à son tour.
   animation: vb-talk-in 800ms cubic-bezier(0.22, 1, 0.36, 1) 1900ms both;
 
+  // Le fil occupe toute la hauteur libre ; c'est lui qui scrolle, pas la page.
   &--fil {
-    @apply flex flex-col gap-md overflow-y-auto;
-    max-height: 48vh;
+    @apply flex flex-col gap-md grow overflow-y-auto;
+    min-height: 0;
     scroll-padding-block-end: 1rem;
   }
 
@@ -827,20 +847,37 @@ const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vince
 }
 
 @media (max-width: 767px) {
-  // Le champ reste sous le pouce, détaché du flux.
-  .vb-saisie {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: -4.5rem;
-    padding-inline: 0.5rem;
-    z-index: 15;
-    filter: drop-shadow(0 10px 18px rgb(36 22 5 / 18%));
+  // Le scroll se joue ici : le rail et le champ s'y accrochent, le fil défile entre eux.
+  .vb-entretien {
+    @apply overflow-y-auto gap-sm;
+    // Le champ collé en bas ne doit pas masquer la dernière bulle.
+    scroll-padding-block: 3.5rem 4rem;
   }
 
-  // Sa hauteur est rendue au flux : rien ne se cache derrière lui.
-  .vb-place-saisie {
-    padding-bottom: 5.5rem;
+  .vb-entretien--rail {
+    position: sticky;
+    top: 0;
+    z-index: 15;
+    @apply pt-xs pb-sm;
+    background: var(--vb-voile);
+  }
+
+  .vb-talk {
+    @apply grow;
+  }
+
+  .vb-talk--fil {
+    @apply overflow-visible grow-0;
+    min-height: auto;
+  }
+
+  .vb-saisie {
+    position: sticky;
+    bottom: 0;
+    z-index: 15;
+    margin-top: auto;
+    @apply pt-sm;
+    background: var(--vb-voile);
   }
 }
 </style>

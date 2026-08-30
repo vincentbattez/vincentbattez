@@ -7,6 +7,8 @@
       5 questions · ~5 minutes
     </p>
 
+    <p class="vb-steps--resume" aria-hidden="true">{{ resume }}</p>
+
     <ol class="vb-steps--list">
       <li
         v-for="(item, index) in steps"
@@ -81,6 +83,13 @@ const emit = defineEmits<{ reset: [] }>();
 const steps = RECOMMENDATION_STEPS;
 const confirming = ref(false);
 
+// En mobile, le rail se résume à une ligne : où on en est, et sur quoi.
+const resume = computed(() =>
+  props.step > steps.length
+    ? "Recommandation prête"
+    : `Étape ${props.step}/${steps.length} · ${steps[props.step - 1]?.label ?? ""}`,
+);
+
 // Le rail se compose de haut en bas : titre, durée, puis chaque étape.
 function rank(index: number): Record<string, number> {
   return { "--vb-rank": index };
@@ -99,27 +108,66 @@ function state(index: number): "done" | "current" | "todo" {
 </script>
 
 <style lang="scss" scoped>
+// Mobile : une barre d'une ligne (résumé + pastilles). Desktop : le rail vertical.
 .vb-steps {
-  @apply flex flex-col gap-sm;
+  @apply flex flex-row flex-wrap items-center gap-xs;
+
+  @screen md {
+    @apply flex-col flex-nowrap items-stretch gap-sm;
+  }
 
   &--kicker {
-    @apply font-heading text-h4 text-black;
+    @apply hidden font-heading text-h4 text-black;
+
+    @screen md {
+      @apply block;
+    }
   }
 
   &--time {
-    @apply text-body-sm text-grey-600;
+    @apply hidden text-body-sm text-grey-600;
+
+    @screen md {
+      @apply block;
+    }
+  }
+
+  &--resume {
+    @apply text-body-sm text-black;
+    font-weight: 800;
+    order: -2;
+
+    @screen md {
+      @apply hidden;
+    }
   }
 
   &--list {
-    @apply flex flex-col mt-sm;
+    @apply flex flex-row items-center w-full;
+
+    @screen md {
+      @apply flex-col items-stretch mt-sm w-auto;
+    }
   }
 
   &--privacy {
-    @apply text-body-sm text-grey-600 mt-md;
+    @apply hidden text-body-sm text-grey-600;
+
+    @screen md {
+      @apply block mt-md;
+    }
   }
 
   &--reset {
-    @apply flex flex-col gap-xs mt-sm text-body-sm;
+    @apply flex flex-col gap-xs text-body-sm;
+    order: -1;
+    margin-left: auto;
+
+    @screen md {
+      @apply mt-sm;
+      order: 0;
+      margin-left: 0;
+    }
   }
 
   &--reset-ask {
@@ -159,31 +207,37 @@ function state(index: number): "done" | "current" | "todo" {
 }
 
 .vb-step {
-  @apply flex gap-sm pb-md;
+  @apply flex items-center grow;
   position: relative;
 
-  // Filet vertical entre les pastilles : le progrès se lit d'un coup d'œil.
+  &:last-child {
+    @apply grow-0;
+  }
+
+  // Filet entre les pastilles : le progrès se lit d'un coup d'œil.
   &:not(:last-child)::before {
     content: "";
     position: absolute;
-    left: 0.85rem;
-    top: 1.9rem;
-    bottom: 0.15rem;
-    width: 2px;
+    left: 1.35rem;
+    right: 0.2rem;
+    top: 50%;
+    height: 2px;
     @apply bg-grey-200;
   }
 
   &--dot {
-    @apply flex items-center justify-center shrink-0 border border-grey-200 bg-white text-grey-600 text-body-sm;
-    width: 1.75rem;
-    height: 1.75rem;
+    @apply flex items-center justify-center shrink-0 border border-grey-200 bg-white text-grey-600;
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.75rem;
     border-radius: 999px;
     font-weight: 800;
     z-index: 1;
   }
 
+  // Les libellés restent lus par les lecteurs d'écran, invisibles en mobile.
   &--body {
-    @apply flex flex-col;
+    @apply sr-only;
   }
 
   &--label {
@@ -191,7 +245,6 @@ function state(index: number): "done" | "current" | "todo" {
     font-weight: 800;
   }
 
-  // L'objectif n'apparaît que là où il sert : sur l'étape en cours.
   &--goal {
     @apply text-body-sm text-grey-700;
     display: none;
@@ -205,15 +258,44 @@ function state(index: number): "done" | "current" | "todo" {
   &--current .vb-step--dot {
     @apply bg-secondary text-white;
     border-color: transparent;
-    box-shadow: 0 0 0 5px rgb(35 165 247 / 18%);
+    box-shadow: 0 0 0 4px rgb(35 165 247 / 18%);
   }
 
   &--current .vb-step--label {
     @apply text-black;
   }
 
-  &--current .vb-step--goal {
-    display: block;
+  @screen md {
+    @apply items-start gap-sm pb-md grow-0;
+
+    &:not(:last-child)::before {
+      left: 0.85rem;
+      right: auto;
+      top: 1.9rem;
+      bottom: 0.15rem;
+      width: 2px;
+      height: auto;
+    }
+
+    &--dot {
+      @apply text-body-sm;
+      width: 1.75rem;
+      height: 1.75rem;
+      font-size: inherit;
+    }
+
+    &--body {
+      @apply not-sr-only flex flex-col;
+    }
+
+    // L'objectif n'apparaît que là où il sert : sur l'étape en cours.
+    &--current .vb-step--goal {
+      display: block;
+    }
+
+    &--current .vb-step--dot {
+      box-shadow: 0 0 0 5px rgb(35 165 247 / 18%);
+    }
   }
 }
 
