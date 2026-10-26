@@ -426,9 +426,14 @@ onMounted(() => {
     justify-content: center;
   }
 
-  &--socials,
   &--name,
   &--meta {
+    display: none;
+  }
+
+  // Préfixe .vb-hero : à spécificité égale, le `display: flex` de .vb-socials
+  // gagnait selon l'ordre de chargement des feuilles.
+  & &--socials {
     display: none;
   }
 }
@@ -580,7 +585,7 @@ onMounted(() => {
       line-height: 1.3;
     }
 
-    &--socials {
+    & &--socials {
       grid-area: socials;
       display: flex;
       margin-top: 0.5rem;

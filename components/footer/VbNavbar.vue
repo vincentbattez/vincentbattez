@@ -193,7 +193,10 @@ const formattedStatusUpdatedAt = computed(() => {
   }
 
   // En mobile, les socials passent sous la photo (rendus dans le hero).
-  .vb-navbar--socials {
+  // Préfixe .vb-navbar : à spécificité égale, le `display: flex` de
+  // .vb-socials gagnait selon l'ordre de chargement des feuilles (flash au
+  // reload).
+  .vb-navbar .vb-navbar--socials {
     display: none;
   }
 }
