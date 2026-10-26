@@ -225,8 +225,7 @@ onMounted(() => {
 
             <span class="vb-xp">
               <span class="vb-xp--num">+8</span>
-              <!-- Espace avant <br> : le badge mobile masque le saut de ligne. -->
-              <span class="vb-xp--label">ans <br />d'expérience</span>
+              <span class="vb-xp--label">ans<br />d'expérience</span>
             </span>
           </div>
 
@@ -235,7 +234,7 @@ onMounted(() => {
           <p class="vb-hero--name">{{ seo.author.name }}</p>
           <p class="vb-hero--meta">{{ identityMeta }}</p>
 
-          <VbSocials class="vb-hero--socials" compact />
+          <VbSocials class="vb-hero--socials" />
         </div>
       </div>
 
@@ -543,17 +542,24 @@ onMounted(() => {
 
     // Rangée identité : le médaillon de 200px poussait pitch et CTA sous le
     // pli. Même DOM qu'en desktop, recomposé en grille.
+    // Les lignes 1fr encadrent nom, meta et socials : le bloc texte se centre
+    // sur la photo, le badge prend une ligne auto sans vide dessous.
     &--portrait {
       order: -1;
       display: grid;
-      grid-template-columns: auto minmax(0, 1fr) auto;
+      // Colonne fixe = photo : le badge s'y centre sans déborder sur les socials.
+      grid-template-columns: 150px minmax(0, 1fr);
+      grid-template-rows: 1fr auto auto auto 1fr auto;
       grid-template-areas:
-        "avatar name socials"
-        "avatar meta socials"
-        "avatar xp socials";
+        "avatar ."
+        "avatar name"
+        "avatar meta"
+        "avatar socials"
+        "avatar ."
+        "xp .";
       align-items: center;
-      column-gap: 0.875rem;
-      row-gap: 0.125rem;
+      column-gap: 1.25rem;
+      row-gap: 0.25rem;
     }
 
     &--name {
@@ -577,6 +583,7 @@ onMounted(() => {
     &--socials {
       grid-area: socials;
       display: flex;
+      margin-top: 0.5rem;
     }
   }
 
@@ -587,35 +594,36 @@ onMounted(() => {
 
     img {
       grid-area: avatar;
-      width: 72px;
-      height: 72px;
-      padding: 3px;
+      width: 150px;
+      height: 150px;
+      padding: 4px;
       background: linear-gradient(160deg, #facf79, #f0910f);
       box-shadow: 0 10px 20px -10px rgba(240, 145, 15, 0.55);
     }
   }
 
+  // Chevauche le bas de la photo, comme le badge du médaillon desktop.
   .vb-xp {
     grid-area: xp;
-    justify-self: start;
-    position: static;
+    justify-self: center;
+    align-self: start;
+    position: relative;
+    // Annule le left/bottom du badge desktop, actifs en `relative`.
+    inset: auto;
+    margin-top: -1.9rem;
     transform: none;
-    gap: 0.3rem;
-    padding: 0.1rem 0.5rem;
-    box-shadow: none;
+    gap: 0.45rem;
+    padding: 0.35rem 0.85rem;
+    box-shadow: 0 12px 24px -12px rgba(240, 145, 15, 0.6);
 
     &--num {
-      font-size: 0.95rem;
+      font-size: 1.45rem;
     }
 
     &--label {
       font-size: 0.58rem;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       white-space: nowrap;
-
-      br {
-        display: none;
-      }
     }
   }
 }
