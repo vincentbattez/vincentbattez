@@ -1,4 +1,5 @@
 import { lookupTable } from "./utils/redirect";
+import { vcardPath } from "./config/vcard";
 import { seo } from "./config/seo";
 import { llmsOptions } from "./config/llms";
 
@@ -97,7 +98,10 @@ export default defineNuxtConfig({
     prerender: {
       // Le crawler ignore les liens avec query (?s=pf) : sans cette liste, /go
       // n'a pas de HTML statique et l'accès direct renvoie 404.
-      routes: Object.keys(lookupTable.redirectId).map((id) => `/go/${id}`),
+      routes: [
+        ...Object.keys(lookupTable.redirectId).map((id) => `/go/${id}`),
+        vcardPath,
+      ],
     },
   },
 

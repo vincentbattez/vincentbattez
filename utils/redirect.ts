@@ -1,4 +1,5 @@
 import { seo } from "../config/seo";
+import { vcardPath } from "../config/vcard";
 
 export const lookupTable = {
   source: {
@@ -21,6 +22,7 @@ export const lookupTable = {
     github: "https://github.com/vincentbattez/",
     cv: "https://drive.google.com/file/d/0B_qtZh6a-s4cVTFkMU42bU9LTU0/view?resourcekey=0-77krpT-fBdI0BbSikISLBQ",
     mail: "mailto:vincentbattez",
+    "get-contact": vcardPath,
   },
 };
 
@@ -33,6 +35,7 @@ const redirectLabel = {
   github: "mon GitHub",
   cv: "mon CV",
   mail: "votre messagerie",
+  "get-contact": "ma fiche contact",
 } as const;
 
 const defaultRedirectLabel = "votre destination";
@@ -79,12 +82,23 @@ const redirectMeta = {
     title: `Écrire à ${seo.author.name}`,
     description: `Envoyez un email à ${who}.`,
   },
+  "get-contact": {
+    title: `Enregistrer le contact de ${seo.author.name}`,
+    description: `Ajoutez ${who} à vos contacts.`,
+  },
 } as const;
 
 export type RedirectMeta = { title: string; description: string };
 
 export function getRedirectMeta(redirectId: string): RedirectMeta | undefined {
   return redirectMeta[redirectId as keyof typeof redirectMeta];
+}
+
+// Cible téléchargée, pas une page : l'onglet survit au replace() et se ferme.
+const downloadRedirectIds = new Set<string>(["get-contact"]);
+
+export function isDownloadRedirect(redirectId: string): boolean {
+  return downloadRedirectIds.has(redirectId);
 }
 
 // Côté client (site statique). keepalive : la requête survit au replace() suivant.

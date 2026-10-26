@@ -16,6 +16,7 @@ Format recommandé : **1200×630 px**, PNG ou JPG.
 | `go-recommandation.png`     | `/go/recommandation`                |
 | `go-envoyer_message.png`    | `/go/envoyer_message`               |
 | `go-mail.png`               | `/go/mail`                          |
+| `go-get-contact.png`        | `/go/get-contact`                   |
 | `vincent-battez-photo.jpg`  | `?`                                 |
 
 > Le nom de fichier des redirections suit `go-<redirectId>.png` (voir

@@ -50,6 +50,16 @@ for = "/recommendation*"
 [headers.values]
 X-Robots-Tag = "noindex, nofollow"
 
+# Fiche contact (/go/get-contact) : attachment force le téléchargement desktop,
+# iOS ouvre quand même l'aperçu Contacts.
+[[headers]]
+for = "/vincent-battez.vcf"
+
+[headers.values]
+Content-Type = "text/vcard; charset=utf-8"
+Content-Disposition = 'attachment; filename="vincent-battez.vcf"'
+X-Robots-Tag = "noindex"
+
 [[headers]]
 for = "/_nuxt/*"
 

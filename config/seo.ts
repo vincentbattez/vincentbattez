@@ -18,6 +18,8 @@ const author = {
   givenName: "Vincent",
   familyName: "Battez",
   email: "vincent.battez.pro@gmail.com",
+  phone: "+33 7 87 13 70 91",
+  birthDate: "1997-04-30",
   url: siteUrl,
 } as const;
 
@@ -87,6 +89,7 @@ export const seo = {
   social: {
     linkedin: "https://www.linkedin.com/in/vincentbattez",
     github: "https://github.com/vincentbattez",
+    codepen: "https://codepen.io/vincentbattez",
   },
 
   ogImage: {

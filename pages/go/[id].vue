@@ -2,6 +2,7 @@
 import {
   getRedirectLabel,
   getRedirectMeta,
+  isDownloadRedirect,
   lookupTable,
   notifyCall,
 } from "~/utils/redirect";
@@ -39,7 +40,9 @@ useSeoMeta({
   twitterImage: ogImageUrl,
 });
 
+const isDownload = isDownloadRedirect(redirectId);
 const isExiting = ref(false);
+const isDone = ref(false);
 onMounted(() => {
   track("outbound_link_opened", {
     destination: redirectId,
@@ -47,14 +50,28 @@ onMounted(() => {
   });
   notifyCall(redirectId);
 
-  const exitTimer = setTimeout(() => (isExiting.value = true), 1500);
-  const redirectTimer = setTimeout(
-    () => window.location.replace(redirectURL),
-    1500,
-  );
+  let closeTimer: ReturnType<typeof setTimeout> | undefined;
+  // Téléchargement : la page reste affichée, pas de fondu de sortie.
+  const exitTimer = isDownload
+    ? undefined
+    : setTimeout(() => (isExiting.value = true), 1500);
+  const redirectTimer = setTimeout(() => {
+    window.location.replace(redirectURL);
+    if (!isDownload) {
+      return;
+    }
+    // Délai : fermer avant la réponse annulerait le téléchargement. close()
+    // n'agit que sur un onglet sans historique (lien target=_blank, QR code) ;
+    // sinon le message de fin reste affiché.
+    closeTimer = setTimeout(() => {
+      isDone.value = true;
+      window.close();
+    }, 1000);
+  }, 1500);
   onBeforeUnmount(() => {
     clearTimeout(exitTimer);
     clearTimeout(redirectTimer);
+    clearTimeout(closeTimer);
   });
 });
 </script>
@@ -65,6 +82,7 @@ onMounted(() => {
       :label="redirectLabel"
       :url="redirectURL"
       :exiting="isExiting"
+      :done="isDone"
     />
   </div>
 </template>

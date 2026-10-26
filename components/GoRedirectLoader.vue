@@ -5,6 +5,8 @@ defineProps<{
   // Passé à true par la page à 1200 ms : le fade-out (300 ms) précède le
   // replace() à 1500 ms.
   exiting?: boolean;
+  // Cible téléchargée : l'onglet n'a pas pu se fermer seul.
+  done?: boolean;
 }>();
 </script>
 
@@ -32,7 +34,10 @@ defineProps<{
 
       <p class="go-loader__brand">Vincent Battez</p>
 
-      <p class="go-loader__label">
+      <p v-if="done" class="go-loader__label" role="status">
+        C'est fait, vous pouvez fermer cet onglet.
+      </p>
+      <p v-else class="go-loader__label">
         Ouverture de {{ label
         }}<span class="go-loader__dots" aria-hidden="true">…</span>
       </p>
