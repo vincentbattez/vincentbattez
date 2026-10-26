@@ -1,7 +1,7 @@
 // Captures d'écran du site pour vérifier visuellement un changement d'UI.
 // Usage : pnpm shot [chemins...] [-v mobile|laptop|desktop|WxH[@dpr]]... [--base url] [--reduced-motion]
 // Défaut = rendu final des animations d'entrée ; --reduced-motion vérifie le mode
-// réduit (sans le soulignement d'accent, gated `no-preference`).
+// réduit (même rendu final, sans passer par les animations).
 // Prérequis (une fois par machine) : pnpm exec playwright install chromium-headless-shell
 import { mkdir } from "node:fs/promises";
 import { resolve } from "node:path";

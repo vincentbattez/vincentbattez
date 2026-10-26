@@ -364,9 +364,16 @@ onMounted(() => {
     line-height: 1.05;
   }
 
+  // Soulignement à l'état final ici : index-motion.scss ne fait que l'animer
+  // depuis 0%, donc le mode reduced-motion garde le rendu statique complet.
   &--accent {
     @apply text-primary;
     position: relative;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 100% 3px;
+    padding-bottom: 2px;
   }
 
   // padding/margin compensés : sans ça le masque rogne les jambages (« pp »).

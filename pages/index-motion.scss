@@ -44,11 +44,7 @@
 
   // Sélecteur renforcé (0,3,0) pour battre la règle générale `.vb-word--i`.
   .vb-hero .vb-word--i.vb-hero--accent {
-    background-image: linear-gradient(currentColor, currentColor);
-    background-repeat: no-repeat;
-    background-position: 0 100%;
     background-size: 0% 3px;
-    padding-bottom: 2px;
     animation:
       vb-word-rise var(--vb-dur-word) var(--vb-ease-reveal) forwards
         var(--vb-at-word-3),
