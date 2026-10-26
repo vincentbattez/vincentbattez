@@ -210,6 +210,12 @@ export default defineNuxtConfig({
   // nuxt-schema-org 6 incompatible unhead 3 : JSON-LD écrit à la main (app.vue).
   schemaOrg: false,
 
+  // Sous-modules de @nuxtjs/seo 6. aiReady écraserait le llms.txt de nuxt-llms
+  // et ajoute un Content-Signal que Lighthouse refuse ; la PWA (autoUpdate)
+  // couvre déjà ce que ferait skewProtection.
+  aiReady: false,
+  skewProtection: false,
+
   posthogConfig: {
     publicKey: process.env.NUXT_PUBLIC_POSTHOG_PROJECT_TOKEN,
     host: process.env.NUXT_PUBLIC_POSTHOG_HOST,
