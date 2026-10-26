@@ -110,63 +110,76 @@ onMounted(() => {
             </span>
           </h2>
           <div class="vb-hero--lead">
-            <p class="vb-hero--tension">
-              J'intègre l'IA au cœur de mon workflow quotidien. Elle démultiplie
-              la vitesse, mais, sans
-              <VbTooltip
-                align="start"
-                term="Architecture"
-                :content="[
-                  'À l\'ère de la génération de code, la valeur du développeur réside plus que jamais dans la conception.',
-                  'Si l\'implémentation est devenue fluide et rapide, la maîtrise des bonnes pratiques d\'architecture est indispensable. À cette vitesse, une erreur à ce niveau se paie en mois, voire en années.',
-                  'Tracer une frontière qu\'on peut déplacer sans casser le reste, ça ne s\'improvise pas.',
-                ]"
-                :keywords="[
-                  'Bounded contexts',
-                  'Couplage / cohésion',
-                  'Shotgun Surgery',
-                  'Big ball of mud',
-                ]"
-                >architecture</VbTooltip
-              >
-              ni
-              <VbTooltip
-                align="start"
-                term="Compréhension profonde"
-                :content="[
-                  'Un modèle de langage n\'est fiable que si on connaît ses angles morts. Et cela ne concerne pas que le dev :',
-                  'Du besoin à la rédaction du ticket, jusqu\'à la mise en prod et à la documentation, toute la chaîne est en jeu. Sans ce recul, on empile et on empoisonne chaque nouvelle livraison.',
-                ]"
-                :keywords="[
-                  'Hallucinations',
-                  'Manque de contexte',
-                  'Dérive silencieuse',
-                  'Sur-confiance',
-                  'Garbage in, garbage out',
-                ]"
-                >compréhension profonde</VbTooltip
-              >, elle accélère surtout
-              <VbTooltip
-                align="start"
-                term="Dette technique"
-                :content="[
-                  'Tout comme un dev inexpérimenté, une IA ne dit jamais non. Elle exécute les bonnes idées comme les mauvaises.',
-                  'Pire encore, là où un humain peut râler et s\'agacer devant du code bâclé, l\'IA n\'aura aucune réticence à la relire et à en reproduire',
-                  'Elle se nourrit du code existant : sur une base saine, la dérive est contenue, sur une base truffée de raccourcis, elle les reproduit et les répand partout.',
-                  'Dire non au bon moment, arbitrer entre livrer et refactorer, ça ne se génère pas, ça s\'apprend. Sans ce recul, la dette s\'accumule désormais aussi vite que le code.',
-                ]"
-                :keywords="[
-                  'God object',
-                  'Flaky tests',
-                  'Code mort',
-                  'Code smell',
-                  'Duplication',
-                  'Rustines empilées',
-                ]"
-                >la dette</VbTooltip
-              >. <br />
-              C'est précisément là que j'interviens&nbsp;: profiter de la
-              vitesse sans le coût de la
+            <p class="vb-hero--hook">
+              L'IA accélère le code. Sans architecture, elle accélère surtout la
+              dette.
+            </p>
+            <ul class="vb-hero--risks">
+              <li>
+                Une
+                <VbTooltip
+                  align="start"
+                  term="Architecture"
+                  :content="[
+                    'À l\'ère de la génération de code, la valeur du développeur réside plus que jamais dans la conception.',
+                    'Si l\'implémentation est devenue fluide et rapide, la maîtrise des bonnes pratiques d\'architecture est indispensable. À cette vitesse, une erreur à ce niveau se paie en mois, voire en années.',
+                    'Tracer une frontière qu\'on peut déplacer sans casser le reste, ça ne s\'improvise pas.',
+                  ]"
+                  :keywords="[
+                    'Bounded contexts',
+                    'Couplage / cohésion',
+                    'Shotgun Surgery',
+                    'Big ball of mud',
+                  ]"
+                  >architecture</VbTooltip
+                >
+                qui cède à la première évolution
+              </li>
+              <li>
+                Du code livré sans
+                <VbTooltip
+                  align="start"
+                  term="Compréhension profonde"
+                  :content="[
+                    'Un modèle de langage n\'est fiable que si on connaît ses angles morts. Et cela ne concerne pas que le dev :',
+                    'Du besoin à la rédaction du ticket, jusqu\'à la mise en prod et à la documentation, toute la chaîne est en jeu. Sans ce recul, on empile et on empoisonne chaque nouvelle livraison.',
+                  ]"
+                  :keywords="[
+                    'Hallucinations',
+                    'Manque de contexte',
+                    'Dérive silencieuse',
+                    'Sur-confiance',
+                    'Garbage in, garbage out',
+                  ]"
+                  >compréhension profonde</VbTooltip
+                >
+              </li>
+              <li>
+                Une
+                <VbTooltip
+                  align="start"
+                  term="Dette technique"
+                  :content="[
+                    'Tout comme un dev inexpérimenté, une IA ne dit jamais non. Elle exécute les bonnes idées comme les mauvaises.',
+                    'Pire encore, là où un humain peut râler et s\'agacer devant du code bâclé, l\'IA n\'aura aucune réticence à la relire et à en reproduire',
+                    'Elle se nourrit du code existant : sur une base saine, la dérive est contenue, sur une base truffée de raccourcis, elle les reproduit et les répand partout.',
+                    'Dire non au bon moment, arbitrer entre livrer et refactorer, ça ne se génère pas, ça s\'apprend. Sans ce recul, la dette s\'accumule désormais aussi vite que le code.',
+                  ]"
+                  :keywords="[
+                    'God object',
+                    'Flaky tests',
+                    'Code mort',
+                    'Code smell',
+                    'Duplication',
+                    'Rustines empilées',
+                  ]"
+                  >dette</VbTooltip
+                >
+                qui grossit aussi vite que le code
+              </li>
+            </ul>
+            <p class="vb-hero--promise">
+              Profiter de la vitesse sans le coût de la
               <VbTooltip
                 align="start"
                 term="Refonte"
@@ -183,7 +196,7 @@ onMounted(() => {
                 ]"
                 >refonte</VbTooltip
               >
-              dans 6 mois.
+              dans 6&nbsp;mois.
             </p>
           </div>
 
@@ -403,18 +416,48 @@ onMounted(() => {
     @apply font-body text-grey-700;
     font-size: clamp(17px, 0.6vw + 15px, 19px);
     font-weight: 600;
-    line-height: 1.65;
-    max-width: 37rem;
+    line-height: 1.55;
+    // 40rem : l'accroche tient sur une ligne en desktop, sinon le lead ne
+    // rentre plus dans le cadre fixe à 1280x720.
+    max-width: 40rem;
 
-    p + p {
-      margin-top: 1rem;
+    > * + * {
+      margin-top: 0.6rem;
     }
 
-    em {
-      @apply text-primary;
-      font-style: normal;
-      font-weight: 800;
+    p {
+      text-wrap: pretty;
     }
+  }
+
+  // L'accroche porte l'argument : plus contrastée que le reste du lead.
+  &--hook {
+    @apply text-black;
+    font-weight: 700;
+  }
+
+  &--risks {
+    li {
+      position: relative;
+      padding-left: 1.2em;
+    }
+
+    // Losange repris des fiches tooltip : même marqueur pour les mêmes termes.
+    li::before {
+      content: "";
+      position: absolute;
+      left: 0.15em;
+      top: 0.8em;
+      width: 0.36em;
+      height: 0.36em;
+      background: theme("colors.primary");
+      transform: translateY(-50%) rotate(45deg);
+    }
+  }
+
+  &--promise {
+    @apply text-black;
+    font-weight: 700;
   }
 
   &--actions {
