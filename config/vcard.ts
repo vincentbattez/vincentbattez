@@ -70,6 +70,12 @@ export function buildVCard(photoBase64: string): string {
         `${item}.X-ABLabel:${escapeText(label)}`,
       ];
     }),
+    // Doublon standard des profils : Android ignore les IMPP x-apple. iOS les
+    // affiche en plus, dans les URL.
+    ...profiles.flatMap(({ label, url }, index) => {
+      const item = `item${index + 2 + profiles.length}`;
+      return [`${item}.URL:${url}`, `${item}.X-ABLabel:${escapeText(label)}`];
+    }),
     `PHOTO;ENCODING=b;TYPE=JPEG:${photoBase64}`,
     "END:VCARD",
   ]
