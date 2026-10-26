@@ -15,7 +15,6 @@ import {
   RECOMMENDATION_DELIVERY,
   RECOMMENDATION_STEPS,
 } from "~/components/recommendation/steps";
-import { seo } from "~/config/seo";
 
 const { outboundHref, trackOutbound } = useOutbound();
 
@@ -451,8 +450,6 @@ async function copyInterview(): Promise<void> {
   copiedMarkdown.value = true;
   setTimeout(() => (copiedMarkdown.value = false), 4000);
 }
-
-const mailto = `mailto:${seo.author.email}?subject=Recommandation%20pour%20Vincent`;
 </script>
 
 <template>
