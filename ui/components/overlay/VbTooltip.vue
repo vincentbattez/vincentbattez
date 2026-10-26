@@ -2,11 +2,10 @@
   <span
     ref="rootEl"
     class="vb-tt"
-    @mouseenter="hovered = true"
-    @mouseleave="hovered = false"
+    @mouseenter="onHover(true)"
+    @mouseleave="onHover(false)"
     @focusin="onFocusin"
     @focusout="onFocusout"
-    @keydown.escape="dismiss"
   >
     <button
       ref="triggerEl"
@@ -28,11 +27,11 @@
         class="vb-tt--bubble"
         :class="[`vb-tt--bubble--${align}`, { 'vb-tt--bubble--open': open }]"
         :style="bubbleStyle"
-        @mouseenter="hovered = true"
-        @mouseleave="hovered = false"
+        :tabindex="isSheet ? -1 : undefined"
+        @mouseenter="onHover(true)"
+        @mouseleave="onHover(false)"
         @focusin="onFocusin"
         @focusout="onFocusout"
-        @keydown.escape="dismiss"
       >
         <button
           type="button"
@@ -42,14 +41,17 @@
         >
           <span aria-hidden="true">×</span>
         </button>
-        <span v-if="term" class="vb-tt--term">{{ term }}</span>
-        <span v-for="(para, i) in paragraphs" :key="i" class="vb-tt--def">{{
-          para
-        }}</span>
-        <span v-if="keywords?.length" class="vb-tt--tags">
-          <span v-for="kw in keywords" :key="kw" class="vb-tt--tag">{{
-            kw
+        <!-- Seul le corps défile en bottom sheet : le bouton fermer reste visible. -->
+        <span class="vb-tt--body">
+          <span v-if="term" class="vb-tt--term">{{ term }}</span>
+          <span v-for="(para, i) in paragraphs" :key="i" class="vb-tt--def">{{
+            para
           }}</span>
+          <span v-if="keywords?.length" class="vb-tt--tags">
+            <span v-for="kw in keywords" :key="kw" class="vb-tt--tag">{{
+              kw
+            }}</span>
+          </span>
         </span>
       </span>
     </Teleport>
@@ -81,24 +83,28 @@ const rootEl = ref<HTMLElement | null>(null);
 const bubbleEl = ref<HTMLElement | null>(null);
 const triggerEl = ref<HTMLButtonElement | null>(null);
 const mounted = ref(false);
-const isMobile = ref(false);
+// Tactile ou écran étroit : bulle ancrée en bas de l'écran (bottom sheet),
+// positionnée en CSS. Même requête que le bloc `@media` du style. Le
+// `tabindex=-1` qui va avec garde le focus quand on tape dans la fiche pour la
+// faire défiler : sans lui, le focusout du mot la refermerait.
+const isSheet = ref(false);
+
+// En sheet, le survol est ignoré : le tap émule un mouseenter qui collerait, et
+// à la souris (fenêtre étroite) la fiche se fermerait en rejoignant le bas.
+function onHover(value: boolean) {
+  if (!isSheet.value) hovered.value = value;
+}
 
 const bubbleStyle = ref<Record<string, string>>({});
 function reposition() {
   const t = triggerEl.value;
-  if (!t) return;
+  if (!t || isSheet.value) {
+    bubbleStyle.value = {};
+    return;
+  }
   const r = t.getBoundingClientRect();
-  const mobile = isMobile.value;
-  const sx = mobile ? window.scrollX : 0;
-  const sy = mobile ? window.scrollY : 0;
-  const style: Record<string, string> = {
-    position: mobile ? "absolute" : "fixed",
-    top: `${r.top + sy - 12}px`,
-  };
-  if (mobile) {
-    // Centrée dans le viewport : jamais de débordement horizontal.
-    style.left = `${sx + window.innerWidth / 2}px`;
-  } else if (props.align === "start") style.left = `${r.left}px`;
+  const style: Record<string, string> = { top: `${r.top - 12}px` };
+  if (props.align === "start") style.left = `${r.left}px`;
   else if (props.align === "end") style.left = `${r.right}px`;
   else style.left = `${r.left + r.width / 2}px`;
   bubbleStyle.value = style;
@@ -109,35 +115,52 @@ watch(open, (v) => {
   if (v) reposition();
 });
 
+function close() {
+  hovered.value = false;
+  focused.value = false;
+  pinned.value = false;
+}
+
 // Sur `pointerdown` pour réagir avant tout changement de focus.
 function onDocPointerDown(e: PointerEvent) {
   if (!open.value) return;
   const target = e.target as Node | null;
   if (rootEl.value?.contains(target) || bubbleEl.value?.contains(target))
     return;
-  hovered.value = false;
-  focused.value = false;
-  pinned.value = false;
+  close();
+}
+
+// Au niveau document : iOS ne focalise pas un bouton tapé, et une fiche ouverte
+// au survol doit pouvoir se fermer sans y déplacer le focus.
+function onDocKeydown(e: KeyboardEvent) {
+  if (e.key !== "Escape" || !open.value) return;
+  const active = document.activeElement;
+  if (rootEl.value?.contains(active) || bubbleEl.value?.contains(active))
+    dismiss();
+  else close();
 }
 
 onMounted(() => {
   mounted.value = true;
-  const mq = matchMedia("(max-width: 820px)");
-  isMobile.value = mq.matches;
+  const mq = matchMedia("(pointer: coarse), (max-width: 820px)");
+  isSheet.value = mq.matches;
   const onReflow = () => open.value && reposition();
   const onMq = () => {
-    isMobile.value = mq.matches;
+    isSheet.value = mq.matches;
+    hovered.value = false;
     onReflow();
   };
   mq.addEventListener("change", onMq);
   window.addEventListener("resize", onReflow, { passive: true });
   window.addEventListener("scroll", onReflow, { passive: true, capture: true });
   document.addEventListener("pointerdown", onDocPointerDown, true);
+  document.addEventListener("keydown", onDocKeydown);
   onBeforeUnmount(() => {
     mq.removeEventListener("change", onMq);
     window.removeEventListener("resize", onReflow);
     window.removeEventListener("scroll", onReflow, { capture: true });
     document.removeEventListener("pointerdown", onDocPointerDown, true);
+    document.removeEventListener("keydown", onDocKeydown);
   });
 });
 
@@ -161,10 +184,10 @@ function onFocusout(e: FocusEvent) {
 }
 
 function dismiss() {
-  hovered.value = false;
-  focused.value = false;
-  pinned.value = false;
-  suppressFocusin = true;
+  close();
+  // Déjà focalisé → aucun focusin : le drapeau resterait armé et avalerait le
+  // prochain focus clavier.
+  suppressFocusin = document.activeElement !== triggerEl.value;
   triggerEl.value?.focus();
 }
 
@@ -306,6 +329,10 @@ const id = useId();
     }
   }
 
+  &--body {
+    display: block;
+  }
+
   &--close {
     position: absolute;
     top: 6px;
@@ -422,12 +449,47 @@ const id = useId();
   }
 }
 
-// Mobile : bulle centrée dans le viewport (aucun débordement horizontal), donc
-// le caret ne pointe plus le mot → masqué.
+// Mobile : un souligné pointillé suffit à signaler le terme. Bordure 2px, gras
+// et « + » sur chaque terme faisaient trop de bruit en colonne étroite.
 @media (max-width: 820px) {
-  .vb-tt--bubble {
-    max-width: calc(100vw - 1.5rem);
+  .vb-tt {
+    display: inline;
+  }
 
+  .vb-tt--trigger {
+    font-weight: 700;
+    padding: 0;
+    border-bottom: 0;
+    text-decoration: underline dotted theme("colors.primary");
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+
+    &::after {
+      content: none;
+    }
+
+    &:hover,
+    &:focus-visible {
+      text-decoration-style: solid;
+    }
+  }
+}
+
+// Bottom sheet : ancrée en bas, pleine largeur moins la gouttière. Une bulle
+// au-dessus du mot débordait du haut de l'écran sur les fiches longues.
+@media (pointer: coarse), (max-width: 820px) {
+  .vb-tt--bubble {
+    inset: auto 0.5rem calc(0.5rem + env(safe-area-inset-bottom)) 0.5rem;
+    width: auto;
+    max-width: none;
+    max-height: 70dvh;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    border-radius: 20px;
+    outline: 0;
+
+    // Le caret ne pointe plus aucun mot.
     &::after {
       display: none;
     }
@@ -435,12 +497,45 @@ const id = useId();
   .vb-tt--bubble--center,
   .vb-tt--bubble--start,
   .vb-tt--bubble--end {
-    transform: translate(-50%, calc(-100% + 6px));
+    transform: translateY(16px);
   }
   .vb-tt--bubble--center.vb-tt--bubble--open,
   .vb-tt--bubble--start.vb-tt--bubble--open,
   .vb-tt--bubble--end.vb-tt--bubble--open {
-    transform: translate(-50%, -100%);
+    transform: none;
+  }
+
+  .vb-tt--body {
+    min-height: 0;
+    overflow-y: auto;
+    // Le défilement de la fiche n'entraîne pas la page derrière.
+    overscroll-behavior: contain;
+    padding: 1.1rem 1.1rem 1.25rem;
+  }
+
+  // Cible tactile de 40px (le × de 22px se rate au doigt).
+  .vb-tt--close {
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 1;
+    width: 40px;
+    height: 40px;
+    font-size: 1.4rem;
+  }
+
+  .vb-tt--term {
+    padding-right: 2.5rem;
+    line-height: 40px;
+    margin-top: -0.6rem;
+  }
+}
+
+@media (pointer: coarse) and (prefers-reduced-motion: reduce),
+  (max-width: 820px) and (prefers-reduced-motion: reduce) {
+  .vb-tt--bubble--center,
+  .vb-tt--bubble--start,
+  .vb-tt--bubble--end {
+    transform: none;
   }
 }
 </style>
