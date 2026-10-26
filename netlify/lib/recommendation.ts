@@ -3,15 +3,20 @@
 // Rien n'est persisté ici — ni l'Entretien, ni la Recommandation (ADR 0003).
 
 import {
+  APICallError,
   convertToModelMessages,
+  createUIMessageStreamResponse,
+  RetryError,
   streamText,
   tool,
+  toUIMessageStream,
+  validateUIMessages,
   type LanguageModel,
-  type UIMessage,
 } from "ai";
-import { z } from "zod";
 import { dossier } from "../../config/dossier";
 import { rubyInstructions } from "../../config/ruby";
+import type { RecommendationMessage } from "./recommendation-message";
+import { recommendationTools } from "./recommendation-tools";
 
 // Un Entretien tient en 5 questions ; au-delà de 25 tours, le Collègue tourne
 // en rond ou quelqu'un s'amuse.
@@ -32,6 +37,8 @@ export const UPSTREAM_ERROR_MESSAGE =
   "Ruby est indisponible pour le moment. Réessaie dans un instant.";
 export const BAD_REQUEST_MESSAGE = "Requête invalide.";
 
+export const UPSTREAM_FAILURE_LOG = "[recommendation] panne du fournisseur";
+
 export type RecommendationDeps = {
   model: LanguageModel;
   notify: (title: string, message: string) => Promise<unknown>;
@@ -50,20 +57,46 @@ function errorResponse(status: number, message: string): Response {
   });
 }
 
-function countTurns(messages: UIMessage[]): number {
+function countTurns(messages: RecommendationMessage[]): number {
   return messages.filter((message) => message.role === "user").length;
+}
+
+// Trace minimale d'une panne : de quoi diagnostiquer (type, statut, modèle),
+// jamais le message ni le corps de l'erreur, qui peuvent porter le prompt ou la
+// réponse amont — donc les propos du Collègue (ADR 0003).
+function logUpstreamFailure(error: unknown, model: LanguageModel): void {
+  const cause = RetryError.isInstance(error) ? error.lastError : error;
+  console.error(UPSTREAM_FAILURE_LOG, {
+    error: cause instanceof Error ? cause.name : typeof cause,
+    status: APICallError.isInstance(cause) ? cause.statusCode : undefined,
+    model: typeof model === "string" ? model : model.modelId,
+  });
 }
 
 export function createRecommendationHandler({
   model,
   notify,
 }: RecommendationDeps) {
+  const tools = {
+    submit_recommendation: tool({
+      ...recommendationTools.submit_recommendation,
+      execute: async () => {
+        await notify(NOTIFICATION_TITLE, NOTIFICATION_MESSAGE);
+        return { livree: true as const };
+      },
+    }),
+  };
+
   return async (request: Request): Promise<Response> => {
-    let messages: UIMessage[];
+    // L'historique vient du navigateur : il doit respecter le contrat des
+    // messages et des tools avant d'atteindre le modèle.
+    let messages: RecommendationMessage[];
     try {
       const body = (await request.json()) as { messages?: unknown };
-      if (!Array.isArray(body.messages)) throw new Error("messages manquants");
-      messages = body.messages as UIMessage[];
+      messages = await validateUIMessages<RecommendationMessage>({
+        messages: body.messages,
+        tools: recommendationTools,
+      });
     } catch {
       return errorResponse(400, BAD_REQUEST_MESSAGE);
     }
@@ -78,23 +111,11 @@ export function createRecommendationHandler({
         model,
         system: buildSystemPrompt(turns),
         messages: await convertToModelMessages(messages),
-        tools: {
-          submit_recommendation: tool({
-            description:
-              "Livre la Recommandation finale au Collègue. Seul moyen de la lui transmettre.",
-            inputSchema: z.object({
-              texte: z
-                .string()
-                .describe(
-                  "La Recommandation complète, texte simple, ~1000 caractères, à la première personne du Collègue.",
-                ),
-            }),
-            execute: async () => {
-              await notify(NOTIFICATION_TITLE, NOTIFICATION_MESSAGE);
-              return { livree: true };
-            },
-          }),
-        },
+        tools,
+        // Le Collègue qui arrête Ruby coupe la requête : la génération suit.
+        abortSignal: request.signal,
+        // `streamText` ne lève pas : la panne passe dans le flux.
+        onError: ({ error }) => logUpstreamFailure(error, model),
         // Le reasoning natif aide la sélection des Valeurs ; il ne sort jamais
         // vers le Collègue (`sendReasoning: false`).
         providerOptions: {
@@ -102,9 +123,13 @@ export function createRecommendationHandler({
         },
       });
 
-      return result.toUIMessageStreamResponse({
-        sendReasoning: false,
-        onError: () => UPSTREAM_ERROR_MESSAGE,
+      return createUIMessageStreamResponse({
+        stream: toUIMessageStream<typeof tools, RecommendationMessage>({
+          stream: result.stream,
+          tools,
+          sendReasoning: false,
+          onError: () => UPSTREAM_ERROR_MESSAGE,
+        }),
       });
     } catch {
       return errorResponse(502, UPSTREAM_ERROR_MESSAGE);
