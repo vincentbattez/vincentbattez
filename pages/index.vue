@@ -493,14 +493,8 @@ onMounted(() => {
     margin: var(--vb-gap) auto;
     border-radius: 22px;
 
-    // Aligné sur le hero, qui passe à gauche.
     &--nav {
       @apply px-md pt-md;
-      justify-content: flex-start;
-
-      :deep(.vb-navbar--status) {
-        align-items: flex-start;
-      }
     }
 
     &--decor {
