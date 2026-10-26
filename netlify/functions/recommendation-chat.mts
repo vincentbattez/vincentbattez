@@ -25,3 +25,7 @@ export default async (request: Request): Promise<Response> => {
 
   return handler(request);
 };
+
+// La Function déclare sa route : évaluée avant les redirects, elle échappe au
+// catch-all 404 que le preset netlify-static écrit dans `_redirects`.
+export const config = { path: "/api/recommendation" };

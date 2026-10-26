@@ -27,8 +27,9 @@ package = "@netlify/plugin-lighthouse"
   # best-practices = 0.95
   # accessibility = 0.9
 
-# Les redirects vivent dans `public/_redirects` : ce fichier prime sur
-# netlify.toml, et le preset netlify-static y écrit un catch-all 404.
+# Pas de redirect ici : `public/_redirects` primerait, et le preset
+# netlify-static y écrit un catch-all 404. Une Function déclare sa route dans
+# son `config.path` (évalué avant les redirects).
 
 [[headers]]
 for = "/*"

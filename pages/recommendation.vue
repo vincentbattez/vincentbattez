@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Markdown } from "@comark/vue";
 import { useChat } from "@ai-sdk/vue";
-import { DefaultChatTransport, type UIMessage } from "ai";
+import { DefaultChatTransport } from "ai";
 import VbNavbar from "~/components/footer/VbNavbar.vue";
 import VbButton from "~/ui/components/forms/VbButton.vue";
 import VbIcon from "~/ui/components/icon/VbIcon.vue";
@@ -15,6 +15,10 @@ import {
   RECOMMENDATION_DELIVERY,
   RECOMMENDATION_STEPS,
 } from "~/components/recommendation/steps";
+import {
+  deliveredRecommendation,
+  type RecommendationMessage,
+} from "~/netlify/lib/recommendation-message";
 
 const { outboundHref, trackOutbound } = useOutbound();
 
@@ -25,7 +29,6 @@ useSeoMeta({
 });
 
 const STORAGE_KEY = "vb-entretien-recommandation";
-const TOOL_PART_TYPE = "tool-submit_recommendation";
 
 // Texte invariant : injecté en dur, aucun appel au modèle pour l'accueil.
 const WELCOME_ID = "ruby-welcome";
@@ -42,7 +45,7 @@ const WELCOME_TEXT = [
 // Découpé en paragraphes : l'accueil se pose bloc par bloc, pas lettre à lettre.
 const WELCOME_PARTS = WELCOME_TEXT.split("\n\n");
 
-const WELCOME: UIMessage = {
+const WELCOME: RecommendationMessage = {
   id: WELCOME_ID,
   role: "assistant",
   parts: [{ type: "text", text: WELCOME_TEXT }],
@@ -50,9 +53,10 @@ const WELCOME: UIMessage = {
 
 const { track } = useAnalytics();
 
-const { messages, sendMessage, status, error, stop, clearError } = useChat({
-  transport: new DefaultChatTransport({ api: "/api/recommendation" }),
-});
+const { messages, sendMessage, status, error, stop, clearError } =
+  useChat<RecommendationMessage>({
+    transport: new DefaultChatTransport({ api: "/api/recommendation" }),
+  });
 
 const started = ref(false);
 // Sortie de l'intro puis entrée de l'entretien : 2s de bout en bout.
@@ -206,46 +210,40 @@ function autoGrow(): void {
 
 onBeforeUnmount(stopReveal);
 
-function textOf(message: UIMessage): string {
+function textOf(message: RecommendationMessage): string {
   return message.parts
-    .filter((part) => part.type === "text")
-    .map((part) => (part as { text: string }).text)
+    .flatMap((part) => (part.type === "text" ? [part.text] : []))
     .join("\n");
 }
 
-// Le tool call est le seul canal de la Recommandation : on lit la dernière
-// occurrence dans le fil.
-function latestRecommendation(list: UIMessage[]): string {
-  let found = "";
-  for (const message of list) {
-    for (const part of message.parts) {
-      if (part.type !== TOOL_PART_TYPE) continue;
-      const texte = (part as { input?: { texte?: string } }).input?.texte;
-      if (typeof texte === "string" && texte.length > 0) found = texte;
-    }
-  }
-  return found;
+// Seul le message que Ruby est en train d'écrire passe en rendu streaming : les
+// précédents restent stables.
+function isWriting(message: RecommendationMessage): boolean {
+  return message.parts.some(
+    (part) => part.type === "text" && part.state === "streaming",
+  );
 }
 
 type ThreadItem = {
-  message: UIMessage;
+  message: RecommendationMessage;
   chapter?: { index: number; label: string; delivery?: boolean };
 };
 
-function questionIn(message: UIMessage): number | undefined {
+function questionIn(message: RecommendationMessage): number | undefined {
   const match = textOf(message).match(/Question\s+(\d)\s*\/\s*5/i);
   return match ? Number(match[1]) : undefined;
 }
 
 // Chaque question ouvre un chapitre dans le fil : la coupure d'étape se voit
-// sans relire le message. La livraison en ouvre un dernier.
+// sans relire le message. La livraison en ouvre un dernier, dès que Ruby
+// commence à l'écrire : c'est un repère, pas la livraison elle-même.
 const thread = computed<ThreadItem[]>(() => {
   let opened = 0;
   return messages.value.map((message) => {
     if (message.role !== "assistant") return { message };
 
     const delivered = message.parts.some(
-      (part) => part.type === TOOL_PART_TYPE,
+      (part) => part.type === "tool-submit_recommendation",
     );
     if (delivered && opened <= RECOMMENDATION_STEPS.length) {
       opened = RECOMMENDATION_STEPS.length + 1;
@@ -282,7 +280,7 @@ watch(
   (list) => {
     if (restored.value) persist(list);
 
-    const incoming = latestRecommendation(list);
+    const incoming = deliveredRecommendation(list);
     if (!incoming || incoming === recommendationSource.value) return;
 
     deliveries += 1;
@@ -316,7 +314,7 @@ watch(messages, (list) => {
 watch(messages, () => follow(), { deep: true });
 watch(isThinking, () => follow());
 
-function persist(list: UIMessage[]): void {
+function persist(list: RecommendationMessage[]): void {
   if (!import.meta.client) return;
   try {
     localStorage.setItem(
@@ -333,7 +331,7 @@ onMounted(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved) as {
-        messages?: UIMessage[];
+        messages?: RecommendationMessage[];
         recommendation?: string;
       };
       if (parsed.messages?.length) {
@@ -341,7 +339,7 @@ onMounted(() => {
         started.value = true;
         if (parsed.recommendation) {
           recommendation.value = parsed.recommendation;
-          recommendationSource.value = latestRecommendation(parsed.messages);
+          recommendationSource.value = deliveredRecommendation(parsed.messages);
         }
       }
     }
@@ -528,7 +526,7 @@ async function copyInterview(): Promise<void> {
                 <Markdown
                   v-else
                   :value="textOf(item.message)"
-                  :streaming="isStreaming"
+                  :streaming="isWriting(item.message)"
                   class="vb-bulle--md"
                 />
               </div>
