@@ -2,8 +2,9 @@
 defineProps<{
   label: string;
   url: string;
-  // Passé à true par la page à 1200 ms : le fade-out (300 ms) précède le
-  // replace() à 1500 ms.
+  // Passé à true par la page avec le replace() à 1500 ms : le fade-out
+  // (300 ms) joue pendant le chargement de la destination. Jamais pour un
+  // téléchargement, la page reste affichée.
   exiting?: boolean;
   // Cible téléchargée : l'onglet n'a pas pu se fermer seul.
   done?: boolean;
