@@ -25,3 +25,6 @@ La prod est un **site statique généré par Nuxt (SSG)** : `nuxt generate` → 
 `netlify.toml`** : `/api/recommendation` et `/.netlify/functions/*` répondent
 404. Pour ces routes, lancer `pnpm dev:netlify` (port 8888) — en ayant arrêté
 `pnpm dev` avant, sinon le lock du dev server Nuxt fait échouer le démarrage.
+
+Vérif visuelle : `pnpm shot [chemins] [-v mobile|laptop|desktop|WxH]` (dev server
+lancé) écrit fold + full-page dans `.shots/` — en-tête de `scripts/shot.mjs`.

@@ -33,3 +33,6 @@ reports
 
 # Local Netlify folder
 .netlify
+
+# Captures de pnpm shot
+.shots
