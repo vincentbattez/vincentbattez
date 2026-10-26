@@ -524,8 +524,10 @@ onMounted(() => {
 
     // Tailles resserrées : à 393x659, titre, pitch et CTA principal doivent
     // tenir au-dessus du pli.
+    // « Développeur Full-Stack » mesure ~10.4em : la taille suit la colonne
+    // (100vw - 3rem de gouttières cadre + hero) pour tenir sur une ligne.
     &--title {
-      font-size: clamp(32px, 8.6vw, 40px);
+      font-size: clamp(24px, (100vw - 3rem) / 10.8, 40px);
       text-wrap: balance;
     }
 
