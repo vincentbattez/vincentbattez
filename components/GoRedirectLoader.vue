@@ -6,7 +6,7 @@ defineProps<{
   // (300 ms) joue pendant le chargement de la destination. Jamais pour un
   // téléchargement, la page reste affichée.
   exiting?: boolean;
-  // Cible téléchargée : l'onglet n'a pas pu se fermer seul.
+  // Cible téléchargée, onglet resté ouvert (mobile, ou close() refusé).
   done?: boolean;
 }>();
 </script>
@@ -35,15 +35,23 @@ defineProps<{
 
       <p class="go-loader__brand">Vincent Battez</p>
 
-      <p v-if="done" class="go-loader__label" role="status">
-        C'est fait, vous pouvez fermer cet onglet.
-      </p>
-      <p v-else class="go-loader__label">
-        Ouverture de {{ label
-        }}<span class="go-loader__dots" aria-hidden="true">…</span>
-      </p>
-
-      <a class="go-loader__bypass" :href="url"> {{ url }} </a>
+      <!-- Prudent : rien ne confirme le téléchargement (navigateurs intégrés
+           aux apps), le lien de secours passe au premier plan. -->
+      <template v-if="done">
+        <p class="go-loader__label" role="status">
+          Le téléchargement a dû démarrer.
+        </p>
+        <a class="go-loader__retry" :href="url">
+          Rien ne s'est passé ? Télécharger {{ label }}
+        </a>
+      </template>
+      <template v-else>
+        <p class="go-loader__label">
+          Ouverture de {{ label
+          }}<span class="go-loader__dots" aria-hidden="true">…</span>
+        </p>
+        <a class="go-loader__bypass" :href="url"> {{ url }} </a>
+      </template>
     </div>
   </div>
 </template>
@@ -152,6 +160,13 @@ defineProps<{
     &:hover {
       @apply text-primary;
     }
+  }
+
+  &__retry {
+    @apply font-body text-body-sm text-orange-800 mt-sm;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 }
 

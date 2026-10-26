@@ -62,10 +62,16 @@ onMounted(() => {
     }
     // Délai : fermer avant la réponse annulerait le téléchargement. close()
     // n'agit que sur un onglet sans historique (lien target=_blank, QR code) ;
-    // sinon le message de fin reste affiché.
+    // sinon le message de fin reste affiché. Desktop seulement : sur mobile,
+    // l'aperçu Contacts d'iOS ou un réseau lent partiraient avec l'onglet.
+    const canClose = window.matchMedia(
+      "(hover: hover) and (pointer: fine)",
+    ).matches;
     closeTimer = setTimeout(() => {
       isDone.value = true;
-      window.close();
+      if (canClose) {
+        window.close();
+      }
     }, 1000);
   }, 1500);
   onBeforeUnmount(() => {
