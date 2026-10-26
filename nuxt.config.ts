@@ -155,11 +155,10 @@ export default defineNuxtConfig({
           href: "/apple-touch-icon.png",
         },
       ],
+      // charset, viewport, description, og:site_name et og:url (par route) :
+      // posés par Nuxt et nuxt-seo-utils depuis `site`.
       meta: [
-        { charset: "utf-8" },
-        { name: "viewport", content: "width=device-width, initial-scale=1" },
         { name: "theme-color", content: seo.themeColor },
-        { name: "description", content: seo.descriptionMeta },
         { name: "keywords", content: seo.keywords },
         { name: "author", content: seo.author.name },
         { name: "language", content: "French" },
@@ -177,8 +176,6 @@ export default defineNuxtConfig({
         { property: "og:description", content: seo.descriptionCard },
         { property: "og:type", content: "profile" },
         { property: "og:locale", content: seo.locale },
-        { property: "og:url", content: seo.siteUrlWithSlash },
-        { property: "og:site_name", content: seo.name },
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: seo.title },
         { name: "twitter:description", content: seo.descriptionCard },
