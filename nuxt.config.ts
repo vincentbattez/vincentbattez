@@ -84,6 +84,12 @@ export default defineNuxtConfig({
     },
   },
 
+  // Ajouté d'office par @nuxtjs/tailwindcss, introuvable pour Nuxt 4.6 et
+  // inutile : aucun CSS brut, l'imbrication passe par SCSS.
+  postcss: {
+    plugins: { "tailwindcss/nesting": false },
+  },
+
   features: {
     // Sinon entry.css est inliné dans le HTML EN PLUS du <link> : payé 2×.
     inlineStyles: false,

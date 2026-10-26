@@ -1,0 +1,14 @@
+# pnpm bloque les scripts d'install par défaut : seuls ceux qui posent un
+# binaire natif sont autorisés.
+allowBuilds:
+  "@parcel/watcher": true
+  esbuild: true
+  unrs-resolver: true
+  # Télécharge la CLI d'upload de sourcemaps, non utilisé ici.
+  "@posthog/cli": false
+  # Message de don.
+  core-js: false
+  # Message post-install.
+  netlify-cli: false
+  # Build node-gyp optionnel (syslog de netlify-cli).
+  unix-dgram: false
