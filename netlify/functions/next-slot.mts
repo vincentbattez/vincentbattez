@@ -67,11 +67,8 @@ export default async (): Promise<Response> => {
 
 function respond(start: string | null): Response {
   if (!start) return new Response(null, { status: 204 });
-  return new Response(JSON.stringify({ start }), {
-    status: 200,
-    headers: {
-      "Content-Type": "application/json",
-      "Cache-Control": "public, max-age=300",
-    },
-  });
+  return Response.json(
+    { start },
+    { headers: { "Cache-Control": "public, max-age=300" } },
+  );
 }
