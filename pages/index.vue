@@ -13,8 +13,9 @@ import { seo } from "~/config/seo";
 
 const { outboundHref, trackOutbound } = useOutbound();
 
-// Le <h2> est codé en dur dans le template (indépendant de `seo.role`) ;
-// le stagger de index-motion.scss reste calibré sur 3 mots (.vb-word).
+// `seo.headline` en 3 blocs .vb-word : le stagger de index-motion.scss cible
+// nth-child(1..3), donc `seo.roleShort` doit rester en 2 mots.
+const heroWords = [...seo.roleShort.split(" "), seo.specialty];
 const kicker = `${seo.role} ${seo.employment.label} à ${seo.location.city}`;
 
 useSeoMeta({
@@ -96,14 +97,16 @@ onMounted(() => {
         <div class="vb-hero--text">
           <h1 class="vb-hero--kicker">{{ kicker }}</h1>
           <h2 class="vb-hero--title">
-            <span class="vb-word">
-              <span class="vb-word--i">Développeur </span>
-            </span>
-            <span class="vb-word">
-              <span class="vb-word--i">Full-Stack </span>
-            </span>
-            <span class="vb-word">
-              <span class="vb-word--i vb-hero--accent">Architecture & IA</span>
+            <span
+              v-for="(word, index) in heroWords"
+              :key="word"
+              class="vb-word"
+            >
+              <span
+                class="vb-word--i"
+                :class="{ 'vb-hero--accent': index === heroWords.length - 1 }"
+                >{{ index === heroWords.length - 1 ? word : `${word} ` }}</span
+              >
             </span>
           </h2>
           <div class="vb-hero--lead">

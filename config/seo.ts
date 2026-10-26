@@ -26,6 +26,10 @@ const seniority = "Senior";
 const role = `${roleShort} ${seniority}`;
 const roleLower = role.charAt(0).toLowerCase() + role.slice(1);
 
+// Titre du hero et de la fiche contact : `roleShort` + `specialty`.
+const specialty = "Architecture & IA";
+const headline = `${roleShort} ${specialty}`;
+
 const employment = {
   label: "Freelance",
   adjective: "freelance",
@@ -58,6 +62,8 @@ export const seo = {
   roleShort,
   seniority,
   role,
+  specialty,
+  headline,
   tagline,
   employment,
 
