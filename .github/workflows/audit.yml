@@ -9,16 +9,14 @@ jobs:
   quality:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: pnpm/action-setup@v4
-
-      - uses: actions/setup-node@v4
+      # pnpm depuis `packageManager` ; Node aligné sur NODE_VERSION (netlify.toml).
+      - uses: pnpm/setup@v3
         with:
-          node-version: 22
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
+          runtime: node@24
+          cache: true
+          require-lockfile: true
 
       - name: Lint
         run: pnpm lint
