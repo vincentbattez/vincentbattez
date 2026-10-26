@@ -23,9 +23,6 @@
     opacity: 0;
     animation: vb-fade-rise var(--vb-dur-fade) var(--vb-ease-fade) forwards
       var(--vb-at-kicker);
-    @media (max-width: 440px) {
-      display: none;
-    }
   }
 
   .vb-hero .vb-word--i {
@@ -90,6 +87,17 @@
   .vb-hero--portrait {
     animation: vb-portrait-float var(--vb-dur-float) var(--vb-ease-float)
       var(--vb-at-float) infinite;
+  }
+
+  // Mobile : le médaillon est en `display: contents` (son entrée n'a plus de
+  // boîte) et une rangée qui flotte gênerait la lecture. La rangée entre d'un
+  // bloc, au même instant que le médaillon desktop.
+  @media (max-width: 820px) {
+    .vb-hero--portrait {
+      opacity: 0;
+      animation: vb-fade-drop var(--vb-dur-fade) var(--vb-ease-fade) forwards
+        var(--vb-at-medallion);
+    }
   }
 
   .vb-frame--marquee {

@@ -17,6 +17,7 @@ const { outboundHref, trackOutbound } = useOutbound();
 // nth-child(1..3), donc `seo.roleShort` doit rester en 2 mots.
 const heroWords = [...seo.roleShort.split(" "), seo.specialty];
 const kicker = `${seo.role} ${seo.employment.label} à ${seo.location.city}`;
+const identityMeta = `${seo.employment.label} · ${seo.location.city}`;
 
 useSeoMeta({
   title: seo.title,
@@ -237,11 +238,17 @@ onMounted(() => {
 
             <span class="vb-xp">
               <span class="vb-xp--num">+8</span>
-              <span class="vb-xp--label">ans<br />d'expérience</span>
+              <!-- Espace avant <br> : le badge mobile masque le saut de ligne. -->
+              <span class="vb-xp--label">ans <br />d'expérience</span>
             </span>
           </div>
 
-          <VbSocials class="vb-hero--socials" />
+          <!-- Rangée identité mobile uniquement : en desktop, le médaillon et
+               le kicker portent déjà ces infos. -->
+          <p class="vb-hero--name">{{ seo.author.name }}</p>
+          <p class="vb-hero--meta">{{ identityMeta }}</p>
+
+          <VbSocials class="vb-hero--socials" compact />
         </div>
       </div>
 
@@ -425,7 +432,8 @@ onMounted(() => {
       margin-top: 0.6rem;
     }
 
-    p {
+    p,
+    li {
       text-wrap: pretty;
     }
   }
@@ -469,7 +477,9 @@ onMounted(() => {
     justify-content: center;
   }
 
-  &--socials {
+  &--socials,
+  &--name,
+  &--meta {
     display: none;
   }
 }
@@ -482,10 +492,6 @@ onMounted(() => {
   border-radius: 50%;
   background: linear-gradient(160deg, #facf79, #f0910f);
   box-shadow: 0 24px 48px -18px rgba(240, 145, 15, 0.55);
-
-  @media (max-width: 440px) {
-    width: min(200px, 50vw);
-  }
 
   img {
     width: 100%;
@@ -525,30 +531,26 @@ onMounted(() => {
     line-height: 1.2;
     text-align: left;
   }
-
-  @media (max-width: 440px) {
-    padding: 0.4rem 0.8rem;
-    gap: 0.45rem;
-
-    &--num {
-      font-size: 1.35rem;
-    }
-
-    &--label {
-      font-size: 0.55rem;
-    }
-  }
 }
 
 @media (max-width: 820px) {
   .vb-frame {
+    // Quasi bord à bord : chaque pixel de gouttière est pris à la colonne.
+    --vb-gap: 0.5rem;
     // height:auto : le cadre grandit avec le contenu, aucun rognage vertical.
     height: auto;
     min-height: calc(100vh - var(--vb-gap) * 2);
     margin: var(--vb-gap) auto;
+    border-radius: 22px;
 
+    // Aligné sur le hero, qui passe à gauche.
     &--nav {
-      @apply px-md;
+      @apply px-md pt-md;
+      justify-content: flex-start;
+
+      :deep(.vb-navbar--status) {
+        align-items: flex-start;
+      }
     }
 
     &--decor {
@@ -562,29 +564,112 @@ onMounted(() => {
     }
   }
 
+  // Aligné à gauche : un lead centré sur 8 lignes avait des bords irréguliers.
   .vb-hero {
-    @apply px-md py-xl;
-    // Pas de justify-items:center : dimensionnerait les items à max-content
-    // et ferait déborder le lead.
+    @apply px-md pt-md pb-xl;
     grid-template-columns: minmax(0, 1fr);
-    text-align: center;
-    gap: var(--vb-hero-gap, 2rem);
+    // Sur tablette, les rangées étirées écartaient l'identité du titre.
+    align-content: center;
+    gap: var(--vb-hero-gap, 1.25rem);
 
-    &--portrait {
-      order: -1;
-      @apply flex-col items-center gap-lg;
+    // sr-only, jamais display:none : le h1 reste dans l'arbre a11y. La rangée
+    // identité affiche déjà statut et ville.
+    &--kicker {
+      @apply sr-only;
     }
 
-    &--socials {
-      @apply flex justify-center;
+    // Tailles resserrées : à 393x659, titre, accroche et CTA principal doivent
+    // tenir au-dessus du pli.
+    &--title {
+      font-size: clamp(32px, 8.6vw, 40px);
+      text-wrap: balance;
     }
 
     &--lead {
-      margin-inline: auto;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.55;
     }
 
     &--actions {
       @apply flex-col w-full;
+    }
+
+    // Rangée identité : le médaillon de 200px poussait pitch et CTA sous le
+    // pli. Même DOM qu'en desktop, recomposé en grille.
+    &--portrait {
+      order: -1;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      grid-template-areas:
+        "avatar name socials"
+        "avatar meta socials"
+        "avatar xp socials";
+      align-items: center;
+      column-gap: 0.875rem;
+      row-gap: 0.125rem;
+    }
+
+    &--name {
+      grid-area: name;
+      display: block;
+      @apply font-heading text-black;
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    &--meta {
+      grid-area: meta;
+      display: block;
+      @apply font-body text-grey-600;
+      font-size: 0.875rem;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    &--socials {
+      grid-area: socials;
+      display: flex;
+    }
+  }
+
+  // `contents` : l'image et le badge deviennent des cellules de la grille, sans
+  // dupliquer le badge dans le markup.
+  .vb-medallion {
+    display: contents;
+
+    img {
+      grid-area: avatar;
+      width: 72px;
+      height: 72px;
+      padding: 3px;
+      background: linear-gradient(160deg, #facf79, #f0910f);
+      box-shadow: 0 10px 20px -10px rgba(240, 145, 15, 0.55);
+    }
+  }
+
+  .vb-xp {
+    grid-area: xp;
+    justify-self: start;
+    position: static;
+    transform: none;
+    gap: 0.3rem;
+    padding: 0.1rem 0.5rem;
+    box-shadow: none;
+
+    &--num {
+      font-size: 0.95rem;
+    }
+
+    &--label {
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+
+      br {
+        display: none;
+      }
     }
   }
 }
