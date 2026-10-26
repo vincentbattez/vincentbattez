@@ -5,10 +5,10 @@ publish = "dist"
 [functions]
 directory = "netlify/functions"
 
+# Le runtime des Functions suit cette version. AWS_LAMBDA_JS_RUNTIME n'est pas
+# lu depuis ce fichier (UI, CLI ou API uniquement).
 [build.environment]
-NODE_VERSION = "22"
-# Sans ça, le runtime des Functions peut rester sur nodejs16.x (déprécié).
-AWS_LAMBDA_JS_RUNTIME = "nodejs22.x"
+NODE_VERSION = "24"
 
 # Seul point qui valide HSTS/CSP (invisibles sur localhost). Non bloquant : les
 # échecs de contraste sur les couleurs de marque sont assumés.
