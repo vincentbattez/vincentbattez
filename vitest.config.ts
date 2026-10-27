@@ -1,6 +1,7 @@
 import { defineConfig } from "vitest/config";
 
-// Un seul seam testé : le handler HTTP de l'Entretien (voir issue #17).
+// Seams testés : le handler HTTP de l'Entretien (voir issue #17) et la
+// notif Pushover de /go/call.
 export default defineConfig({
   test: {
     include: ["netlify/**/*.test.ts"],
