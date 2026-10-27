@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { trackServerEvent } from "../lib/analytics";
-import { sendPushover } from "../lib/pushover";
-import notifyCall from "./notify-call.mts";
+import { trackServerEvent } from "./analytics";
+import { sendPushover } from "./pushover";
+import notifyCall from "../functions/notify-call.mts";
 
-vi.mock("../lib/analytics", () => ({ trackServerEvent: vi.fn() }));
+vi.mock("./analytics", () => ({ trackServerEvent: vi.fn() }));
 
 const fetchMock = vi.fn<typeof fetch>();
 
