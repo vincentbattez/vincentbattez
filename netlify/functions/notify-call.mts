@@ -10,6 +10,8 @@ export default async (request: Request): Promise<Response> => {
     message: 'Quelqu\'un est passé par le lien "vincentbattez.dev/go/call"',
     url: CALL_URL,
     urlTitle: "Rejoindre l'appel",
+    // Emergency pour passer le Ne pas déranger : répète toutes les 30 s, 5 min max.
+    emergency: { retry: 30, expire: 300 },
   });
 
   if (result === "not-configured") {
