@@ -36,3 +36,8 @@ reports
 
 # Captures de pnpm shot
 .shots
+
+# Hallmark : captures et rapports de sloplint ; le cache de pre-flight et le log restent versionnés
+.hallmark/*
+!.hallmark/preflight.json
+!.hallmark/log.json

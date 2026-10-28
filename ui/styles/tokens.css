@@ -1,0 +1,91 @@
+/* Source unique des valeurs de design. tailwind.config.mjs et nuxt.config.ts
+ * les lisent au chargement (ui/styles/tokens.mjs) : ne les recopier nulle part.
+ * Seul le premier bloc :root est lu ; les media queries ne concernent que le
+ * runtime. Après modification, relancer le dev server (la config Tailwind ne
+ * se recharge pas sur ce fichier). */
+:root {
+  /* Palette brute : n'est utilisée que via les rôles ci-dessous ou les classes
+   * Tailwind (bg-orange-500, text-grey-600…). */
+  --palette-primary: var(--palette-orange-500); /* aussi theme-color et manifest PWA */
+  --palette-secondary: var(--palette-blue-500);
+  --palette-black: #241605;
+  --palette-white: #FFFFFF;
+  --palette-page: #feecd1; /* aussi background_color du manifest PWA */
+  --palette-orange-100: #FEF3D2; --palette-orange-200: #FDE4A6; --palette-orange-300: #FACF79;
+  --palette-orange-400: #F6BA57; --palette-orange-500: #F0910F; --palette-orange-600: #CF7A18;
+  --palette-orange-700: #AD5E11; --palette-orange-800: #8B450A; --palette-orange-900: #733306;
+  --palette-blue-100: #d2f7fdff; --palette-blue-200: #a7ebfeff; --palette-blue-300: #7bd9fdff;
+  --palette-blue-400: #5ac5fbff; --palette-blue-500: #23a5f7ff; --palette-blue-600: #1a80d4ff;
+  --palette-blue-700: #1260b2ff; --palette-blue-800: #0b458fff; --palette-blue-900: #053075ff;
+  --palette-yellow-100: #fffcd9ff; --palette-yellow-200: #fff8b4ff; --palette-yellow-300: #fff38fff;
+  --palette-yellow-400: #feee75ff; --palette-yellow-500: #fee646ff; --palette-yellow-600: #dbc232ff;
+  --palette-yellow-700: #b79f23ff; --palette-yellow-800: #937d17ff; --palette-yellow-900: #7a650cff;
+  --palette-grey-100: #f3f2efff; --palette-grey-200: #eae6e1ff; --palette-grey-300: #c2bcafff;
+  --palette-grey-400: #a9a08fff; --palette-grey-500: #91856fff; --palette-grey-600: #706856ff;
+  --palette-grey-700: #504a3eff; --palette-grey-800: #302d25ff; --palette-grey-900: #1d1b16ff;
+  --palette-green-100: #edfce5ff; --palette-green-200: #d8fcccff; --palette-green-300: #baf6aeff;
+  --palette-green-400: #9fed99ff; --palette-green-500: #76e275ff; --palette-green-600: #56c25fff;
+  --palette-green-700: #3ba34eff; --palette-green-800: #26833dff; --palette-green-900: #176c35ff;
+  --palette-red-100: #feebddff; --palette-red-200: #ffd0beff; --palette-red-300: #ffb09fff;
+  --palette-red-400: #fe9286ff; --palette-red-500: #ff5552ff; --palette-red-600: #db434fff;
+  --palette-red-700: #b72f45ff; --palette-red-800: #941d3bff; --palette-red-900: #7a1233ff;
+
+  /* Rôles (DESIGN.md) : ce que le nouveau code utilise. */
+  --color-field: var(--palette-page);
+  --color-paper: var(--palette-white);
+  --color-paper-2: #fffaf1;
+  --color-paper-3: var(--palette-orange-100);
+  --color-ink: var(--palette-black);
+  --color-ink-2: var(--palette-grey-700);
+  --color-muted: var(--palette-grey-600);
+  --color-rule: var(--palette-grey-200);
+  --color-rule-2: var(--palette-grey-300);
+  --color-accent: var(--palette-secondary); /* l'action */
+  --color-accent-ink: var(--palette-white);
+  --color-accent-2: var(--palette-primary); /* la marque */
+  --color-accent-2-ink: var(--palette-orange-700); /* l'orange lisible en texte */
+  --color-focus: var(--palette-blue-500);
+  --color-error: var(--palette-red-700);
+  --color-success: var(--palette-green-800);
+
+  --font-display: "Zilla Slab", serif;
+  --font-body: "Nunito", sans-serif;
+  --font-outlier: var(--font-body);
+  --display-weight: 700; /* le plus gras servi par @nuxt/fonts */
+  --tracking-display: 0;
+  --leading-heading: 120%;
+  --leading-body: 150%;
+
+  --text-xs: 0.8125rem; --text-sm: 0.875rem; --text-md: 1rem; --text-lg: 1.125rem;
+  --text-xl: 1.25rem; --text-2xl: 1.625rem; --text-3xl: 2rem; --text-4xl: 2.5rem;
+  --text-5xl: 3.75rem; --text-6xl: 6rem;
+  --text-display-s: clamp(3rem, 2.5vw + 2.25rem, var(--text-5xl));
+  --text-display: clamp(4.75rem, 2.5vw + 4rem, var(--text-6xl));
+  --text-section: clamp(var(--text-3xl), 1.25vw + 1.625rem, var(--text-4xl));
+  --text-title: clamp(var(--text-xl), 0.75vw + 1rem, var(--text-2xl));
+  --text-lead: var(--text-lg);
+
+  /* xs…3xl = classes Tailwind xs…xxxl. */
+  --space-3xs: 0.0625rem; --space-2xs: 0.125rem; --space-xs: .25rem; --space-sm: .5rem;
+  --space-md: 1rem; --space-lg: 1.5rem; --space-xl: 2rem; --space-2xl: 3rem;
+  --space-3xl: 5rem; --space-4xl: 8rem;
+  --container: 1440px; --gutter: var(--space-3xl); --gap-columns: var(--space-xl);
+  --section-gap-s: 80px; --section-gap: 128px; --section-gap-l: 160px;
+
+  --radius-card: 28px; --radius-inner: 22px; --radius-control: 4px; --radius-pill: 999px;
+  --rule-hair: 1px;
+  --shadow-card: 0 40px 80px -30px rgb(225 159 80 / 55%);
+
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: ease-in-out;
+  --dur-micro: 120ms; --dur-short: 200ms; --dur-long: 500ms;
+
+  --z-base: 1; --z-raised: 10; --z-dropdown: 100; --z-sticky: 200; --z-sticky-nav: 300;
+  --z-modal: 400; --z-toast: 500; --z-tooltip: 600;
+}
+
+/* Gouttières de .vb-container (px-md / sm:px-xl / md:px-xxl / lg:px-xxxl). */
+@media (max-width: 1023px) { :root { --gutter: var(--space-2xl); --section-gap-s: 64px; --section-gap: 96px; --section-gap-l: 120px; } }
+@media (max-width: 767px) { :root { --gutter: var(--space-xl); } }
+@media (max-width: 639px) { :root { --gutter: var(--space-md); --section-gap-s: 56px; --section-gap: 72px; --section-gap-l: 96px; --gap-columns: var(--space-md); } }

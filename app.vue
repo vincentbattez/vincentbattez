@@ -198,7 +198,7 @@ body {
   top: 50%;
   right: 0;
   transform: translate(38%, -50%);
-  font-family: "Zilla Slab", serif;
+  font-family: theme("fontFamily.heading");
   font-weight: 700;
   font-size: clamp(28rem, 44vw, 58rem);
   line-height: 0.8;

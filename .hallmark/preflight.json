@@ -1,0 +1,25 @@
+{
+  "scanned": "2026-10-28",
+  "findings": {
+    "design": "DESIGN.md (locked, theme: brand)",
+    "fonts": "Zilla Slab 600/700 + Nunito 400-800, @nuxt/fonts self-hosted, normal style only (nuxt.config.ts fonts)",
+    "palette": "tailwind.config.mjs theme.colors (hex), mirrored as roles in ui/styles/tokens.css",
+    "motion": "CSS keyframes + --vb-* timing vars (ui/styles/base/_motion.scss), no motion library; reduced-motion in app.vue",
+    "spacing": "tailwind.config.mjs theme.spacing xs..xxxl (4-80px) = --space-xs..--space-3xl",
+    "framework": "Nuxt 4 SSG + @nuxtjs/tailwindcss 6 (Tailwind v3) + SCSS; dev server pnpm dev :3000"
+  },
+  "preserve": [
+    "palette",
+    "fonts",
+    "spacing scale",
+    "motion vars",
+    "copy (verbatim)"
+  ],
+  "introduce": [
+    "role tokens (ui/styles/tokens.css)",
+    "role utilities under theme.extend",
+    "gates",
+    "hero discipline",
+    "slots"
+  ]
+}
