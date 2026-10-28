@@ -89,7 +89,7 @@ defineProps<{
 
     circle {
       fill: none;
-      stroke: #f0910f;
+      stroke: theme("colors.primary");
       stroke-width: 3;
       stroke-linecap: round;
       stroke-dasharray: 289;
@@ -105,8 +105,8 @@ defineProps<{
     border-radius: 50%;
     background: radial-gradient(
       circle,
-      rgba(240, 145, 15, 0.55) 0%,
-      rgba(240, 145, 15, 0) 70%
+      theme("colors.primary / 55%") 0%,
+      theme("colors.primary / 0%") 70%
     );
     opacity: 0;
     pointer-events: none;

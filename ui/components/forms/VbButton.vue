@@ -45,7 +45,7 @@ const linkAttrs = computed(() => {
   @apply text-body-md;
   font-weight: 800;
   @apply transition-all duration-200 ease-in-out;
-  outline: 0px solid white;
+  outline: 0px solid theme("colors.white");
 
   &:focus-visible {
     outline: 4px solid;
@@ -61,11 +61,11 @@ const linkAttrs = computed(() => {
 
   &--primary {
     @apply bg-secondary text-white;
-    box-shadow: 0 12px 24px -10px rgba(35, 165, 247, 0.6);
+    box-shadow: 0 12px 24px -10px theme("colors.secondary / 60%");
 
     &:hover {
       @apply bg-blue-400;
-      box-shadow: 0 18px 30px -12px rgba(35, 165, 247, 0.7);
+      box-shadow: 0 18px 30px -12px theme("colors.secondary / 70%");
     }
     &:focus-visible {
       @apply bg-blue-400;

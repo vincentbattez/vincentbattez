@@ -65,8 +65,8 @@ const skillList: IVbSkill[] = [
 <style lang="scss" scoped>
 .vb-skill {
   @apply py-md;
-  border-top: 1px solid rgba(240, 145, 15, 0.18);
-  background: white;
+  border-top: 1px solid theme("colors.primary / 18%");
+  background: theme("colors.white");
 }
 
 // Faible contraste volontaire (lien technique), renforcé au survol/focus.

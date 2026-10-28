@@ -164,7 +164,7 @@ body {
   inset-block: 0;
   left: 0;
   width: calc(50vw - 560px);
-  background: rgba(240, 145, 15, 0.35);
+  background: theme("colors.primary / 35%");
   --vb-dot: radial-gradient(circle at center, #000 1.3px, transparent 1.7px);
   --vb-fade: linear-gradient(to right, #000 0%, transparent 88%);
   -webkit-mask-image: var(--vb-dot), var(--vb-fade);
@@ -186,7 +186,7 @@ body {
   width: calc(50vw - 560px);
   background: repeating-linear-gradient(
     -45deg,
-    rgba(240, 145, 15, 0.35) 0 1px,
+    theme("colors.primary / 35%") 0 1px,
     transparent 1px 22px
   );
   -webkit-mask-image: linear-gradient(to right, transparent 12%, #000 100%);
@@ -203,7 +203,7 @@ body {
   font-size: clamp(28rem, 44vw, 58rem);
   line-height: 0.8;
   letter-spacing: -0.04em;
-  color: rgba(159, 86, 12, 0.07);
+  color: theme("colors.orange.750 / 7%");
   user-select: none;
 }
 

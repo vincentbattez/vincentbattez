@@ -619,15 +619,19 @@ async function copyInterview(): Promise<void> {
 .vb-frame {
   --vb-gap: clamp(1rem, 2.5vw, 2rem);
   // Fond opaque des zones collantes, calé sur le dégradé du cadre.
-  --vb-voile: #fffdf8;
+  --vb-voile: theme("colors.paper.veil");
   position: relative;
   margin: auto;
   width: min(100% - var(--vb-gap) * 2, 1180px);
   // Le cadre tient dans le viewport : c'est lui qui scrolle, pas la page.
   height: min(100dvh - var(--vb-gap) * 2, 900px);
   border-radius: 28px;
-  box-shadow: 0 40px 80px -30px rgb(225 159 80 / 55%);
-  background: linear-gradient(115deg, #ffffff 0%, #fffaf1 100%);
+  box-shadow: theme("boxShadow.card");
+  background: linear-gradient(
+    115deg,
+    theme("colors.white") 0%,
+    theme("colors.paper.2") 100%
+  );
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -828,8 +832,8 @@ async function copyInterview(): Promise<void> {
     &:focus-within {
       @apply border-blue-300;
       box-shadow:
-        0 0 0 4px rgb(35 165 247 / 16%),
-        0 14px 28px -20px rgb(35 165 247 / 90%);
+        0 0 0 4px theme("colors.secondary / 16%"),
+        0 14px 28px -20px theme("colors.secondary / 90%");
     }
   }
 
@@ -852,7 +856,7 @@ async function copyInterview(): Promise<void> {
     width: 2.25rem;
     height: 2.25rem;
     border-radius: 999px;
-    box-shadow: 0 10px 20px -12px rgb(35 165 247 / 90%);
+    box-shadow: 0 10px 20px -12px theme("colors.secondary / 90%");
     transition:
       background-color 200ms ease,
       opacity 200ms ease,

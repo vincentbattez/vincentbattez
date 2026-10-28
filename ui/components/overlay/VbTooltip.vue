@@ -246,15 +246,19 @@ const id = useId();
     background:
       radial-gradient(
         72% 34px at 50% 0%,
-        rgba(240, 145, 15, 0.42) 0%,
-        rgba(240, 145, 15, 0.11) 46%,
+        theme("colors.primary / 42%") 0%,
+        theme("colors.primary / 11%") 46%,
         transparent 72%
       ),
-      linear-gradient(152deg, #2c1c08 0%, #241605 100%);
+      linear-gradient(
+        152deg,
+        theme("colors.ink.raised") 0%,
+        theme("colors.black") 100%
+      );
     box-shadow:
-      0 22px 44px -20px rgba(36, 22, 5, 0.75),
-      0 0 0 1px rgba(240, 145, 15, 0.18),
-      inset 0 1px 0 0 rgba(240, 145, 15, 0.28);
+      0 22px 44px -20px theme("colors.black / 75%"),
+      0 0 0 1px theme("colors.primary / 18%"),
+      inset 0 1px 0 0 theme("colors.primary / 28%");
     text-align: left;
     pointer-events: none;
     opacity: 0;
@@ -274,8 +278,8 @@ const id = useId();
       transform: translateX(-50%);
       background: radial-gradient(
         58% 100% at 50% 0%,
-        rgba(240, 145, 15, 0.6) 0%,
-        rgba(240, 145, 15, 0) 74%
+        theme("colors.primary / 60%") 0%,
+        theme("colors.primary / 0%") 74%
       );
       filter: blur(7px);
       pointer-events: none;
@@ -289,7 +293,7 @@ const id = useId();
       width: 12px;
       height: 12px;
       margin-top: -6px;
-      background: #241605;
+      background: theme("colors.black");
       transform: rotate(45deg);
     }
 
@@ -345,7 +349,7 @@ const id = useId();
     padding: 0;
     border: 0;
     border-radius: 999px;
-    background: rgba(240, 145, 15, 0.12);
+    background: theme("colors.primary / 12%");
     color: theme("colors.orange.300");
     font-size: 1rem;
     line-height: 1;
@@ -356,7 +360,7 @@ const id = useId();
 
     &:hover,
     &:focus-visible {
-      background: rgba(240, 145, 15, 0.22);
+      background: theme("colors.primary / 22%");
       color: theme("colors.orange.400");
       outline: 0;
     }
@@ -403,7 +407,7 @@ const id = useId();
     gap: 0.35rem;
     margin-top: 0.7rem;
     padding-top: 0.6rem;
-    border-top: 1px solid rgba(240, 145, 15, 0.18);
+    border-top: 1px solid theme("colors.primary / 18%");
   }
 
   &--tag {
@@ -415,8 +419,8 @@ const id = useId();
     padding: 0.15rem 0.5rem;
     border-radius: 999px;
     color: theme("colors.orange.300");
-    background: rgba(240, 145, 15, 0.1);
-    border: 1px solid rgba(240, 145, 15, 0.22);
+    background: theme("colors.primary / 10%");
+    border: 1px solid theme("colors.primary / 22%");
     white-space: nowrap;
   }
 }

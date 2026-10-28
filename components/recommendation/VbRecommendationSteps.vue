@@ -258,7 +258,7 @@ function state(index: number): "done" | "current" | "todo" {
   &--current .vb-step--dot {
     @apply bg-secondary text-white;
     border-color: transparent;
-    box-shadow: 0 0 0 4px rgb(35 165 247 / 18%);
+    box-shadow: 0 0 0 4px theme("colors.secondary / 18%");
   }
 
   &--current .vb-step--label {
@@ -294,7 +294,7 @@ function state(index: number): "done" | "current" | "todo" {
     }
 
     &--current .vb-step--dot {
-      box-shadow: 0 0 0 5px rgb(35 165 247 / 18%);
+      box-shadow: 0 0 0 5px theme("colors.secondary / 18%");
     }
   }
 }

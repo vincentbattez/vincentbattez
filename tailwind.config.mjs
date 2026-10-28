@@ -62,10 +62,12 @@ export default {
           DEFAULT: token("color-paper"),
           2: token("color-paper-2"),
           3: token("color-paper-3"),
+          veil: token("color-paper-veil"),
         },
         ink: {
           DEFAULT: token("color-ink"),
           2: token("color-ink-2"),
+          raised: token("color-ink-raised"),
         },
         muted: token("color-muted"),
         rule: {
@@ -75,6 +77,7 @@ export default {
         accent: {
           DEFAULT: token("color-accent"),
           ink: token("color-accent-ink"),
+          glow: token("color-accent-glow"),
           2: token("color-accent-2"),
           "2-ink": token("color-accent-2-ink"),
         },

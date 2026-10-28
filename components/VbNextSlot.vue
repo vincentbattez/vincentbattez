@@ -84,7 +84,7 @@ function absolute(iso: string, dayLabel?: string): string {
     width: 7px;
     height: 7px;
     border-radius: 999px;
-    box-shadow: 0 0 4px 0 #3b82f6;
+    box-shadow: 0 0 4px 0 theme("colors.accent.glow");
     animation: vb-next-slot-pulse 2s ease-in-out infinite;
   }
 }
