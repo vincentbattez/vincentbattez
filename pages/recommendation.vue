@@ -45,6 +45,10 @@ const WELCOME_TEXT = [
 // Découpé en paragraphes : l'accueil se pose bloc par bloc, pas lettre à lettre.
 const WELCOME_PARTS = WELCOME_TEXT.split("\n\n");
 
+// Message posé dans le fil quand le Collègue coupe court sans rien taper.
+const CONCLUDE_TEXT =
+  "J'ai fait le tour, tu peux rédiger avec ce que je t'ai dit.";
+
 const WELCOME: RecommendationMessage = {
   id: WELCOME_ID,
   role: "assistant",
@@ -78,6 +82,12 @@ const isThinking = computed(() => status.value === "submitted");
 const isStreaming = computed(() => status.value === "streaming");
 const isBusy = computed(() => isThinking.value || isStreaming.value);
 const hasRecommendation = computed(() => recommendation.value.length > 0);
+// Rien à reformuler tant que le Collègue n'a pas répondu au moins une fois.
+const canConclude = computed(
+  () =>
+    !hasRecommendation.value &&
+    messages.value.some((message) => message.role === "user"),
+);
 
 // Étape courante du tracker : Ruby l'annonce en fin de message (`Question X/5`),
 // la livraison de la Recommandation vaut sixième étape.
@@ -414,6 +424,20 @@ function submit(): void {
   follow(true);
 }
 
+// Le Collègue s'arrête là : Ruby rédige avec la matière déjà donnée. Une
+// réponse en cours de saisie part avec la demande plutôt que d'être perdue.
+function conclude(): void {
+  if (isBusy.value) return;
+  const text = input.value.trim() || CONCLUDE_TEXT;
+  input.value = "";
+  clearError();
+  stuckToBottom.value = true;
+  track("recommendation_concluded", { step: step.value });
+  sendMessage({ text }, { body: { conclude: true } });
+  nextTick(autoGrow);
+  follow(true);
+}
+
 function onEnter(event: KeyboardEvent): void {
   if (event.shiftKey) return;
   event.preventDefault();
@@ -583,6 +607,15 @@ async function copyInterview(): Promise<void> {
                 />
               </button>
             </div>
+            <button
+              v-if="canConclude"
+              type="button"
+              class="vb-saisie--conclure"
+              :disabled="isBusy"
+              @click="conclude"
+            >
+              Terminer et rédiger ma recommandation
+            </button>
           </form>
 
           <VbRecommendationPanel
@@ -888,6 +921,23 @@ async function copyInterview(): Promise<void> {
 
     &:hover {
       @apply bg-grey-700;
+    }
+  }
+
+  &--conclure {
+    @apply self-end mt-xs text-body-sm text-muted underline;
+
+    &:hover:not(:disabled) {
+      @apply text-ink;
+    }
+
+    &:focus-visible {
+      @apply outline outline-2 outline-focus;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
     }
   }
 
