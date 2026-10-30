@@ -10,7 +10,7 @@ Le site est en SSG sans base de données. `@netlify/blobs` aurait suffi, sans in
 
 **Rien n'est écrit côté serveur.** Pas de base, pas de blob, pas de log d'Entretien. La Netlify Function relaie vers OpenRouter et oublie. La Recommandation et le fil de l'Entretien n'existent que dans l'onglet du Collègue, jusqu'à ce qu'il les copie.
 
-Vincent reçoit une **notification Pushover sans contenu** (« quelqu'un vient de terminer une recommandation »), et des **compteurs PostHog anonymes** (`started`, `step`, `completed`, `copied`, `refined`). Aucun de ces canaux ne transporte les mots du Collègue.
+Vincent reçoit une **notification Pushover sans contenu** (« quelqu'un vient de terminer une recommandation »), et des **compteurs PostHog anonymes** (`started`, `step`, `completed`, `copied`, `refined`, `concluded`). Aucun de ces canaux ne transporte les mots du Collègue.
 
 ## Considered Options
 

@@ -2,6 +2,7 @@ import { lookupTable } from "./utils/redirect";
 import { vcardPath } from "./config/vcard";
 import { seo } from "./config/seo";
 import { llmsOptions } from "./config/llms";
+import { fontFamily, token } from "./ui/styles/tokens.mjs";
 
 // PostHog uniquement en prod : le dev polluait le projet analytics de prod.
 // Fail-closed (défaut = désactivé) ; forçable via NUXT_PUBLIC_POSTHOG_ENABLED=true.
@@ -31,6 +32,9 @@ export default defineNuxtConfig({
 
   llms: llmsOptions,
 
+  // Rôles de design (DESIGN.md) : uniquement des custom properties sur :root.
+  css: ["~/ui/styles/tokens.css"],
+
   // "autoUpdate" : le nouveau SW prend le contrôle à la visite suivante, évite
   // de servir un HTML précaché périmé après un déploiement.
   pwa: {
@@ -42,8 +46,8 @@ export default defineNuxtConfig({
       lang: seo.language,
       start_url: "/",
       display: "standalone",
-      background_color: seo.backgroundColor,
-      theme_color: seo.themeColor,
+      background_color: token("palette-page"),
+      theme_color: token("palette-primary"),
       icons: [
         { src: "/pwa-192x192.png", sizes: "192x192", type: "image/png" },
         { src: "/pwa-512x512.png", sizes: "512x512", type: "image/png" },
@@ -74,10 +78,13 @@ export default defineNuxtConfig({
 
   fonts: {
     families: [
-      { name: "Nunito", weights: [400, 600, 700, 800] },
-      { name: "Zilla Slab", weights: [600, 700] },
+      { name: fontFamily("font-body"), weights: [400, 600, 700, 800] },
+      { name: fontFamily("font-display"), weights: [600, 700] },
     ],
     // Site 100% français, aucun italique : évite ~15 fichiers de police inutiles.
+    // Sinon les --font-* de tokens.css réinjectent un jeu complet de @font-face
+    // (+11 KB dans entry.css) : les classes font-heading/font-body suffisent.
+    processCSSVariables: false,
     defaults: {
       styles: ["normal"],
       subsets: ["latin", "latin-ext"],
@@ -158,7 +165,7 @@ export default defineNuxtConfig({
       // charset, viewport, description, og:site_name et og:url (par route) :
       // posés par Nuxt et nuxt-seo-utils depuis `site`.
       meta: [
-        { name: "theme-color", content: seo.themeColor },
+        { name: "theme-color", content: token("palette-primary") },
         { name: "keywords", content: seo.keywords },
         { name: "author", content: seo.author.name },
         { name: "language", content: "French" },

@@ -15,6 +15,14 @@ Default five canonical labels (`needs-triage`, `needs-info`, `ready-for-agent`, 
 
 Single-context: `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
 
+### Design
+
+Système verrouillé dans `DESIGN.md`. `ui/styles/tokens.css` est la **seule**
+source des valeurs (couleurs, polices, tailles, espacements, rayons) :
+`tailwind.config.mjs` et `nuxt.config.ts` la lisent via `ui/styles/tokens.mjs`,
+n'y recopier aucune valeur. Toute nouvelle UI passe par les rôles ; la section
+`## Debt` liste ce que les pages actuelles enfreignent encore.
+
 ### Déploiement
 
 La prod est un **site statique généré par Nuxt (SSG)** : `nuxt generate` → `dist`, déployé sur Netlify. **Pas de serveur au runtime.**

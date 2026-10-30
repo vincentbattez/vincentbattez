@@ -95,7 +95,7 @@ const { outboundHref, trackOutbound } = useOutbound();
 <style lang="scss" scoped>
 .vb-reco {
   @apply flex flex-col gap-sm p-md bg-white border border-orange-200 rounded;
-  box-shadow: 0 18px 40px -24px rgba(159, 86, 12, 0.6);
+  box-shadow: 0 18px 40px -24px theme("colors.orange.750 / 60%");
 
   &--head {
     @apply flex items-center justify-between;

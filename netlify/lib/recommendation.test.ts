@@ -10,6 +10,7 @@ import { MockLanguageModelV4, simulateReadableStream } from "ai/test";
 import type { LanguageModelV4StreamPart } from "@ai-sdk/provider";
 import {
   BAD_REQUEST_MESSAGE,
+  CONCLUDE_INSTRUCTION,
   createRecommendationHandler,
   LANDING_INSTRUCTION,
   LANDING_TURN,
@@ -217,6 +218,36 @@ describe("handler de l'Entretien de recommandation", () => {
     await run(model);
 
     expect(systemPromptOf(model)).not.toContain(LANDING_INSTRUCTION);
+  });
+
+  it("injecte la conclusion, prioritaire sur l'atterrissage", async () => {
+    const model = textModel();
+    const { handler } = handlerWith(model);
+
+    // Assez de tours pour que l'atterrissage se déclenche sans la demande.
+    const response = await handler(
+      new Request("http://localhost/api/recommendation", {
+        method: "POST",
+        body: JSON.stringify({
+          messages: Array.from({ length: LANDING_TURN }, (_, index) =>
+            userMessage("je continue", index),
+          ),
+          conclude: true,
+        }),
+      }),
+    );
+    await response.text();
+
+    const system = systemPromptOf(model);
+    expect(system).toContain(CONCLUDE_INSTRUCTION);
+    expect(system).not.toContain(LANDING_INSTRUCTION);
+  });
+
+  it("n'injecte pas la conclusion sans demande explicite", async () => {
+    const model = textModel();
+    await run(model);
+
+    expect(systemPromptOf(model)).not.toContain(CONCLUDE_INSTRUCTION);
   });
 
   it("relaie le tool call submit_recommendation jusqu'au client", async () => {

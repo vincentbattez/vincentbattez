@@ -45,6 +45,10 @@ const WELCOME_TEXT = [
 // Découpé en paragraphes : l'accueil se pose bloc par bloc, pas lettre à lettre.
 const WELCOME_PARTS = WELCOME_TEXT.split("\n\n");
 
+// Message posé dans le fil quand le Collègue coupe court sans rien taper.
+const CONCLUDE_TEXT =
+  "J'ai fait le tour, tu peux rédiger avec ce que je t'ai dit.";
+
 const WELCOME: RecommendationMessage = {
   id: WELCOME_ID,
   role: "assistant",
@@ -78,6 +82,12 @@ const isThinking = computed(() => status.value === "submitted");
 const isStreaming = computed(() => status.value === "streaming");
 const isBusy = computed(() => isThinking.value || isStreaming.value);
 const hasRecommendation = computed(() => recommendation.value.length > 0);
+// Rien à reformuler tant que le Collègue n'a pas répondu au moins une fois.
+const canConclude = computed(
+  () =>
+    !hasRecommendation.value &&
+    messages.value.some((message) => message.role === "user"),
+);
 
 // Étape courante du tracker : Ruby l'annonce en fin de message (`Question X/5`),
 // la livraison de la Recommandation vaut sixième étape.
@@ -414,6 +424,20 @@ function submit(): void {
   follow(true);
 }
 
+// Le Collègue s'arrête là : Ruby rédige avec la matière déjà donnée. Une
+// réponse en cours de saisie part avec la demande plutôt que d'être perdue.
+function conclude(): void {
+  if (isBusy.value) return;
+  const text = input.value.trim() || CONCLUDE_TEXT;
+  input.value = "";
+  clearError();
+  stuckToBottom.value = true;
+  track("recommendation_concluded", { step: step.value });
+  sendMessage({ text }, { body: { conclude: true } });
+  nextTick(autoGrow);
+  follow(true);
+}
+
 function onEnter(event: KeyboardEvent): void {
   if (event.shiftKey) return;
   event.preventDefault();
@@ -583,6 +607,15 @@ async function copyInterview(): Promise<void> {
                 />
               </button>
             </div>
+            <button
+              v-if="canConclude"
+              type="button"
+              class="vb-saisie--conclure"
+              :disabled="isBusy"
+              @click="conclude"
+            >
+              Terminer et rédiger ma recommandation
+            </button>
           </form>
 
           <VbRecommendationPanel
@@ -619,15 +652,19 @@ async function copyInterview(): Promise<void> {
 .vb-frame {
   --vb-gap: clamp(1rem, 2.5vw, 2rem);
   // Fond opaque des zones collantes, calé sur le dégradé du cadre.
-  --vb-voile: #fffdf8;
+  --vb-voile: theme("colors.paper.veil");
   position: relative;
   margin: auto;
   width: min(100% - var(--vb-gap) * 2, 1180px);
   // Le cadre tient dans le viewport : c'est lui qui scrolle, pas la page.
   height: min(100dvh - var(--vb-gap) * 2, 900px);
   border-radius: 28px;
-  box-shadow: 0 40px 80px -30px rgb(225 159 80 / 55%);
-  background: linear-gradient(115deg, #ffffff 0%, #fffaf1 100%);
+  box-shadow: theme("boxShadow.card");
+  background: linear-gradient(
+    115deg,
+    theme("colors.white") 0%,
+    theme("colors.paper.2") 100%
+  );
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -828,8 +865,8 @@ async function copyInterview(): Promise<void> {
     &:focus-within {
       @apply border-blue-300;
       box-shadow:
-        0 0 0 4px rgb(35 165 247 / 16%),
-        0 14px 28px -20px rgb(35 165 247 / 90%);
+        0 0 0 4px theme("colors.secondary / 16%"),
+        0 14px 28px -20px theme("colors.secondary / 90%");
     }
   }
 
@@ -852,7 +889,7 @@ async function copyInterview(): Promise<void> {
     width: 2.25rem;
     height: 2.25rem;
     border-radius: 999px;
-    box-shadow: 0 10px 20px -12px rgb(35 165 247 / 90%);
+    box-shadow: 0 10px 20px -12px theme("colors.secondary / 90%");
     transition:
       background-color 200ms ease,
       opacity 200ms ease,
@@ -884,6 +921,23 @@ async function copyInterview(): Promise<void> {
 
     &:hover {
       @apply bg-grey-700;
+    }
+  }
+
+  &--conclure {
+    @apply self-end mt-xs text-body-sm text-muted underline;
+
+    &:hover:not(:disabled) {
+      @apply text-ink;
+    }
+
+    &:focus-visible {
+      @apply outline outline-2 outline-focus;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
     }
   }
 

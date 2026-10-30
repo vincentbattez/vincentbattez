@@ -25,6 +25,10 @@ export const LANDING_TURN = 20;
 
 export const LANDING_INSTRUCTION = `ATTENTION : cet Entretien s'éternise. Tu as maintenant assez de matière. Conclus au prochain message et appelle \`submit_recommendation\` avec ce que tu as, même si c'est incomplet. Ne pose plus de question.`;
 
+// Le Collègue a cliqué « Terminer et rédiger ma recommandation » : il s'arrête là, quelle que soit
+// l'étape. Même mécanique que l'atterrissage, déclenchée par lui.
+export const CONCLUDE_INSTRUCTION = `ATTENTION : le Collègue a demandé à terminer l'Entretien maintenant. Ne pose plus aucune question. Rédige la Recommandation avec ce qu'il t'a déjà donné, même si c'est incomplet, et appelle \`submit_recommendation\` dans ce message. N'invente aucun fait pour combler ce qui manque.`;
+
 // Sans contenu, par construction : la notification ne transporte aucun propos
 // du Collègue (ADR 0003).
 export const NOTIFICATION_TITLE = "Nouvelle recommandation";
@@ -44,9 +48,10 @@ export type RecommendationDeps = {
   notify: (title: string, message: string) => Promise<unknown>;
 };
 
-export function buildSystemPrompt(turns: number): string {
+export function buildSystemPrompt(turns: number, conclude = false): string {
   const parts = [rubyInstructions, dossier];
-  if (turns >= LANDING_TURN) parts.push(LANDING_INSTRUCTION);
+  if (conclude) parts.push(CONCLUDE_INSTRUCTION);
+  else if (turns >= LANDING_TURN) parts.push(LANDING_INSTRUCTION);
   return parts.join("\n\n---\n\n");
 }
 
@@ -91,12 +96,17 @@ export function createRecommendationHandler({
     // L'historique vient du navigateur : il doit respecter le contrat des
     // messages et des tools avant d'atteindre le modèle.
     let messages: RecommendationMessage[];
+    let conclude: boolean;
     try {
-      const body = (await request.json()) as { messages?: unknown };
+      const body = (await request.json()) as {
+        messages?: unknown;
+        conclude?: unknown;
+      };
       messages = await validateUIMessages<RecommendationMessage>({
         messages: body.messages,
         tools: recommendationTools,
       });
+      conclude = body.conclude === true;
     } catch {
       return errorResponse(400, BAD_REQUEST_MESSAGE);
     }
@@ -109,7 +119,7 @@ export function createRecommendationHandler({
     try {
       const result = streamText({
         model,
-        system: buildSystemPrompt(turns),
+        system: buildSystemPrompt(turns, conclude),
         messages: await convertToModelMessages(messages),
         tools,
         // Le Collègue qui arrête Ruby coupe la requête : la génération suit.

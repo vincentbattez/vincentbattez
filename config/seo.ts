@@ -77,10 +77,6 @@ export const seo = {
   locale: "fr_FR",
   defaultLocale: "fr",
 
-  // Couleurs de marque intentionnelles, pas à retoucher.
-  themeColor: "#F0910F",
-  backgroundColor: "#feecd1",
-
   twitter: "@vincentbattez",
 
   author,

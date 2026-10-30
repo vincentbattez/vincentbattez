@@ -36,8 +36,12 @@ const ariaLabel = computed(() =>
     border-radius: 999px;
     font-weight: 800;
     letter-spacing: 0.02em;
-    background: linear-gradient(140deg, #f0910f 0%, #ad5e11 100%);
-    box-shadow: 0 6px 14px -6px rgb(173 94 17 / 70%);
+    background: linear-gradient(
+      140deg,
+      theme("colors.primary") 0%,
+      theme("colors.orange.700") 100%
+    );
+    box-shadow: 0 6px 14px -6px theme("colors.orange.700 / 70%");
   }
 
   &--label {
@@ -53,8 +57,8 @@ const ariaLabel = computed(() =>
     animation: vb-trait-in 520ms cubic-bezier(0.22, 1, 0.36, 1) 520ms both;
     background: linear-gradient(
       to right,
-      rgb(250 207 121 / 90%),
-      rgb(250 207 121 / 0%)
+      theme("colors.orange.300 / 90%"),
+      theme("colors.orange.300 / 0%")
     );
   }
 }

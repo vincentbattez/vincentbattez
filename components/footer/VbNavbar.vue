@@ -66,7 +66,7 @@ const formattedStatusUpdatedAt = computed(() => {
     border-radius: 999px;
 
     &:focus-visible {
-      outline: 2px solid #3b82f6;
+      outline: 2px solid theme("colors.accent.glow");
     }
 
     &:hover:not(.is-unavailable),
@@ -80,7 +80,7 @@ const formattedStatusUpdatedAt = computed(() => {
 
       .vb-navbar--indicator {
         transform: scale(1);
-        box-shadow: 0 0 10px 3px #3b82f6;
+        box-shadow: 0 0 10px 3px theme("colors.accent.glow");
 
         &::after {
           animation-play-state: paused;
@@ -121,7 +121,11 @@ const formattedStatusUpdatedAt = computed(() => {
       bottom: 2px;
       height: 2px;
       border-radius: 2px;
-      background: linear-gradient(90deg, #3b82f6, #23a5f7);
+      background: linear-gradient(
+        90deg,
+        theme("colors.accent.glow"),
+        theme("colors.secondary")
+      );
       transform: scaleX(0);
       transform-origin: right;
       transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -133,7 +137,7 @@ const formattedStatusUpdatedAt = computed(() => {
     width: 11px;
     height: 11px;
     border-radius: 11px;
-    box-shadow: 0 0 4px 0 #3b82f6;
+    box-shadow: 0 0 4px 0 theme("colors.accent.glow");
     transition:
       transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
       box-shadow 420ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -170,12 +174,12 @@ const formattedStatusUpdatedAt = computed(() => {
   100% {
     opacity: 1;
     transform: scale(1);
-    box-shadow: 0 0 4px 0 #3b82f6;
+    box-shadow: 0 0 4px 0 theme("colors.accent.glow");
   }
   50% {
     opacity: 0.7;
     transform: scale(1.1);
-    box-shadow: 0 0 8px 2px #3b82f6;
+    box-shadow: 0 0 8px 2px theme("colors.accent.glow");
   }
 }
 

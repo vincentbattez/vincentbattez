@@ -6,6 +6,7 @@ type AnalyticsEvents = {
   // Entretien de recommandation : anonymes, sans aucun propos du Collègue.
   recommendation_started: Record<string, never>;
   recommendation_step: { step: number };
+  recommendation_concluded: { step: number };
   recommendation_completed: Record<string, never>;
   recommendation_refined: Record<string, never>;
   recommendation_copied: Record<string, never>;

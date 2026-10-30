@@ -252,9 +252,13 @@ onMounted(() => {
   height: min(100vh - var(--vb-gap) * 2, 900px);
   overflow: hidden;
   border-radius: 28px;
-  box-shadow: 0 40px 80px -30px rgb(225 159 80 / 55%);
+  box-shadow: theme("boxShadow.card");
   // 2 stops : le palier plat #fff→#fff créait une bande verticale (Mach band).
-  background: linear-gradient(115deg, #ffffff 0%, #fffaf1 100%);
+  background: linear-gradient(
+    115deg,
+    theme("colors.white") 0%,
+    theme("colors.paper.2") 100%
+  );
   display: flex;
   flex-direction: column;
   transform-style: preserve-3d;
@@ -275,8 +279,8 @@ onMounted(() => {
       height: 620px;
       background: radial-gradient(
         circle at 60% 40%,
-        rgba(246, 186, 87, 0.32),
-        rgba(240, 145, 15, 0.06) 60%,
+        theme("colors.orange.400 / 32%"),
+        theme("colors.primary / 6%") 60%,
         transparent 0%
       );
     }
@@ -288,7 +292,11 @@ onMounted(() => {
       left: 0;
       width: 360px;
       height: 320px;
-      background: linear-gradient(45deg, #f0910f 0%, #ffffff 100%);
+      background: linear-gradient(
+        45deg,
+        theme("colors.primary") 0%,
+        theme("colors.white") 100%
+      );
       --vb-dot: radial-gradient(
         circle at center,
         #000 1.3px,
@@ -316,7 +324,7 @@ onMounted(() => {
     height: 320px;
     pointer-events: none;
     z-index: 0;
-    background: #f6ba57;
+    background: theme("colors.orange.400");
     --vb-dot: radial-gradient(circle at center, #000 1.3px, transparent 1.7px);
     --vb-fade: linear-gradient(225deg, #000 0%, transparent 68%);
     -webkit-mask-image: var(--vb-dot), var(--vb-fade);
@@ -444,8 +452,12 @@ onMounted(() => {
   aspect-ratio: 1;
   padding: 10px;
   border-radius: 50%;
-  background: linear-gradient(160deg, #facf79, #f0910f);
-  box-shadow: 0 24px 48px -18px rgba(240, 145, 15, 0.55);
+  background: linear-gradient(
+    160deg,
+    theme("colors.orange.300"),
+    theme("colors.primary")
+  );
+  box-shadow: 0 24px 48px -18px theme("colors.primary / 55%");
 
   img {
     width: 100%;
@@ -466,9 +478,9 @@ onMounted(() => {
   gap: 0.55rem;
   padding: 0.5rem 1rem;
   border-radius: 999px;
-  background: #ffffff;
-  border: 1px solid rgba(240, 145, 15, 0.16);
-  box-shadow: 0 16px 32px -14px rgba(240, 145, 15, 0.6);
+  background: theme("colors.white");
+  border: 1px solid theme("colors.primary / 16%");
+  box-shadow: 0 16px 32px -14px theme("colors.primary / 60%");
 
   &--num {
     @apply font-heading text-primary;
@@ -508,7 +520,11 @@ onMounted(() => {
     &--dots {
       width: 200px;
       height: 180px;
-      background: linear-gradient(45deg, #f0910f 0%, #ffffff 100%);
+      background: linear-gradient(
+        45deg,
+        theme("colors.primary") 0%,
+        theme("colors.white") 100%
+      );
     }
   }
 
@@ -602,8 +618,12 @@ onMounted(() => {
       width: 150px;
       height: 150px;
       padding: 4px;
-      background: linear-gradient(160deg, #facf79, #f0910f);
-      box-shadow: 0 10px 20px -10px rgba(240, 145, 15, 0.55);
+      background: linear-gradient(
+        160deg,
+        theme("colors.orange.300"),
+        theme("colors.primary")
+      );
+      box-shadow: 0 10px 20px -10px theme("colors.primary / 55%");
     }
   }
 
@@ -619,7 +639,7 @@ onMounted(() => {
     transform: none;
     gap: 0.45rem;
     padding: 0.35rem 0.85rem;
-    box-shadow: 0 12px 24px -12px rgba(240, 145, 15, 0.6);
+    box-shadow: 0 12px 24px -12px theme("colors.primary / 60%");
 
     &--num {
       font-size: 1.45rem;
